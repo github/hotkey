@@ -1,0 +1,18 @@
+{
+  "name": "@github/hotkey",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "github-lint",
+    "test": "npm run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-github": "^1.7.3",
+    "flow-bin": "^0.90.0"
+  }
+}
