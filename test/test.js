@@ -51,4 +51,10 @@ describe('hotkey', function() {
     document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', ctrlKey: true}))
     assert.include(buttonsClicked, 'button3')
   })
+
+  it("doesn't trigger elements where the hotkey library has been uninstalled", function() {
+    hotkey.uninstall(document.querySelector('#button1'))
+    document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+    assert.deepEqual(buttonsClicked, [])
+  })
 })
