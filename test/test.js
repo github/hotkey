@@ -22,7 +22,9 @@ describe('hotkey', function() {
   })
 
   afterEach(function() {
-    hotkey.uninstall(document.querySelector('[data-hotkey]'))
+    for (const button of document.querySelectorAll('[data-hotkey]')) {
+      hotkey.uninstall(button)
+    }
     document.body.innerHTML = ''
     buttonsClicked = []
   })
