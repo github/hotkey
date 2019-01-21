@@ -6,7 +6,7 @@
   "module": "dist/index.esm.js",
   "repository": "github/hotkey",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && cp src/index.js.flow dist/index.esm.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
     "lint": "github-lint && flow",
     "test": "karma start test/karma.config.js",
     "clean": "rm -rf dist",

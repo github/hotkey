@@ -1,0 +1,4 @@
+declare module.exports: {
+  install(container: HTMLElement): void;
+  uninstall(container: HTMLElement): void;
+}
