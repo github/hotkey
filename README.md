@@ -10,11 +10,13 @@ are separated by a space.
 Two-keypress sequences like `g c` and `g i` would be stored
 under the 'g' key in a nested object with keys 'c' and 'i'.
 
+```
 mappings =
   'c'     : <a href="/rails/rails/issues/new" data-hotkey="c">New Issue</a>
   'g'     :
     'c'   : <a href="/rails/rails" data-hotkey="g c">Code</a>
     'i'   : <a href="/rails/rails/issues" data-hotkey="g i">Issues</a>
+```
 
 So both `g c` and `c` could be available hotkeys on the same
 page, but `g c` and `g` couldn't coexist. If the user presses
