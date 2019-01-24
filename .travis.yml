@@ -1,0 +1,9 @@
+language: node_js
+sudo: required
+node_js:
+  - "node"
+addons:
+  chrome: stable
+cache:
+  directories:
+    - node_modules
