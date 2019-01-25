@@ -1,14 +1,18 @@
 # Hotkey Behavior
 
-Trigger a action on element when keyboard hotkey is pressed.
+Trigger an action on a target element when a key or sequence of keys is pressed
+on the keyboard. This triggers a focus event on form elements, or a click event on
+link, button, and summary elements.
 
-Automatically binds hotkeys to any link with a `data-hotkey`
-attribute set. Multiple hotkeys are separated by a `,`.
-Key combinations are separated by a `+`, and key sequences
-are separated by a space.
+By default, hotkeys are extracted from a target element's `data-hotkey`
+attribute, but this can be overridden by passing the hotkey to the registering
+function (`install`) as a parameter.
 
-Two-keypress sequences like `g c` and `g i` would be stored
-under the 'g' key in a nested object with keys 'c' and 'i'.
+Multiple hotkeys are separated by a `,`; key combinations are separated
+by a `+`; and key sequences are separated by a space.
+
+Two-keypress sequences such as `g c` and `g i` are stored
+under the 'g' key in a nested object with 'c' and 'i' keys.
 
 ```
 mappings =
@@ -18,10 +22,10 @@ mappings =
     'i'   : <a href="/rails/rails/issues" data-hotkey="g i">Issues</a>
 ```
 
-So both `g c` and `c` could be available hotkeys on the same
-page, but `g c` and `g` couldn't coexist. If the user presses
-`g`, the `c` hotkey will be unavailable for 1500ms while we
-listen for either `g c` or `g i`.
+In this example, both `g c` and `c` could be available as hotkeys on the
+same page, but `g c` and `g` can't coexist. If the user presses
+`g`, the `c` hotkey will be unavailable for 1500 ms while we
+wait for either `g c` or `g i`.
 
 ## Accessibility considerations
 
@@ -56,8 +60,19 @@ See [the list of `KeyboardEvent` key values](https://developer.mozilla.org/en-US
 
 ```js
 import {install} from '@github/hotkey'
+
 for (const el of document.querySelectorAll('[data-hotkey]')) {
-  install(el)
+  install(el) // or install(el, hotkey)
+}
+```
+
+To unregister a hotkey from an element, use `uninstall`:
+
+```js
+import {uninstall} from '@github/hotkey'
+
+for (const el of document.querySelectorAll('[data-hotkey]')) {
+  uninstall(el)
 }
 ```
 

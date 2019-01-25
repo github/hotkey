@@ -41,8 +41,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 export {RadixTrie, Leaf}
 
-export function install(element: HTMLElement) {
-  const hotkeys = expandHotkeyToEdges(element.getAttribute('data-hotkey') || '')
+export function install(element: HTMLElement, hotkey?: string) {
+  const hotkeys = expandHotkeyToEdges(hotkey || element.getAttribute('data-hotkey') || '')
   const leaves = hotkeys.map(hotkey => hotkeyRadixTrie.insert(hotkey).add(element))
   elementsLeaves.set(element, leaves)
 }
