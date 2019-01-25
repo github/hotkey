@@ -26,9 +26,9 @@ listen for either `g c` or `g i`.
 ## Accessibility considerations
 
 Please note that adding this functionality to your site can be a drawback for
-certain users. Providing a way in your system to disable hotkeys makes sure
-that those users can still use your site (given that it's accessible to those
-users).
+certain users. Providing a way in your system to disable hotkeys or remap
+them makes sure that those users can still use your site (given that it's
+accessible to those users).
 
 See ["Understanding Success Criterion 2.1.4: Character Key Shortcuts"](https://www.w3.org/WAI/WCAG21/Understanding/character-key-shortcuts.html)
 for further reading on this topic.
