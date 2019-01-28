@@ -1,8 +1,8 @@
 # Hotkey Behavior
 
 Trigger an action on a target element when a key or sequence of keys is pressed
-on the keyboard. This triggers a focus event on form elements, or a click event on
-link, button, and summary elements.
+on the keyboard. This triggers a focus event on form fields, or a click event on
+`<a href="...">`, `<button>` and `<summary>` elements.
 
 By default, hotkeys are extracted from a target element's `data-hotkey`
 attribute, but this can be overridden by passing the hotkey to the registering
@@ -62,7 +62,15 @@ See [the list of `KeyboardEvent` key values](https://developer.mozilla.org/en-US
 import {install} from '@github/hotkey'
 
 for (const el of document.querySelectorAll('[data-hotkey]')) {
-  install(el) // or install(el, hotkey)
+  install(el)
+}
+```
+
+Alternatively, the hotkey(s) can be passed to the `install` function as a parameter e.g.:
+
+```js
+for (const el of document.querySelectorAll('[data-shortcut]')) {
+  install(el, el.dataset.shortcut)
 }
 ```
 
