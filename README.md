@@ -56,7 +56,7 @@ See [the list of `KeyboardEvent` key values](https://developer.mozilla.org/en-US
 
 ```js
 import {install} from '@github/hotkey'
-for (const el of document.querySelector('[data-hotkey]')) {
+for (const el of document.querySelectorAll('[data-hotkey]')) {
   install(el)
 }
 ```
