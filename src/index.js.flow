@@ -1,6 +1,6 @@
 /* @flow strict */
 
 declare module.exports: {
-  install(container: Element): void;
+  install(container: Element, hotkey?: string): void;
   uninstall(container: Element): void;
 };

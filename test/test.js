@@ -17,7 +17,11 @@ describe('hotkey', function() {
       button.addEventListener('click', buttonClickHandler)
     }
     for (const button of document.querySelectorAll('[data-hotkey]')) {
-      hotkey.install(button)
+      if (button.id === 'button3') {
+        hotkey.install(button, 'Control+c')
+      } else {
+        hotkey.install(button)
+      }
     }
   })
 
@@ -32,14 +36,24 @@ describe('hotkey', function() {
     buttonsClicked = []
   })
 
-  it('triggers buttons that have `data-hotkey` as a attribute', function() {
+  it('triggers buttons that have a `data-hotkey` attribute', function() {
     document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
     assert.include(buttonsClicked, 'button1')
   })
 
-  it("doesn't trigger buttons that don't have `data-hotkey` as a attribute", function() {
+  it('triggers buttons that have a `data-hotkey` attribute which is overriden by a hotkey parameter', function() {
+    document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
+    assert.include(buttonsClicked, 'button3')
+  })
+
+  it("doesn't trigger buttons that don't have a `data-hotkey` attribute", function() {
     document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
     assert.notInclude(buttonsClicked, 'button2')
+  })
+
+  it("doesn't respond to the hotkey in a button's overriden `data-hotkey` attribute", function() {
+    document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', ctrlKey: true}))
+    assert.notInclude(buttonsClicked, 'button3')
   })
 
   it("doesn't trigger when user is focused on a form field", function() {
@@ -48,11 +62,11 @@ describe('hotkey', function() {
   })
 
   it('handles multiple keys in a hotkey combination', function() {
-    document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', ctrlKey: true}))
+    document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
     assert.include(buttonsClicked, 'button3')
   })
 
-  it("doesn't trigger elements where the hotkey library has been uninstalled", function() {
+  it("doesn't trigger elements whose hotkey has been removed", function() {
     hotkey.uninstall(document.querySelector('#button1'))
     document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
     assert.deepEqual(buttonsClicked, [])

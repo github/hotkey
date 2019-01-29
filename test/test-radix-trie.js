@@ -54,7 +54,7 @@ describe('RadixTrie', () => {
       assert.instanceOf(otherLeaf, Leaf, 'otherLeaf isnt a Leaf instance')
     })
 
-    it('overrides leafs with new deeper insertions', () => {
+    it('overrides leaves with new deeper insertions', () => {
       const trie = new RadixTrie()
       const otherLeaf = trie.insert(['g', 'c', 'e'])
 
