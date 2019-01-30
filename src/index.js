@@ -2,7 +2,7 @@
 
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
-import hotkey from './hotkey'
+import eventToHotkeyString from './hotkey'
 
 const hotkeyRadixTrie = new RadixTrie()
 const elementsLeaves = new WeakMap()
@@ -24,7 +24,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
   // If the user presses a hotkey that doesn't exist in the Trie,
   // they've pressed a wrong key-combo and we should reset the flow
-  const newTriePosition = currentTriePosition.get(hotkey(event))
+  const newTriePosition = currentTriePosition.get(eventToHotkeyString(event))
   if (!newTriePosition) {
     resetTriePosition()
     return
@@ -39,7 +39,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   }
 })
 
-export {RadixTrie, Leaf}
+export {RadixTrie, Leaf, eventToHotkeyString}
 
 export function install(element: HTMLElement, hotkey?: string) {
   const hotkeys = expandHotkeyToEdges(hotkey || element.getAttribute('data-hotkey') || '')
