@@ -73,4 +73,24 @@ describe('hotkey', function() {
       assert.deepEqual(elementsActivated, [])
     })
   })
+
+  describe('eventToHotkeyString', function() {
+    it('keydown with uppercase letter', function(done) {
+      document.body.addEventListener('keydown', function handler(event) {
+        assert.equal(hotkey.eventToHotkeyString(event), 'J')
+        document.body.removeEventListener('keydown', handler)
+        done()
+      })
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'J'}))
+    })
+
+    it('keydown with number', function(done) {
+      document.body.addEventListener('keydown', function handler(event) {
+        assert.equal(hotkey.eventToHotkeyString(event), '1')
+        document.body.removeEventListener('keydown', handler)
+        done()
+      })
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {key: '1'}))
+    })
+  })
 })
