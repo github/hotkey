@@ -1,7 +1,7 @@
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai'],
-    files: ['../dist/index.umd.js', 'test.js', 'test-radix-trie.js'],
+    files: ['../dist/index.umd.js', 'test.js', 'test-radix-trie.js', 'test-hotkey.js'],
     reporters: ['mocha'],
     port: 9876,
     colors: true,
