@@ -167,4 +167,47 @@ describe('hotkey', function() {
       assert.deepEqual(elementsActivated, ['duplicate2'])
     })
   })
+
+  describe('elements', function() {
+    it('can focus form elements that declare data-hotkey for focus', async () => {
+      let didFocus = false
+      setHTML('<input data-hotkey="a b">')
+      document.querySelector('input').focus = function() {
+        didFocus = true
+      }
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+
+      assert.isTrue(didFocus)
+      assert.deepEqual(elementsActivated, [])
+    })
+
+    it('can click a[href] elements that declare data-hotkey for activation', async () => {
+      setHTML('<a id="link" href="#" data-hotkey="a b">')
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+
+      assert.deepEqual(elementsActivated, ['link'])
+    })
+
+    it('can click button elements that declare data-hotkey for activation', async () => {
+      setHTML('<button id="button" data-hotkey="a b">')
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+
+      assert.deepEqual(elementsActivated, ['button'])
+    })
+
+    it('can click details summary elements that declare data-hotkey for activation', async () => {
+      setHTML('<summary id="summary" data-hotkey="a b">')
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+
+      assert.deepEqual(elementsActivated, ['summary'])
+    })
+  })
 })
