@@ -67,7 +67,7 @@ describe('hotkey', function() {
       assert.notInclude(elementsActivated, 'button3')
     })
 
-    it("doesn't trigger when user is focused on a form field", function() {
+    it("doesn't trigger when user is focused on a input or textfield", function() {
       setHTML(`
       <button id="button1" data-hotkey="b">Button 1</button>
       <input id="textfield" />`)
