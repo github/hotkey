@@ -3,4 +3,5 @@
 declare module.exports: {
   install(container: Element, hotkey?: string): void;
   uninstall(container: Element): void;
+  eventToHotkeyString(event: Event): string;
 };
