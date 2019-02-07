@@ -14,7 +14,7 @@ function resetTriePosition() {
   currentTriePosition = hotkeyRadixTrie
 }
 
-document.addEventListener('keydown', (event: KeyboardEvent) => {
+export function keyDownHandler(event: KeyboardEvent) {
   if (event.target instanceof Node && isFormField(event.target)) return
 
   if (resetTriePositionTimer != null) {
@@ -37,7 +37,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     resetTriePosition()
     return
   }
-})
+}
 
 export {RadixTrie, Leaf, eventToHotkeyString}
 
