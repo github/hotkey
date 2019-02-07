@@ -8,6 +8,8 @@ function clickHandler(event) {
 const setHTML = html => {
   document.body.innerHTML = html
 
+  document.addEventListener('keydown', hotkey.keyDownHandler)
+
   for (const element of document.querySelectorAll('[data-hotkey]')) {
     hotkey.install(element)
   }
