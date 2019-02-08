@@ -40,6 +40,7 @@ describe('hotkey', function() {
     for (const element of document.querySelectorAll('[data-hotkey]')) {
       hotkey.uninstall(element)
     }
+    hotkey.uninstall(document.getElementById('button-without-a-attribute'))
     document.body.innerHTML = ''
     elementsActivated = []
   })
@@ -51,11 +52,11 @@ describe('hotkey', function() {
       assert.include(elementsActivated, 'button1')
     })
 
-    it('triggers buttons that have a `data-hotkey` attribute which is overriden by a hotkey parameter', function() {
-      setHTML('<button id="button3" data-hotkey="Control+b">Button 3</button>')
-      hotkey.install(document.getElementById('button3'), 'Control+c')
+    it('triggers buttons that get hotkey passed in as second argument', function() {
+      setHTML('<button id="button-without-a-attribute">Button 3</button>')
+      hotkey.install(document.getElementById('button-without-a-attribute'), 'Control+c')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
-      assert.include(elementsActivated, 'button3')
+      assert.include(elementsActivated, 'button-without-a-attribute')
     })
 
     it("doesn't trigger buttons that don't have a `data-hotkey` attribute", function() {
