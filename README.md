@@ -59,10 +59,7 @@ See [the list of `KeyboardEvent` key values](https://developer.mozilla.org/en-US
 ### JS
 
 ```js
-import {install, keyDownHandler} from '@github/hotkey'
-
-// Register the global key handler
-document.addEventListener('keydown', keyDownHandler)
+import {install} from '@github/hotkey'
 
 // Install all the hotkeys on the page
 for (const el of document.querySelectorAll('[data-hotkey]')) {
