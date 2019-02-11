@@ -8,6 +8,8 @@ function clickHandler(event) {
 const setHTML = html => {
   document.body.innerHTML = html
 
+  document.addEventListener('keydown', hotkey.keyDownHandler)
+
   for (const element of document.querySelectorAll('[data-hotkey]')) {
     hotkey.install(element)
   }
@@ -38,6 +40,7 @@ describe('hotkey', function() {
     for (const element of document.querySelectorAll('[data-hotkey]')) {
       hotkey.uninstall(element)
     }
+    hotkey.uninstall(document.getElementById('button-without-a-attribute'))
     document.body.innerHTML = ''
     elementsActivated = []
   })
@@ -49,11 +52,11 @@ describe('hotkey', function() {
       assert.include(elementsActivated, 'button1')
     })
 
-    it('triggers buttons that have a `data-hotkey` attribute which is overriden by a hotkey parameter', function() {
-      setHTML('<button id="button3" data-hotkey="Control+b">Button 3</button>')
-      hotkey.install(document.getElementById('button3'), 'Control+c')
+    it('triggers buttons that get hotkey passed in as second argument', function() {
+      setHTML('<button id="button-without-a-attribute">Button 3</button>')
+      hotkey.install(document.getElementById('button-without-a-attribute'), 'Control+c')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
-      assert.include(elementsActivated, 'button3')
+      assert.include(elementsActivated, 'button-without-a-attribute')
     })
 
     it("doesn't trigger buttons that don't have a `data-hotkey` attribute", function() {
@@ -209,5 +212,90 @@ describe('hotkey', function() {
 
       assert.deepEqual(elementsActivated, ['summary'])
     })
+  })
+})
+
+describe('keydown listener', function() {
+  let registeredAddEventListeners = []
+  let registeredRemoveEventListeners = []
+  const originalAddEventListenerFunction = document.addEventListener
+  const originalRemoveEventListenerFunction = document.removeEventListener
+
+  beforeEach(function() {
+    function addEventListenerWrapper(eventName, callback) {
+      registeredAddEventListeners.push(eventName)
+      originalAddEventListenerFunction(eventName, callback)
+    }
+    document.addEventListener = addEventListenerWrapper
+
+    function removeEventListenerWrapper(eventName, callback) {
+      registeredRemoveEventListeners.push(eventName)
+      originalRemoveEventListenerFunction(eventName, callback)
+    }
+    document.removeEventListener = removeEventListenerWrapper
+  })
+
+  afterEach(function() {
+    document.addEventListener = originalAddEventListenerFunction
+    document.removeEventListener = originalRemoveEventListenerFunction
+    for (const el of document.querySelectorAll('[data-hotkey]')) {
+      hotkey.uninstall(el)
+    }
+    registeredAddEventListeners = []
+    registeredRemoveEventListeners = []
+  })
+
+  it('adds a keydown listener when the first install is called', function() {
+    document.body.innerHTML = `
+      <button id="button1" data-hotkey="a">Button 1</button>
+      <button id="button2" data-hotkey="b">Button 2</button>
+    `
+
+    for (const el of document.querySelectorAll('[data-hotkey]')) {
+      hotkey.install(el)
+    }
+
+    assert.deepEqual(registeredAddEventListeners, ['keydown'])
+    assert.deepEqual(registeredRemoveEventListeners, [])
+  })
+
+  it('only one keydown listener is installed', function() {
+    document.body.innerHTML = `
+      <button id="button1" data-hotkey="a">Button 1</button>
+      <button id="button2" data-hotkey="b">Button 2</button>
+    `
+
+    for (const el of document.querySelectorAll('[data-hotkey]')) {
+      hotkey.install(el)
+    }
+
+    assert.deepEqual(registeredAddEventListeners, ['keydown'])
+    assert.deepEqual(registeredRemoveEventListeners, [])
+  })
+
+  it('uninstalling the last hotkey removes the keydown handler', function() {
+    document.body.innerHTML = `
+      <button id="button1" data-hotkey="a">Button 1</button>
+      <button id="button2" data-hotkey="b">Button 2</button>
+    `
+
+    const button1 = document.querySelector('#button1')
+    const button2 = document.querySelector('#button2')
+
+    hotkey.install(button1)
+    hotkey.install(button2)
+
+    assert.deepEqual(registeredAddEventListeners, ['keydown'])
+    assert.deepEqual(registeredRemoveEventListeners, [])
+
+    hotkey.uninstall(button1)
+
+    assert.deepEqual(registeredAddEventListeners, ['keydown'])
+    assert.deepEqual(registeredRemoveEventListeners, [])
+
+    hotkey.uninstall(button2)
+
+    assert.deepEqual(registeredAddEventListeners, ['keydown'])
+    assert.deepEqual(registeredRemoveEventListeners, ['keydown'])
   })
 })

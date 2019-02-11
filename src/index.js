@@ -6,15 +6,15 @@ import eventToHotkeyString from './hotkey'
 
 const hotkeyRadixTrie = new RadixTrie()
 const elementsLeaves = new WeakMap()
-
 let currentTriePosition = hotkeyRadixTrie
 let resetTriePositionTimer = null
+
 function resetTriePosition() {
   resetTriePositionTimer = null
   currentTriePosition = hotkeyRadixTrie
 }
 
-document.addEventListener('keydown', (event: KeyboardEvent) => {
+function keyDownHandler(event: KeyboardEvent) {
   if (event.target instanceof Node && isFormField(event.target)) return
 
   if (resetTriePositionTimer != null) {
@@ -37,11 +37,16 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     resetTriePosition()
     return
   }
-})
+}
 
 export {RadixTrie, Leaf, eventToHotkeyString}
 
 export function install(element: HTMLElement, hotkey?: string) {
+  // Install the keydown handler if this is the first install
+  if (Object.keys(hotkeyRadixTrie.children).length === 0) {
+    document.addEventListener('keydown', keyDownHandler)
+  }
+
   const hotkeys = expandHotkeyToEdges(hotkey || element.getAttribute('data-hotkey') || '')
   const leaves = hotkeys.map(hotkey => hotkeyRadixTrie.insert(hotkey).add(element))
   elementsLeaves.set(element, leaves)
@@ -53,5 +58,9 @@ export function uninstall(element: HTMLElement) {
     for (const leaf of leaves) {
       leaf && leaf.delete(element)
     }
+  }
+
+  if (Object.keys(hotkeyRadixTrie.children).length === 0) {
+    document.removeEventListener('keydown', keyDownHandler)
   }
 }
