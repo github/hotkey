@@ -10,7 +10,7 @@ export function isFormField(element: Node): boolean {
   return (
     name === 'select' ||
     name === 'textarea' ||
-    (name === 'input' && type !== 'submit' && type !== 'reset' && type !== 'checkbox') ||
+    (name === 'input' && type !== 'submit' && type !== 'reset' && type !== 'checkbox' && type !== 'radio') ||
     element.isContentEditable
   )
 }
@@ -22,7 +22,7 @@ function isActivableFormField(element: Node): boolean {
 
   const name = element.nodeName.toLowerCase()
   const type = (element.getAttribute('type') || '').toLowerCase()
-  return name === 'input' && type === 'checkbox'
+  return name === 'input' && (type === 'checkbox' || type === 'radio')
 }
 
 export function fireDeterminedAction(el: HTMLElement): void {
