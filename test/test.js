@@ -186,6 +186,14 @@ describe('hotkey', function() {
       assert.deepEqual(elementsActivated, [])
     })
 
+    it('will activate checkbox input elements that have a hotkey attribute', async () => {
+      setHTML('<input type="checkbox" id="checkbox" data-hotkey="a">')
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
+
+      assert.deepEqual(elementsActivated, ['checkbox'])
+    })
+
     it('can click a[href] elements that declare data-hotkey for activation', async () => {
       setHTML('<a id="link" href="#" data-hotkey="a b">')
 
