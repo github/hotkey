@@ -1,6 +1,7 @@
 /* @flow strict */
 
 import babel from 'rollup-plugin-babel'
+import {terser} from 'rollup-plugin-terser'
 
 const pkg = require('./package.json')
 
@@ -18,6 +19,7 @@ export default {
     }
   ],
   plugins: [
+    terser({}),
     babel({
       plugins: ['@babel/plugin-proposal-class-properties'],
       presets: ['@babel/preset-env', '@babel/preset-flow']
