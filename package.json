@@ -7,7 +7,7 @@
   "repository": "github/hotkey",
   "scripts": {
     "build": "rollup -c && cp src/index.js.flow dist/index.esm.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
-    "lint": "github-lint && flow",
+    "lint": "github-lint",
     "test": "karma start test/karma.config.js",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean && npm run lint && mkdir dist",
@@ -37,5 +37,8 @@
     "mocha": "^5.2.0",
     "rollup": "^1.1.0",
     "rollup-plugin-babel": "^4.3.0"
-  }
+  },
+  "eslintIgnore": [
+    "dist/"
+  ]
 }
