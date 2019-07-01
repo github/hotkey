@@ -48,7 +48,7 @@ export function install(element: HTMLElement, hotkey?: string) {
   }
 
   const hotkeys = expandHotkeyToEdges(hotkey || element.getAttribute('data-hotkey') || '')
-  const leaves = hotkeys.map(hotkey => hotkeyRadixTrie.insert(hotkey).add(element))
+  const leaves = hotkeys.map(h => hotkeyRadixTrie.insert(h).add(element))
   elementsLeaves.set(element, leaves)
 }
 
