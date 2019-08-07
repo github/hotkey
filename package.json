@@ -12,7 +12,8 @@
     "clean": "rm -rf dist",
     "prebuild": "npm run clean && npm run lint && mkdir dist",
     "pretest": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
   },
   "files": [
     "dist"
