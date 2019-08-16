@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
+  "types": "index.d.ts",
   "repository": "github/hotkey",
   "scripts": {
     "build": "rollup -c && cp src/index.js.flow dist/index.esm.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
@@ -16,7 +17,8 @@
     "postpublish": "npm publish --ignore-scripts --@github:registry='https://npm.pkg.github.com'"
   },
   "files": [
-    "dist"
+    "dist",
+    "index.d.ts"
   ],
   "keywords": [],
   "author": "",
