@@ -1,6 +1,6 @@
 {
   "name": "@github/hotkey",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
