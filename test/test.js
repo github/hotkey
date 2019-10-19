@@ -228,6 +228,15 @@ describe('hotkey', function() {
 
       assert.deepEqual(elementsActivated, ['summary'])
     })
+
+    it('can click any element with role == button attribute that declare data-hotkey for activation', async () => {
+      setHTML('<div id="my-pseudo-btn" role="button" data-hotkey="p d" />')
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'p'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd'}))
+
+      assert.deepEqual(elementsActivated, ['my-pseudo-btn'])
+    })
   })
 })
 

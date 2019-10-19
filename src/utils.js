@@ -25,6 +25,14 @@ function isActivableFormField(element: Node): boolean {
   return name === 'input' && (type === 'checkbox' || type === 'radio')
 }
 
+function isButtonLikeElement(element: Node): boolean {
+  if (!(element instanceof HTMLElement)) {
+    return false
+  }
+
+  return element.getAttribute('role') === 'button'
+}
+
 export function fireDeterminedAction(el: HTMLElement): void {
   if (isFormField(el)) {
     el.focus()
@@ -32,7 +40,8 @@ export function fireDeterminedAction(el: HTMLElement): void {
     (el instanceof HTMLAnchorElement && el.href) ||
     el.tagName === 'BUTTON' ||
     el.tagName === 'SUMMARY' ||
-    isActivableFormField(el)
+    isActivableFormField(el) ||
+    isButtonLikeElement(el)
   ) {
     el.click()
   }
