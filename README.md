@@ -29,6 +29,8 @@ wait for either `g c` or `g i`.
 
 ## Accessibility considerations
 
+### Character Key Shortcuts
+
 Please note that adding this functionality to your site can be a drawback for
 certain users. Providing a way in your system to disable hotkeys or remap
 them makes sure that those users can still use your site (given that it's
@@ -36,6 +38,10 @@ accessible to those users).
 
 See ["Understanding Success Criterion 2.1.4: Character Key Shortcuts"](https://www.w3.org/WAI/WCAG21/Understanding/character-key-shortcuts.html)
 for further reading on this topic.
+
+### Interactive Elements
+
+Wherever possible, hotkeys should be add to [interactive and focusable elements](https://html.spec.whatwg.org/#interactive-content). If a static element must be used, please follow the guideline in ["Adding keyboard-accessible actions to static HTML elements"](https://www.w3.org/WAI/WCAG21/Techniques/client-side-script/SCR29.html).
 
 ## Installation
 
