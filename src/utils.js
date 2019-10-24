@@ -15,25 +15,10 @@ export function isFormField(element: Node): boolean {
   )
 }
 
-function isActivableFormField(element: Node): boolean {
-  if (!(element instanceof HTMLElement)) {
-    return false
-  }
-
-  const name = element.nodeName.toLowerCase()
-  const type = (element.getAttribute('type') || '').toLowerCase()
-  return name === 'input' && (type === 'checkbox' || type === 'radio')
-}
-
 export function fireDeterminedAction(el: HTMLElement): void {
   if (isFormField(el)) {
     el.focus()
-  } else if (
-    (el instanceof HTMLAnchorElement && el.href) ||
-    el.tagName === 'BUTTON' ||
-    el.tagName === 'SUMMARY' ||
-    isActivableFormField(el)
-  ) {
+  } else {
     el.click()
   }
 }
