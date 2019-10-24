@@ -2,7 +2,7 @@
 
 Trigger an action on a target element when a key or sequence of keys is pressed
 on the keyboard. This triggers a focus event on form fields, or a click event on
-`<a href="...">`, `<button>` and `<summary>` elements.
+others.
 
 By default, hotkeys are extracted from a target element's `data-hotkey`
 attribute, but this can be overridden by passing the hotkey to the registering
