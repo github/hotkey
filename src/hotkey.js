@@ -27,5 +27,7 @@
 //
 // Returns key character String or null.
 export default function hotkey(event: KeyboardEvent) {
-  return `${event.ctrlKey ? 'Control+' : ''}${event.altKey ? 'Alt+' : ''}${event.metaKey ? 'Meta+' : ''}${event.key}`
+  return `${event.ctrlKey ? 'Control+' : ''}${event.altKey ? 'Alt+' : ''}${event.metaKey ? 'Meta+' : ''}${
+    event.shiftKey ? 'Shift+' : ''
+  }${event.key}`
 }
