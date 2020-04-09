@@ -10,21 +10,8 @@ describe('RadixTrie', () => {
 
       assert(trie.get('ctrl+p'), 'missing `ctrl+p` in trie')
       assert(trie.get('ctrl+p').get('a'), 'missing `ctrl+p a` in trie')
-      assert(
-        trie
-          .get('ctrl+p')
-          .get('a')
-          .get('b'),
-        'missing `ctrl+p a b` in trie'
-      )
-      assert.equal(
-        trie
-          .get('ctrl+p')
-          .get('a')
-          .get('b'),
-        leaf,
-        'didnt return leaf correctly'
-      )
+      assert(trie.get('ctrl+p').get('a').get('b'), 'missing `ctrl+p a b` in trie')
+      assert.equal(trie.get('ctrl+p').get('a').get('b'), leaf, 'didnt return leaf correctly')
       assert.instanceOf(leaf, Leaf, 'leaf isnt a Leaf instance')
     })
 
@@ -33,22 +20,8 @@ describe('RadixTrie', () => {
       const leaf = trie.insert(['ctrl+p', 'a', 'b'])
       const otherLeaf = trie.insert(['ctrl+p', 'a', 'c'])
 
-      assert.equal(
-        trie
-          .get('ctrl+p')
-          .get('a')
-          .get('b'),
-        leaf,
-        'didnt return `ctrl+p a b` end leaf correctly'
-      )
-      assert.equal(
-        trie
-          .get('ctrl+p')
-          .get('a')
-          .get('c'),
-        otherLeaf,
-        'didnt return `ctrl+p a c` end leaf correctly'
-      )
+      assert.equal(trie.get('ctrl+p').get('a').get('b'), leaf, 'didnt return `ctrl+p a b` end leaf correctly')
+      assert.equal(trie.get('ctrl+p').get('a').get('c'), otherLeaf, 'didnt return `ctrl+p a c` end leaf correctly')
       assert.notEqual(leaf, otherLeaf, 'leaves are same reference but shouldnt be')
       assert.instanceOf(leaf, Leaf, 'leaf isnt a Leaf instance')
       assert.instanceOf(otherLeaf, Leaf, 'otherLeaf isnt a Leaf instance')
@@ -59,14 +32,7 @@ describe('RadixTrie', () => {
       const otherLeaf = trie.insert(['g', 'c', 'e'])
 
       assert.instanceOf(trie.get('g').get('c'), RadixTrie, 'didnt override `g c` leaf as trie')
-      assert.equal(
-        trie
-          .get('g')
-          .get('c')
-          .get('e'),
-        otherLeaf,
-        'didnt add `g c e` leaf to trie'
-      )
+      assert.equal(trie.get('g').get('c').get('e'), otherLeaf, 'didnt add `g c e` leaf to trie')
     })
   })
 

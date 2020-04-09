@@ -16,7 +16,7 @@ const setHTML = html => {
 }
 
 async function wait(ms) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     return setTimeout(resolve, ms)
   })
 }
@@ -30,12 +30,12 @@ async function keySequence(keys, delay = 10) {
   }
 }
 
-describe('hotkey', function() {
-  beforeEach(function() {
+describe('hotkey', function () {
+  beforeEach(function () {
     document.addEventListener('click', clickHandler)
   })
 
-  afterEach(function() {
+  afterEach(function () {
     document.removeEventListener('click', clickHandler)
     for (const element of document.querySelectorAll('[data-hotkey]')) {
       hotkey.uninstall(element)
@@ -45,32 +45,32 @@ describe('hotkey', function() {
     elementsActivated = []
   })
 
-  describe('single key support', function() {
-    it('triggers buttons that have a `data-hotkey` attribute', function() {
+  describe('single key support', function () {
+    it('triggers buttons that have a `data-hotkey` attribute', function () {
       setHTML('<button id="button1" data-hotkey="b">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
       assert.include(elementsActivated, 'button1')
     })
 
-    it('triggers buttons that get hotkey passed in as second argument', function() {
+    it('triggers buttons that get hotkey passed in as second argument', function () {
       setHTML('<button id="button-without-a-attribute">Button 3</button>')
       hotkey.install(document.getElementById('button-without-a-attribute'), 'Control+c')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
       assert.include(elementsActivated, 'button-without-a-attribute')
     })
 
-    it("doesn't trigger buttons that don't have a `data-hotkey` attribute", function() {
+    it("doesn't trigger buttons that don't have a `data-hotkey` attribute", function () {
       setHTML('<button id="button2">Button 2</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
       assert.notInclude(elementsActivated, 'button2')
     })
 
-    it("doesn't respond to the hotkey in a button's overriden `data-hotkey` attribute", function() {
+    it("doesn't respond to the hotkey in a button's overriden `data-hotkey` attribute", function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', ctrlKey: true}))
       assert.notInclude(elementsActivated, 'button3')
     })
 
-    it("doesn't trigger when user is focused on a input or textfield", function() {
+    it("doesn't trigger when user is focused on a input or textfield", function () {
       setHTML(`
       <button id="button1" data-hotkey="b">Button 1</button>
       <input id="textfield" />`)
@@ -78,28 +78,28 @@ describe('hotkey', function() {
       assert.deepEqual(elementsActivated, [])
     })
 
-    it('handles multiple keys in a hotkey combination', function() {
+    it('handles multiple keys in a hotkey combination', function () {
       setHTML('<button id="button3" data-hotkey="Control+c">Button 3</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
       assert.include(elementsActivated, 'button3')
     })
 
-    it("doesn't trigger elements whose hotkey has been removed", function() {
+    it("doesn't trigger elements whose hotkey has been removed", function () {
       setHTML('<button id="button1" data-hotkey="b">Button 1</button>')
       hotkey.uninstall(document.querySelector('#button1'))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
       assert.deepEqual(elementsActivated, [])
     })
 
-    it('triggers elements with capitalised key', function() {
+    it('triggers elements with capitalised key', function () {
       setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, key: 'B'}))
       assert.include(elementsActivated, 'button1')
     })
   })
 
-  describe('eventToHotkeyString', function() {
-    it('keydown with uppercase letter', function(done) {
+  describe('eventToHotkeyString', function () {
+    it('keydown with uppercase letter', function (done) {
       document.body.addEventListener('keydown', function handler(event) {
         assert.equal(hotkey.eventToHotkeyString(event), 'J')
         document.body.removeEventListener('keydown', handler)
@@ -108,7 +108,7 @@ describe('hotkey', function() {
       document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'J'}))
     })
 
-    it('keydown with number', function(done) {
+    it('keydown with number', function (done) {
       document.body.addEventListener('keydown', function handler(event) {
         assert.equal(hotkey.eventToHotkeyString(event), '1')
         document.body.removeEventListener('keydown', handler)
@@ -118,34 +118,34 @@ describe('hotkey', function() {
     })
   })
 
-  describe('hotkey sequence support', function() {
-    it('supports sequences of 2 keys', async function() {
+  describe('hotkey sequence support', function () {
+    it('supports sequences of 2 keys', async function () {
       setHTML('<a id="link2" href="#" data-hotkey="b c"></a>')
       await keySequence('b c')
       assert.deepEqual(elementsActivated, ['link2'])
     })
 
-    it('finds the longest sequence of keys which maps to something', async function() {
+    it('finds the longest sequence of keys which maps to something', async function () {
       setHTML('<a id="link2" href="#" data-hotkey="b c"></a>')
       await keySequence('z b c')
       assert.deepEqual(elementsActivated, ['link2'])
     })
 
-    it('supports sequences of 3 keys', async function() {
+    it('supports sequences of 3 keys', async function () {
       setHTML('<a id="link3" href="#" data-hotkey="d e f"></a>')
       await keySequence('d e f')
       assert.deepEqual(elementsActivated, ['link3'])
     })
 
-    it('only exact hotkey sequence matches', async function() {
+    it('only exact hotkey sequence matches', async function () {
       setHTML('<a id="exact" href="#" data-hotkey="j k"></a>')
       await keySequence('j z k')
       assert.deepEqual(elementsActivated, [])
     })
   })
 
-  describe('misc', function() {
-    it('sequences time out after 1500 ms', async function() {
+  describe('misc', function () {
+    it('sequences time out after 1500 ms', async function () {
       setHTML(`
       <a href="#" id="create1" data-hotkey="h i"></a>
       <a href="#" id="create2" data-hotkey="i"></a>
@@ -157,7 +157,7 @@ describe('hotkey', function() {
       assert.deepEqual(elementsActivated, ['create2'])
     })
 
-    it('multiple hotkeys for the same element', async function() {
+    it('multiple hotkeys for the same element', async function () {
       setHTML('<a href="#" id="multiple" data-hotkey="l,m n"></a>')
 
       await keySequence('l')
@@ -166,7 +166,7 @@ describe('hotkey', function() {
       assert.deepEqual(elementsActivated, ['multiple', 'multiple'])
     })
 
-    it('with duplicate hotkeys, last element registered wins', async function() {
+    it('with duplicate hotkeys, last element registered wins', async function () {
       setHTML(`
       <a href="#" id="duplicate1" data-hotkey="c"></a>
       <a href="#" id="duplicate2" data-hotkey="c"></a>
@@ -187,11 +187,11 @@ describe('hotkey', function() {
     })
   })
 
-  describe('elements', function() {
+  describe('elements', function () {
     it('can focus form elements that declare data-hotkey for focus', async () => {
       let didFocus = false
       setHTML('<input data-hotkey="a b">')
-      document.querySelector('input').focus = function() {
+      document.querySelector('input').focus = function () {
         didFocus = true
       }
 
@@ -247,13 +247,13 @@ describe('hotkey', function() {
   })
 })
 
-describe('keydown listener', function() {
+describe('keydown listener', function () {
   let registeredAddEventListeners = []
   let registeredRemoveEventListeners = []
   const originalAddEventListenerFunction = document.addEventListener
   const originalRemoveEventListenerFunction = document.removeEventListener
 
-  beforeEach(function() {
+  beforeEach(function () {
     function addEventListenerWrapper(eventName, callback) {
       registeredAddEventListeners.push(eventName)
       originalAddEventListenerFunction(eventName, callback)
@@ -267,7 +267,7 @@ describe('keydown listener', function() {
     document.removeEventListener = removeEventListenerWrapper
   })
 
-  afterEach(function() {
+  afterEach(function () {
     document.addEventListener = originalAddEventListenerFunction
     document.removeEventListener = originalRemoveEventListenerFunction
     for (const el of document.querySelectorAll('[data-hotkey]')) {
@@ -277,7 +277,7 @@ describe('keydown listener', function() {
     registeredRemoveEventListeners = []
   })
 
-  it('adds a keydown listener when the first install is called', function() {
+  it('adds a keydown listener when the first install is called', function () {
     document.body.innerHTML = `
       <button id="button1" data-hotkey="a">Button 1</button>
       <button id="button2" data-hotkey="b">Button 2</button>
@@ -291,7 +291,7 @@ describe('keydown listener', function() {
     assert.deepEqual(registeredRemoveEventListeners, [])
   })
 
-  it('only one keydown listener is installed', function() {
+  it('only one keydown listener is installed', function () {
     document.body.innerHTML = `
       <button id="button1" data-hotkey="a">Button 1</button>
       <button id="button2" data-hotkey="b">Button 2</button>
@@ -305,7 +305,7 @@ describe('keydown listener', function() {
     assert.deepEqual(registeredRemoveEventListeners, [])
   })
 
-  it('uninstalling the last hotkey removes the keydown handler', function() {
+  it('uninstalling the last hotkey removes the keydown handler', function () {
     document.body.innerHTML = `
       <button id="button1" data-hotkey="a">Button 1</button>
       <button id="button2" data-hotkey="b">Button 2</button>

@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai'],
     files: ['../dist/index.umd.js', 'test.js', 'test-radix-trie.js'],
