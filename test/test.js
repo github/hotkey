@@ -169,6 +169,16 @@ describe('hotkey', function() {
       await keySequence('c')
       assert.deepEqual(elementsActivated, ['duplicate2'])
     })
+
+    it('works with macos meta+shift plane', async () => {
+      setHTML(`<a href="#" id="metashiftplane" data-hotkey="Meta+Shift+p"></a>`)
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, shiftKey: true, key: 'p'}))
+
+      await wait(10)
+
+      assert.deepEqual(elementsActivated, ['metashiftplane'])
+    })
   })
 
   describe('elements', function() {
