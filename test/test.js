@@ -90,6 +90,12 @@ describe('hotkey', function() {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
       assert.deepEqual(elementsActivated, [])
     })
+
+    it('triggers elements with capitalised key', function() {
+      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, key: 'B'}))
+      assert.include(elementsActivated, 'button1')
+    })
   })
 
   describe('eventToHotkeyString', function() {
