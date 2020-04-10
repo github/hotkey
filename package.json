@@ -3,11 +3,11 @@
   "version": "1.3.2",
   "description": "",
   "main": "dist/index.umd.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.js",
   "types": "index.d.ts",
   "repository": "github/hotkey",
   "scripts": {
-    "build": "rollup -c && cp src/index.js.flow dist/index.esm.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
+    "build": "rollup -c && cp src/index.js.flow dist/index.js.flow && cp src/index.js.flow dist/index.umd.js.flow",
     "lint": "github-lint",
     "test": "karma start test/karma.config.js",
     "clean": "rm -rf dist",
@@ -21,7 +21,6 @@
     "index.d.ts"
   ],
   "keywords": [],
-  "author": "",
   "license": "MIT",
   "prettier": "@github/prettier-config",
   "devDependencies": {
