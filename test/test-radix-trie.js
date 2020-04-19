@@ -43,7 +43,7 @@ describe('RadixTrie', () => {
       const keyATrie = trie.get('ctrl+p').get('a')
       const success = leaf.parent.delete(leaf)
 
-      assert(success, 'delete was unsucessful')
+      assert(success, 'delete was unsuccessful')
       assert.isUndefined(trie.get('ctrl+p'), 'still has ctrl+p leaf')
       assert.isUndefined(keyATrie.get('b'), 'keyAtrie still has b key child')
     })
@@ -56,7 +56,7 @@ describe('RadixTrie', () => {
       const keyCTrie = keyATrie.get('c')
       const success = otherLeaf.parent.delete(otherLeaf)
 
-      assert(success, 'delete was unsucessful')
+      assert(success, 'delete was unsuccessful')
       assert.equal(keyCTrie.children.length, 0, '`c` trie still has children')
     })
   })
