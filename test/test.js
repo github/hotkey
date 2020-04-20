@@ -65,7 +65,7 @@ describe('hotkey', function () {
       assert.notInclude(elementsActivated, 'button2')
     })
 
-    it("doesn't respond to the hotkey in a button's overriden `data-hotkey` attribute", function () {
+    it("doesn't respond to the hotkey in a button's overridden `data-hotkey` attribute", function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', ctrlKey: true}))
       assert.notInclude(elementsActivated, 'button3')
     })
