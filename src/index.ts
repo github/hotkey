@@ -1,13 +1,11 @@
-/* @flow strict */
-
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import eventToHotkeyString from './hotkey'
 
 const hotkeyRadixTrie = new RadixTrie()
-const elementsLeaves = new WeakMap()
-let currentTriePosition = hotkeyRadixTrie
-let resetTriePositionTimer = null
+const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
+let currentTriePosition: RadixTrie | Leaf<unknown> = hotkeyRadixTrie
+let resetTriePositionTimer: number | null = null
 
 function resetTriePosition() {
   resetTriePositionTimer = null
@@ -18,13 +16,13 @@ function keyDownHandler(event: KeyboardEvent) {
   if (event.target instanceof Node && isFormField(event.target)) return
 
   if (resetTriePositionTimer != null) {
-    clearTimeout(resetTriePositionTimer)
+    window.clearTimeout(resetTriePositionTimer)
   }
-  resetTriePositionTimer = setTimeout(resetTriePosition, 1500)
+  resetTriePositionTimer = window.setTimeout(resetTriePosition, 1500)
 
   // If the user presses a hotkey that doesn't exist in the Trie,
   // they've pressed a wrong key-combo and we should reset the flow
-  const newTriePosition = currentTriePosition.get(eventToHotkeyString(event))
+  const newTriePosition = (currentTriePosition as RadixTrie).get(eventToHotkeyString(event))
   if (!newTriePosition) {
     resetTriePosition()
     return
@@ -32,7 +30,7 @@ function keyDownHandler(event: KeyboardEvent) {
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
-    fireDeterminedAction(newTriePosition.children[newTriePosition.children.length - 1])
+    fireDeterminedAction(newTriePosition.children[newTriePosition.children.length - 1] as HTMLElement)
     event.preventDefault()
     resetTriePosition()
     return
@@ -48,7 +46,7 @@ export function install(element: HTMLElement, hotkey?: string) {
   }
 
   const hotkeys = expandHotkeyToEdges(hotkey || element.getAttribute('data-hotkey') || '')
-  const leaves = hotkeys.map(h => hotkeyRadixTrie.insert(h).add(element))
+  const leaves = hotkeys.map(h => (hotkeyRadixTrie.insert(h) as Leaf<HTMLElement>).add(element))
   elementsLeaves.set(element, leaves)
 }
 

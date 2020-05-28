@@ -1,7 +1,7 @@
 {
   "extends": [
-    "plugin:github/es6",
+    "plugin:github/recommended",
     "plugin:github/browser",
-    "plugin:github/flow"
+    "plugin:github/typescript"
   ]
 }

@@ -1,5 +1,3 @@
-/* @flow strict */
-
 export function isFormField(element: Node): boolean {
   if (!(element instanceof HTMLElement)) {
     return false

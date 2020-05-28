@@ -1,5 +1,3 @@
-/* @flow strict */
-
 // # Returns a hotkey character string for keydown and keyup events.
 //
 // A full list of key names can be found here:
