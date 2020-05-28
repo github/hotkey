@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>hotkey demo</title>
+</head>
+
+<body>
+
+  <button onclick="alert('clicked!')" data-hotkey="d">press d to click this button</button><br>
+  <textarea data-hotkey="t" rows="4" cols="40">press t to focus on this field</textarea><br>
+  <label><input data-hotkey="r" type="checkbox">Press r to check/uncheck this checkbox</label>
+
+  <script type="module">
+    import {install} from '../dist/index.esm.js'
+    // import {install} from 'https://unpkg.com/@github/hotkeynav@latest/dist/index.js'
+
+    for (const el of document.querySelectorAll('[data-hotkey]')) {
+      install(el)
+    }
+  </script>
+</body>
+
+</html>
