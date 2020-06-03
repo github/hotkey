@@ -1,6 +1,4 @@
-/* global hotkey */
-
-const {RadixTrie, Leaf} = hotkey
+import {RadixTrie, Leaf} from '../dist/index.js'
 
 describe('RadixTrie', () => {
   describe('insert', () => {

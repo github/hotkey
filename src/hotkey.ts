@@ -1,5 +1,3 @@
-/* @flow strict */
-
 // # Returns a hotkey character string for keydown and keyup events.
 //
 // A full list of key names can be found here:
@@ -26,7 +24,7 @@
 // "Control+Alt+Delete" // Multiple modifiers
 //
 // Returns key character String or null.
-export default function hotkey(event: KeyboardEvent) {
+export default function hotkey(event: KeyboardEvent): string {
   return `${event.ctrlKey ? 'Control+' : ''}${event.altKey ? 'Alt+' : ''}${event.metaKey ? 'Meta+' : ''}${
     event.shiftKey && event.key.toUpperCase() !== event.key ? 'Shift+' : ''
   }${event.key}`

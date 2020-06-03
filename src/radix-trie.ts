@@ -1,5 +1,3 @@
-/* @flow */
-
 export class Leaf<T> {
   parent: RadixTrie
   children: T[] = []
@@ -8,7 +6,7 @@ export class Leaf<T> {
     this.parent = trie
   }
 
-  delete(value: T) {
+  delete(value: T): boolean {
     const index = this.children.indexOf(value)
     if (index === -1) return false
     this.children = this.children.slice(0, index).concat(this.children.slice(index + 1))
@@ -18,7 +16,7 @@ export class Leaf<T> {
     return true
   }
 
-  add(value: T) {
+  add(value: T): Leaf<T> {
     this.children.push(value)
     return this
   }
@@ -26,21 +24,22 @@ export class Leaf<T> {
 
 export class RadixTrie {
   parent: RadixTrie | null = null
-  children: {[key: string]: RadixTrie | Leaf<*>} = {}
+  children: {[key: string]: RadixTrie | Leaf<unknown>} = {}
 
-  constructor(trie: ?RadixTrie) {
+  constructor(trie?: RadixTrie) {
     this.parent = trie || null
   }
 
-  get(edge: string) {
+  get(edge: string): RadixTrie | Leaf<unknown> {
     return this.children[edge]
   }
 
-  insert(edges: string[]) {
-    let currentNode = this
+  insert(edges: string[]): RadixTrie | Leaf<unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    let currentNode: RadixTrie | Leaf<unknown> = this
     for (let i = 0; i < edges.length; i += 1) {
       const edge = edges[i]
-      let nextNode = currentNode.get(edge)
+      let nextNode: RadixTrie | Leaf<unknown> | null = currentNode.get(edge)
       // If we're at the end of this set of edges:
       if (i === edges.length - 1) {
         // If this end already exists as a RadixTrie, then hose it and replace with a Leaf:
@@ -68,8 +67,7 @@ export class RadixTrie {
     return currentNode
   }
 
-  // eslint-disable-next-line flowtype/no-weak-types
-  delete(node: RadixTrie | Leaf<any>) {
+  delete(node: RadixTrie | Leaf<unknown>): boolean {
     for (const edge in this.children) {
       const currentNode = this.children[edge]
       if (currentNode === node) {
