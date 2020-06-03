@@ -67,7 +67,7 @@ export class RadixTrie {
     return currentNode
   }
 
-  delete(node: RadixTrie | Leaf<unknown>) {
+  delete(node: RadixTrie | Leaf<unknown>): boolean {
     for (const edge in this.children) {
       const currentNode = this.children[edge]
       if (currentNode === node) {
