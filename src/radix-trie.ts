@@ -6,7 +6,7 @@ export class Leaf<T> {
     this.parent = trie
   }
 
-  delete(value: T) {
+  delete(value: T): boolean {
     const index = this.children.indexOf(value)
     if (index === -1) return false
     this.children = this.children.slice(0, index).concat(this.children.slice(index + 1))
@@ -16,7 +16,7 @@ export class Leaf<T> {
     return true
   }
 
-  add(value: T) {
+  add(value: T): Leaf<T> {
     this.children.push(value)
     return this
   }
@@ -30,11 +30,11 @@ export class RadixTrie {
     this.parent = trie || null
   }
 
-  get(edge: string) {
+  get(edge: string): RadixTrie | Leaf<unknown> {
     return this.children[edge]
   }
 
-  insert(edges: string[]) {
+  insert(edges: string[]): RadixTrie | Leaf<unknown> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let currentNode: RadixTrie | Leaf<unknown> = this
     for (let i = 0; i < edges.length; i += 1) {

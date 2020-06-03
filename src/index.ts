@@ -39,7 +39,7 @@ function keyDownHandler(event: KeyboardEvent) {
 
 export {RadixTrie, Leaf, eventToHotkeyString}
 
-export function install(element: HTMLElement, hotkey?: string) {
+export function install(element: HTMLElement, hotkey?: string): void {
   // Install the keydown handler if this is the first install
   if (Object.keys(hotkeyRadixTrie.children).length === 0) {
     document.addEventListener('keydown', keyDownHandler)
@@ -50,7 +50,7 @@ export function install(element: HTMLElement, hotkey?: string) {
   elementsLeaves.set(element, leaves)
 }
 
-export function uninstall(element: HTMLElement) {
+export function uninstall(element: HTMLElement): void {
   const leaves = elementsLeaves.get(element)
   if (leaves && leaves.length) {
     for (const leaf of leaves) {
