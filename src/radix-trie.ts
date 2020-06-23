@@ -9,7 +9,7 @@ export class Leaf<T> {
   delete(value: T): boolean {
     const index = this.children.indexOf(value)
     if (index === -1) return false
-    this.children = this.children.slice(0, index).concat(this.children.slice(index + 1))
+    this.children.splice(index, 1)
     if (this.children.length === 0) {
       this.parent.delete(this)
     }
