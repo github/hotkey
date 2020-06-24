@@ -13,6 +13,7 @@ function resetTriePosition() {
 }
 
 function keyDownHandler(event: KeyboardEvent) {
+  if (event.defaultPrevented) return
   if (event.target instanceof Node && isFormField(event.target)) return
 
   if (resetTriePositionTimer != null) {
