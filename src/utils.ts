@@ -8,7 +8,7 @@ export function isFormField(element: Node): boolean {
   return (
     name === 'select' ||
     name === 'textarea' ||
-    (name === 'input' && type !== 'submit' && type !== 'reset' && type !== 'checkbox' && type !== 'radio') ||
+    (name === 'input' && ["submit", "reset", "checkbox", "radio"].indexOf(type) < 0)) ||
     element.isContentEditable
   )
 }
