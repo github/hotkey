@@ -27,7 +27,7 @@
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
     "chai": "^4.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.22.0",
     "eslint-plugin-github": "^4.0.0",
     "karma": "^5.0.0",
     "karma-chai": "^0.1.0",
