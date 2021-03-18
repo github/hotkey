@@ -14,7 +14,6 @@ function resetTriePosition() {
 
 function keyDownHandler(event: KeyboardEvent) {
   if (event.defaultPrevented) return
-  if (event.target instanceof Node && isFormField(event.target)) return
 
   if (resetTriePositionTimer != null) {
     window.clearTimeout(resetTriePositionTimer)
@@ -29,9 +28,26 @@ function keyDownHandler(event: KeyboardEvent) {
     return
   }
 
+  const oldTriePosition = currentTriePosition
   currentTriePosition = newTriePosition
+
   if (newTriePosition instanceof Leaf) {
-    fireDeterminedAction(newTriePosition.children[newTriePosition.children.length - 1])
+    const children = newTriePosition.children
+    const target: Element | null = event.target instanceof Element ? event.target : null
+    const leafElement = children.find((element, i) => {
+      if (target && element.getAttribute('data-hotkey-for') === target.id) return true
+      const isLastElement = children.length - 1 === i
+      return isLastElement
+    })!
+    const forSelector = leafElement.getAttribute('data-hotkey-for')
+    if (target) {
+      if ((!forSelector && isFormField(target)) || forSelector !== target.id) {
+        // Retract the currentTriePosition
+        currentTriePosition = oldTriePosition
+        return
+      }
+    }
+    fireDeterminedAction(leafElement)
     event.preventDefault()
     resetTriePosition()
     return

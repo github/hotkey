@@ -76,6 +76,35 @@ describe('hotkey', function () {
       assert.deepEqual(elementsActivated, [])
     })
 
+    it('triggers when `data-hotkey-for` matches target', function () {
+      setHTML(`
+      <button id="button1" data-hotkey="b" data-hotkey-for="textfield">Button 1</button>
+      <input id="textfield" />`)
+      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      assert.deepEqual(elementsActivated, ['button1'])
+    })
+
+    it('triggers specifically the `data-hotkey-for` element related to target', function () {
+      setHTML(`
+      <button id="button2" data-hotkey="b" data-hotkey-for="textfield">Button 1</button>
+      <button id="button1" data-hotkey="b">Button 1</button>
+      <input id="textfield" />`)
+      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      assert.deepEqual(elementsActivated, ['button2'])
+    })
+
+    it("doesn't trigger when `data-hotkey-for` does not match target", function () {
+      setHTML('<button id="button1" data-hotkey="b" data-hotkey-for="other">Button 1</button><div id="element"></div>')
+      document.getElementById('element').dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      assert.deepEqual(elementsActivated, [])
+    })
+
+    it("doesn't trigger when `data-hotkey-for` does not match form target", function () {
+      setHTML('<button id="button1" data-hotkey="b" data-hotkey-for="other">Button 1</button><input id="element"/>')
+      document.getElementById('element').dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      assert.deepEqual(elementsActivated, [])
+    })
+
     it('handles multiple keys in a hotkey combination', function () {
       setHTML('<button id="button3" data-hotkey="Control+c">Button 3</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
