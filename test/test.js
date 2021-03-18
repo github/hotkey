@@ -72,7 +72,7 @@ describe('hotkey', function () {
       setHTML(`
       <button id="button1" data-hotkey="b">Button 1</button>
       <input id="textfield" />`)
-      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
       assert.deepEqual(elementsActivated, [])
     })
 
