@@ -148,7 +148,7 @@ describe('hotkey', function () {
         document.body.removeEventListener('keydown', handler)
         done()
       })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, '`'}))
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, key: '`'}))
     })
   })
 
