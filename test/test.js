@@ -85,13 +85,13 @@ describe('hotkey', function () {
     it("doesn't trigger elements whose hotkey has been removed", function () {
       setHTML('<button id="button1" data-hotkey="b">Button 1</button>')
       uninstall(document.querySelector('#button1'))
-      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {code: 'KeyB', key: 'b'}))
       assert.deepEqual(elementsActivated, [])
     })
 
     it('triggers elements with capitalised key', function () {
       setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
-      document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, key: 'B'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.include(elementsActivated, 'button1')
     })
   })
@@ -103,25 +103,25 @@ describe('hotkey', function () {
         document.body.removeEventListener('keydown', handler)
         done()
       })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'J'}))
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyJ', key: 'J'}))
     })
 
     it('keydown with shift and lowercase letter', function (done) {
       document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'Control+Shift+J')
+        assert.equal(eventToHotkeyString(event), 'Control+J')
         document.body.removeEventListener('keydown', handler)
         done()
       })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, key: 'j'}))
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}))
     })
 
     it('keydown with shift and uppercase letter', function (done) {
       document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'Control+Shift+J')
+        assert.equal(eventToHotkeyString(event), 'Control+J')
         document.body.removeEventListener('keydown', handler)
         done()
       })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, key: 'J'}))
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}))
     })
 
     it('keydown with lowercase letter', function (done) {
@@ -130,7 +130,7 @@ describe('hotkey', function () {
         document.body.removeEventListener('keydown', handler)
         done()
       })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, key: 'j'}))
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, code: 'KeyJ', key: 'j'}))
     })
 
     it('keydown with number', function (done) {
