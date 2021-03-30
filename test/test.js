@@ -105,7 +105,34 @@ describe('hotkey', function () {
       })
       document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'J'}))
     })
-
+    
+    it('keydown with shift and lowercase letter', function (done) {
+      document.body.addEventListener('keydown', function handler(event) {
+        assert.equal(eventToHotkeyString(event), 'Control+Shift+J')
+        document.body.removeEventListener('keydown', handler)
+        done()
+      })
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, key: 'j'}))
+    })
+        
+    it('keydown with shift and uppercase letter', function (done) {
+      document.body.addEventListener('keydown', function handler(event) {
+        assert.equal(eventToHotkeyString(event), 'Control+Shift+J')
+        document.body.removeEventListener('keydown', handler)
+        done()
+      })
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, key: 'J'}))
+    })
+            
+    it('keydown with lowercase letter', function (done) {
+      document.body.addEventListener('keydown', function handler(event) {
+        assert.equal(eventToHotkeyString(event), 'Control+j')
+        document.body.removeEventListener('keydown', handler)
+        done()
+      })
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, key: 'j'}))
+    })
+    
     it('keydown with number', function (done) {
       document.body.addEventListener('keydown', function handler(event) {
         assert.equal(eventToHotkeyString(event), '1')
@@ -113,6 +140,15 @@ describe('hotkey', function () {
         done()
       })
       document.body.dispatchEvent(new KeyboardEvent('keydown', {key: '1'}))
+    })
+    
+    it('keydown with symbol', function (done) {
+      document.body.addEventListener('keydown', function handler(event) {
+        assert.equal(eventToHotkeyString(event), 'Control+Shift+`')
+        document.body.removeEventListener('keydown', handler)
+        done()
+      })
+      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, '`'}))
     })
   })
 
