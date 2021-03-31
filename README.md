@@ -62,6 +62,20 @@ $ npm install @github/hotkey
 
 See [the list of `KeyboardEvent` key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) for a list of supported key values.
 
+#### Usage within form elements
+
+If the user is currently within a typeable element (an input or textarea) then hotkeys will not fire. This behavior is intentional as these typeable elements will receive a lot of input which may accidentally trigger keyboard shortcuts. In other words - global hotkeys by design will not fire in areas where the user is likely to type.
+
+It is possible to override this behavior by adding `data-hotkey-for` which points to an ID of a form element. A element with `data-hotkey-for` specifically scopes the hotkey activation only to the element which it points to. In other words - these aren't global hotkeys, but are specifically scopes to an element's focus. This allows you to still have shortcut behaviors for an element, but using an opt-in pattern.
+
+
+```html
+<button data-hotkey="j">This will fire when input is not focussed</button>
+
+<button data-hotkey="j" data-hotkey-for="my_id">This will fire when only if input is focussed</button>
+<input id="my_id">
+```
+
 ### JS
 
 ```js
