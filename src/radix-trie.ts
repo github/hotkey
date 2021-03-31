@@ -1,8 +1,8 @@
 export class Leaf<T> {
-  parent: RadixTrie
+  parent: RadixTrie<T>
   children: T[] = []
 
-  constructor(trie: RadixTrie) {
+  constructor(trie: RadixTrie<T>) {
     this.parent = trie
   }
 
@@ -22,24 +22,24 @@ export class Leaf<T> {
   }
 }
 
-export class RadixTrie {
-  parent: RadixTrie | null = null
-  children: {[key: string]: RadixTrie | Leaf<unknown>} = {}
+export class RadixTrie<T> {
+  parent: RadixTrie<T> | null = null
+  children: {[key: string]: RadixTrie<T> | Leaf<T>} = {}
 
-  constructor(trie?: RadixTrie) {
+  constructor(trie?: RadixTrie<T>) {
     this.parent = trie || null
   }
 
-  get(edge: string): RadixTrie | Leaf<unknown> {
+  get(edge: string): RadixTrie<T> | Leaf<T> {
     return this.children[edge]
   }
 
-  insert(edges: string[]): RadixTrie | Leaf<unknown> {
+  insert(edges: string[]): RadixTrie<T> | Leaf<T> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let currentNode: RadixTrie | Leaf<unknown> = this
+    let currentNode: RadixTrie<T> | Leaf<T> = this
     for (let i = 0; i < edges.length; i += 1) {
       const edge = edges[i]
-      let nextNode: RadixTrie | Leaf<unknown> | null = currentNode.get(edge)
+      let nextNode: RadixTrie<T> | Leaf<T> | null = currentNode.get(edge)
       // If we're at the end of this set of edges:
       if (i === edges.length - 1) {
         // If this end already exists as a RadixTrie, then hose it and replace with a Leaf:
@@ -67,7 +67,7 @@ export class RadixTrie {
     return currentNode
   }
 
-  delete(node: RadixTrie | Leaf<unknown>): boolean {
+  delete(node: RadixTrie<T> | Leaf<T>): boolean {
     for (const edge in this.children) {
       const currentNode = this.children[edge]
       if (currentNode === node) {

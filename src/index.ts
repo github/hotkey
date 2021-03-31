@@ -2,9 +2,9 @@ import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import eventToHotkeyString from './hotkey'
 
-const hotkeyRadixTrie = new RadixTrie()
+const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
-let currentTriePosition: RadixTrie | Leaf<unknown> = hotkeyRadixTrie
+let currentTriePosition: RadixTrie<HTMLElement> | Leaf<HTMLElement> = hotkeyRadixTrie
 let resetTriePositionTimer: number | null = null
 
 function resetTriePosition() {
@@ -23,7 +23,7 @@ function keyDownHandler(event: KeyboardEvent) {
 
   // If the user presses a hotkey that doesn't exist in the Trie,
   // they've pressed a wrong key-combo and we should reset the flow
-  const newTriePosition = (currentTriePosition as RadixTrie).get(eventToHotkeyString(event))
+  const newTriePosition = (currentTriePosition as RadixTrie<HTMLElement>).get(eventToHotkeyString(event))
   if (!newTriePosition) {
     resetTriePosition()
     return
@@ -31,7 +31,7 @@ function keyDownHandler(event: KeyboardEvent) {
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
-    fireDeterminedAction(newTriePosition.children[newTriePosition.children.length - 1] as HTMLElement)
+    fireDeterminedAction(newTriePosition.children[newTriePosition.children.length - 1])
     event.preventDefault()
     resetTriePosition()
     return
