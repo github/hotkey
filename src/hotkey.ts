@@ -25,8 +25,8 @@
 //
 // Returns key character String or null.
 export default function hotkey(event: KeyboardEvent): string {
-  const elideShift = event.code.startsWith('Key') && event.shiftKey
+  const elideShift = event.code.startsWith('Key') && event.shiftKey && event.key.toUpperCase() === event.key
   return `${event.ctrlKey ? 'Control+' : ''}${event.altKey ? 'Alt+' : ''}${event.metaKey ? 'Meta+' : ''}${
     event.shiftKey && !elideShift ? 'Shift+' : ''
-  }${elideShift ? event.key.toUpperCase() : event.key}`
+  }${event.key}`
 }

@@ -97,59 +97,29 @@ describe('hotkey', function () {
   })
 
   describe('eventToHotkeyString', function () {
-    it('keydown with uppercase letter', function (done) {
-      document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'J')
-        document.body.removeEventListener('keydown', handler)
-        done()
+    const tests = [
+      ['Control+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
+      ['Control+Shift+j', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}],
+      ['Control+j', {ctrlKey: true, code: 'KeyJ', key: 'j'}],
+      ['Meta+Shift+p', {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}],
+      ['J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
+      ['/', {key: '/', code: ''}],
+      ['1', {key: '1', code: 'Digit1'}],
+      ['Control+Shift+`', {ctrlKey: true, shiftKey: true, key: '`'}],
+      ['c', {key: 'c', code: 'KeyC'}],
+      ['S', {key: 'S', shiftKey: true, code: 'KeyS'}],
+      ['!', {key: '!', shiftKey: true, code: 'KeyS'}]
+    ]
+    for (const [expected, keyEvent] of tests) {
+      it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
+        document.body.addEventListener('keydown', function handler(event) {
+          document.body.removeEventListener('keydown', handler)
+          assert.equal(eventToHotkeyString(event), expected)
+          done()
+        })
+        document.body.dispatchEvent(new KeyboardEvent('keydown', keyEvent))
       })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyJ', key: 'J'}))
-    })
-
-    it('keydown with shift and lowercase letter', function (done) {
-      document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'Control+J')
-        document.body.removeEventListener('keydown', handler)
-        done()
-      })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}))
-    })
-
-    it('keydown with shift and uppercase letter', function (done) {
-      document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'Control+J')
-        document.body.removeEventListener('keydown', handler)
-        done()
-      })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}))
-    })
-
-    it('keydown with lowercase letter', function (done) {
-      document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'Control+j')
-        document.body.removeEventListener('keydown', handler)
-        done()
-      })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, code: 'KeyJ', key: 'j'}))
-    })
-
-    it('keydown with number', function (done) {
-      document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), '1')
-        document.body.removeEventListener('keydown', handler)
-        done()
-      })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {key: '1'}))
-    })
-
-    it('keydown with symbol', function (done) {
-      document.body.addEventListener('keydown', function handler(event) {
-        assert.equal(eventToHotkeyString(event), 'Control+Shift+`')
-        document.body.removeEventListener('keydown', handler)
-        done()
-      })
-      document.body.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, shiftKey: true, key: '`'}))
-    })
+    }
   })
 
   describe('hotkey sequence support', function () {
