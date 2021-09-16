@@ -24,3 +24,7 @@ export function fireDeterminedAction(el: HTMLElement): void {
 export function expandHotkeyToEdges(hotkey: string): string[][] {
   return hotkey.split(',').map(edge => edge.split(' '))
 }
+
+export function includesModifier(event: KeyboardEvent): boolean {
+  return event.altKey || event.ctrlKey || event.metaKey
+}

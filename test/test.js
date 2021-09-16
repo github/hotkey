@@ -76,6 +76,14 @@ describe('hotkey', function () {
       assert.deepEqual(elementsActivated, [])
     })
 
+    it('triggers when user is focused on a input or textfield and hotkey includes modifier', function () {
+      setHTML(`
+      <button id="button1" data-hotkey="Meta+7">Button 1</button>
+      <input id="textfield" />`)
+      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, key: '7'}))
+      assert.include(elementsActivated, 'button1')
+    })
+
     it('handles multiple keys in a hotkey combination', function () {
       setHTML('<button id="button3" data-hotkey="Control+c">Button 3</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))

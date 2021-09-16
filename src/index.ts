@@ -1,5 +1,5 @@
 import {Leaf, RadixTrie} from './radix-trie'
-import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
+import {fireDeterminedAction, expandHotkeyToEdges, isFormField, includesModifier} from './utils'
 import eventToHotkeyString from './hotkey'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
@@ -14,7 +14,8 @@ function resetTriePosition() {
 
 function keyDownHandler(event: KeyboardEvent) {
   if (event.defaultPrevented) return
-  if (event.target instanceof Node && isFormField(event.target)) return
+
+  if (event.target instanceof Node && isFormField(event.target) && !includesModifier(event)) return
 
   if (resetTriePositionTimer != null) {
     window.clearTimeout(resetTriePositionTimer)
