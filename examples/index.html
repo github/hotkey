@@ -8,8 +8,8 @@
 
 <body>
 
-  <button onclick="alert('clicked!')" data-hotkey="d">press d to click this button</button><br>
-  <textarea data-hotkey="t" rows="4" cols="40">press t to focus on this field</textarea><br>
+  <button onclick="alert('clicked!')" data-hotkey-scope="text-area-1" data-hotkey="Control+d,Meta+d">press meta+d or ctrl+d in text area to click this button</button><br>
+  <textarea id="text-area-1" data-hotkey="t" rows="4" cols="40">press t to focus on this field</textarea><br>
   <label><input data-hotkey="r" type="checkbox">Press r to check/uncheck this checkbox</label><br>
   <a href="#ok" data-hotkey="o k">Press <kbd>o k</kbd> click this link</a>
 

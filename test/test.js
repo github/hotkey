@@ -96,12 +96,46 @@ describe('hotkey', function () {
     })
   })
 
+  describe('data-hotkey-scope', function () {
+    it('allows hotkey action from form field', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="textfield" data-hotkey="Meta+b">Button 1</button>
+      <input id="textfield" />`)
+      document
+        .getElementById('textfield')
+        .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
+      assert.include(elementsActivated, 'button1')
+    })
+
+    it('does nothing if `data-hotkey-scope` is set to non-form field', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="button2" data-hotkey="Meta+b">Button 1</button>
+      <button id="button2" />`)
+      document
+        .getElementById('button2')
+        .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
+      assert.deepEqual(elementsActivated, [])
+    })
+
+    it('does nothing if `data-hotkey-scope` does not exist', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="bad-id" data-hotkey="b">Button 1</button>
+      <input id="textfield" />`)
+      document
+        .getElementById('textfield')
+        .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, key: 'b'}))
+      assert.deepEqual(elementsActivated, [])
+    })
+  })
+
   describe('eventToHotkeyString', function () {
     const tests = [
       ['Control+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
       ['Control+Shift+j', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}],
       ['Control+j', {ctrlKey: true, code: 'KeyJ', key: 'j'}],
       ['Meta+Shift+p', {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}],
+      ['Meta+Shift+8', {key: '8', metaKey: true, shiftKey: true, code: 'Digit8'}],
+      ['Control+Shift+7', {key: '7', ctrlKey: true, shiftKey: true, code: 'Digit7'}],
       ['J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
       ['/', {key: '/', code: ''}],
       ['1', {key: '1', code: 'Digit1'}],
