@@ -35,22 +35,25 @@ function keyDownHandler(event: KeyboardEvent) {
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
-    let shouldFire = true
-    const elementToFire = newTriePosition.children[newTriePosition.children.length - 1]
-    const hotkeyScope = elementToFire.getAttribute('data-hotkey-scope')
-    if (isFormField(event.target)) {
-      const target = event.target as HTMLElement
-      if (target.id !== elementToFire.getAttribute('data-hotkey-scope')) {
-        shouldFire = false
+    const target = event.target as HTMLElement
+    let shouldFire = false
+    let elementToFire
+    const formField = isFormField(target)
+
+    for (let i = newTriePosition.children.length - 1; i >= 0; i -= 1) {
+      elementToFire = newTriePosition.children[i]
+      const scope = elementToFire.getAttribute('data-hotkey-scope')
+      if ((!formField && !scope) || (formField && target.id === scope)) {
+        shouldFire = true
+        break
       }
-    } else if (hotkeyScope) {
-      shouldFire = false
     }
 
-    if (shouldFire) {
+    if (elementToFire && shouldFire) {
       fireDeterminedAction(elementToFire)
       event.preventDefault()
     }
+
     resetTriePosition()
   }
 }
