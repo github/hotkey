@@ -36,15 +36,17 @@ function keyDownHandler(event: KeyboardEvent) {
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
     const target = event.target as HTMLElement
-    let shouldFire = true
+    let shouldFire = false
     let elementToFire
-    if (isFormField(target)) {
-      const scopedElements = newTriePosition.children.filter(element => element.hasAttribute('data-hotkey-scope'))
-      elementToFire = scopedElements.find(element => element.getAttribute('data-hotkey-scope') === target.id)
-      shouldFire = elementToFire ? true : false
-    } else {
-      const nonScopedElements = newTriePosition.children.filter(element => !element.hasAttribute('data-hotkey-scope'))
-      elementToFire = nonScopedElements[nonScopedElements.length - 1]
+    const formField = isFormField(target)
+
+    for (let i = newTriePosition.children.length - 1; i >= 0; i -= 1) {
+      elementToFire = newTriePosition.children[i]
+      const scope = elementToFire.getAttribute('data-hotkey-scope')
+      if ((!formField && !scope) || (formField && target.id === scope)) {
+        shouldFire = true
+        break
+      }
     }
 
     if (elementToFire && shouldFire) {
