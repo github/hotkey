@@ -126,6 +126,28 @@ describe('hotkey', function () {
         .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, key: 'b'}))
       assert.deepEqual(elementsActivated, [])
     })
+
+    it('identifies and fires correct element for duplicated hotkeys', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="textfield1" data-hotkey="Meta+b">Button 1</button>
+      <input id="textfield1" />
+      <button id="button2" data-hotkey-scope="textfield2" data-hotkey="Meta+b">Button 2</button>
+      <input id="textfield2" />
+      <button id="button3" data-hotkey="Meta+b">Button 2</button>
+      `)
+      const keyboardEventArgs = {bubbles: true, metaKey: true, cancelable: true, key: 'b'}
+
+      // Scoped hotkeys
+      document.getElementById('textfield1').dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
+      assert.include(elementsActivated, 'button1')
+
+      document.getElementById('textfield2').dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
+      assert.include(elementsActivated, 'button2')
+
+      // Non-scoped hotkey
+      document.dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
+      assert.include(elementsActivated, 'button3')
+    })
   })
 
   describe('eventToHotkeyString', function () {
