@@ -5,18 +5,7 @@ on:
     types: [created]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
-  publish-npm:
-    needs: build
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,29 +15,16 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build --if-present
+      - run: npm test
       - run: npm version ${TAG_NAME} --git-tag-version=false
         env:
           TAG_NAME: ${{ github.event.release.tag_name }}
-      - run: npm publish
+      - run: npm whoami; npm publish
         env:
-         NPM_TOKEN: ${{secrets.npm_token}}
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v2
+         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
           registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm version ${TAG_NAME} --git-tag-version=false
+      - run: npm whoami; npm publish
         env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
-      - run: npm publish
-        env:
-          NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
