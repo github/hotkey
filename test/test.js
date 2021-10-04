@@ -100,7 +100,7 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail, ['B'])
+        assert.deepEqual(event.detail.path, ['B'])
         assert.equal(event.cancelable, true)
       })
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
@@ -179,7 +179,7 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail, ['Meta+b'])
+        assert.deepEqual(event.detail.path, ['Meta+b'])
         assert.equal(event.cancelable, true)
       })
       document
@@ -262,7 +262,7 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#link3').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail, ['d', 'e', 'f'])
+        assert.deepEqual(event.detail.path, ['d', 'e', 'f'])
         assert.equal(event.cancelable, true)
       })
       await keySequence('d e f')
