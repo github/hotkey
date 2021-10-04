@@ -94,6 +94,25 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.include(elementsActivated, 'button1')
     })
+
+    it('dispatches an event on the element once fired', function () {
+      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      let fired = false
+      document.querySelector('#button1').addEventListener('hotkey-fire', event => {
+        fired = true
+        assert.deepEqual(event.detail.path, ['B'])
+        assert.equal(event.cancelable, true)
+      })
+      document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
+      assert.ok(fired, 'button1 did not receive a hotkey-fire event')
+    })
+
+    it('wont trigger action if the hotkey-fire event is cancelled', function () {
+      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      document.querySelector('#button1').addEventListener('hotkey-fire', event => event.preventDefault())
+      document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
+      assert.notInclude(elementsActivated, 'button1')
+    })
   })
 
   describe('data-hotkey-scope', function () {
@@ -148,6 +167,41 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
       assert.include(elementsActivated, 'button3')
     })
+
+    it('dispatches an event on the element once fired', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="textfield1" data-hotkey="Meta+b">Button 1</button>
+      <input id="textfield1" />
+      <button id="button2" data-hotkey-scope="textfield2" data-hotkey="Meta+b">Button 2</button>
+      <input id="textfield2" />
+      <button id="button3" data-hotkey="Meta+b">Button 2</button>
+      `)
+      let fired = false
+      document.querySelector('#button1').addEventListener('hotkey-fire', event => {
+        fired = true
+        assert.deepEqual(event.detail.path, ['Meta+b'])
+        assert.equal(event.cancelable, true)
+      })
+      document
+        .getElementById('textfield1')
+        .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
+      assert.ok(fired, 'button1 did not receive a hotkey-fire event')
+    })
+
+    it('wont trigger action if the hotkey-fire event is cancelled', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="textfield1" data-hotkey="Meta+b">Button 1</button>
+      <input id="textfield1" />
+      <button id="button2" data-hotkey-scope="textfield2" data-hotkey="Meta+b">Button 2</button>
+      <input id="textfield2" />
+      <button id="button3" data-hotkey="Meta+b">Button 2</button>
+      `)
+      document.querySelector('#button1').addEventListener('hotkey-fire', event => event.preventDefault())
+      document
+        .getElementById('textfield1')
+        .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
+      assert.notInclude(elementsActivated, 'button1')
+    })
   })
 
   describe('eventToHotkeyString', function () {
@@ -201,6 +255,18 @@ describe('hotkey', function () {
       setHTML('<a id="exact" href="#" data-hotkey="j k"></a>')
       await keySequence('j z k')
       assert.deepEqual(elementsActivated, [])
+    })
+
+    it('dispatches an event on the element once fired', async function () {
+      setHTML('<a id="link3" href="#" data-hotkey="d e f"></a>')
+      let fired = false
+      document.querySelector('#link3').addEventListener('hotkey-fire', event => {
+        fired = true
+        assert.deepEqual(event.detail.path, ['d', 'e', 'f'])
+        assert.equal(event.cancelable, true)
+      })
+      await keySequence('d e f')
+      assert.ok(fired, 'link3 did not receive a hotkey-fire event')
     })
   })
 

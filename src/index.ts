@@ -6,8 +6,10 @@ const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
 let currentTriePosition: RadixTrie<HTMLElement> | Leaf<HTMLElement> = hotkeyRadixTrie
 let resetTriePositionTimer: number | null = null
+let path: string[] = []
 
 function resetTriePosition() {
+  path = []
   resetTriePositionTimer = null
   currentTriePosition = hotkeyRadixTrie
 }
@@ -32,6 +34,7 @@ function keyDownHandler(event: KeyboardEvent) {
     resetTriePosition()
     return
   }
+  path.push(eventToHotkeyString(event))
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
@@ -50,7 +53,7 @@ function keyDownHandler(event: KeyboardEvent) {
     }
 
     if (elementToFire && shouldFire) {
-      fireDeterminedAction(elementToFire)
+      fireDeterminedAction(elementToFire, path)
       event.preventDefault()
     }
 

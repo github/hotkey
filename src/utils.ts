@@ -13,7 +13,10 @@ export function isFormField(element: Node): boolean {
   )
 }
 
-export function fireDeterminedAction(el: HTMLElement): void {
+export function fireDeterminedAction(el: HTMLElement, path: string[]): void {
+  const delegateEvent = new CustomEvent('hotkey-fire', {cancelable: true, detail: {path}})
+  const cancelled = !el.dispatchEvent(delegateEvent)
+  if (cancelled) return
   if (isFormField(el)) {
     el.focus()
   } else {
