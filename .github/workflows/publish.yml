@@ -19,12 +19,12 @@ jobs:
       - run: npm version ${TAG_NAME} --git-tag-version=false
         env:
           TAG_NAME: ${{ github.event.release.tag_name }}
-      - run: npm whoami; npm publish
+      - run: npm whoami; npm --ignore-scripts publish
         env:
          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - uses: actions/setup-node@v2
         with:
           registry-url: https://npm.pkg.github.com/
-      - run: npm whoami; npm publish
+      - run: npm whoami; npm --ignore-scripts publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
