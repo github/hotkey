@@ -20,7 +20,7 @@ function keyDownHandler(event: KeyboardEvent) {
   if (isFormField(event.target)) {
     const target = event.target as HTMLElement
     if (!target.id) return
-    if (!target.ownerDocument.querySelector(`[data-hotkey-scope=${target.id}]`)) return
+    if (!target.ownerDocument.querySelector(`[data-hotkey-scope="${target.id}"]`)) return
   }
   if (resetTriePositionTimer != null) {
     window.clearTimeout(resetTriePositionTimer)
