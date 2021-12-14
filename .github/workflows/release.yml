@@ -1,0 +1,75 @@
+name: Release and publish
+
+# Inspired by https://github.com/MylesBorins/node-osc/blob/959b9c83972a67390a351d333b23db3972ca7b46/.github/workflows/bump-version.yml and
+#             https://github.com/MylesBorins/node-osc/blob/74b563c83736a04c4a37acbff9d7bb1f01a00f57/.github/workflows/create-release.yml
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Semver descriptor for new version ("major", "minor", or "patch")
+        required: true
+
+jobs:
+  bump-version:
+    name: Bump package version
+    runs-on: ubuntu-latest
+    outputs:
+      new-tag: ${{ steps.new-tag.outputs.new-tag }}
+    steps:
+      - name: Checkout ref
+        uses: actions/checkout@v2
+      - name: Preparation
+        uses: ./.github/actions/setup
+      - name: Perform last-minute tests
+        run: npm test
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      - name: Bump package version
+        run: npm version ${{ github.event.inputs.version }}
+      - name: Push back to GitHub
+        run: git push origin main --follow-tags
+      - name: Set output to new version
+        id: new-tag
+        run: |
+          version=$(jq -r .version < package.json)
+          echo "::set-output name=new-tag::v$version"
+  create-release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    needs: bump-version
+    steps:
+      - name: Checkout ref
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.bump-version.outputs.new-tag }}
+      - name: Preparation
+        uses: ./.github/actions/setup
+      - name: Create release
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.request(`POST /repos/${{ github.repository }}/releases`, {
+              tag_name: "${{ needs.bump-version.outputs.new-tag }}",
+              generate_release_notes: true
+            })
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    needs: [bump-version, create-release]
+    steps:
+      - name: Checkout ref
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.bump-version.outputs.new-tag }}
+      - name: Preparation
+        uses: ./.github/actions/setup
+      - name: Build package
+        run: npm run build --if-present
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
