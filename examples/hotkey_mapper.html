@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>hotkey demo</title>
+  <link href="https://unpkg.com/@primer/css@^16.0.0/dist/primer.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="blankslate mx-auto col-12 col-md-8 col-lg-6 col-xl-4">
+    <h1>Hotkey Code</h1>
+    <p>Type your desired key combination on the keyboard to see the corresponding Hotkey string.</p>
+    <div id="hotkey-code" class="border rounded-2 p-6 f1 text-mono">&nbsp;</div>
+    <div id="history" />
+  </div>
+
+  <script type="module">
+    // import {eventToHotkeyString} from '../dist/index.js'
+    import {eventToHotkeyString} from 'https://unpkg.com/@github/hotkey@latest?module';
+    const codeInput = document.getElementById('hotkey-code');
+    document.addEventListener('keydown', event => {
+      const code = eventToHotkeyString(event);
+      console.log(`Hotkey Code is: "${code}"`);
+      codeInput.innerText = code;
+      event.preventDefault();
+      event.stopPropagation();
+    })
+  </script>
+</body>
+
+</html>
