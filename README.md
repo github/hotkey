@@ -4,16 +4,33 @@
 <button data-hotkey="Shift+?">Show help dialog</button>
 ```
 
-Trigger an action on a target element when a key or sequence of keys is pressed
+Trigger an action on a target element when a key, or sequence of keys, is pressed
 on the keyboard. This triggers a focus event on form fields, or a click event on
-others.
+other elements.
 
 By default, hotkeys are extracted from a target element's `data-hotkey`
 attribute, but this can be overridden by passing the hotkey to the registering
 function (`install`) as a parameter.
 
-Multiple hotkeys are separated by a `,`; key combinations are separated
-by a `+`; and key sequences are separated by a space.
+#### Hotkey string format
+
+1. Hotkey matches against the `event.key`, and uses standard W3C key names for keys and modifiers as documented in [UI Events KeyboardEvent key Values](https://www.w3.org/TR/uievents-key/).
+2. At minimum a hotkey string must specify one bare key.
+3. Multiple hotkeys (aliases) are separated by a `,`. For example the hotkey `a,b` would activate if the user typed `a` or `b`.
+4. Multiple keys separated by a blank space represent a key sequence. For example the hotkey `g n` would activate when a user types the `g` key followed by the `n` key.
+5. Modifier key combos are separated with a `+` and are prepended to a key in a consistent order as follows: `Control+Alt+Meta+Shift+KEY`.
+
+##### Example
+
+The following hotkey would match if the user typed the key sequence `a` and then `b`, OR if the user held down the `Control`, `Alt` and `/` keys at the same time.
+
+```js
+"a b,Control+Alt+/"
+```
+
+🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: https://github.github.io/hotkey/examples/hotkey_mapper.html
+
+#### Keypress sequence considerations
 
 Two-keypress sequences such as `g c` and `g i` are stored
 under the 'g' key in a nested object with 'c' and 'i' keys.
@@ -54,7 +71,6 @@ $ npm install @github/hotkey
 ```
 
 ## Usage
-
 ### HTML
 
 ``` html
