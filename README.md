@@ -30,9 +30,9 @@ The following hotkey would match if the user typed the key sequence `a` and then
 
 🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: https://github.github.io/hotkey/examples/hotkey_mapper.html
 
-#### Keypress sequence considerations
+#### Key-sequence considerations
 
-Two-keypress sequences such as `g c` and `g i` are stored
+Two-key-sequences such as `g c` and `g i` are stored
 under the 'g' key in a nested object with 'c' and 'i' keys.
 
 ```
