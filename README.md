@@ -1,5 +1,9 @@
 # Hotkey Behavior
 
+```html
+<button data-hotkey="Shift+?">Show help dialog</button>
+```
+
 Trigger an action on a target element when a key or sequence of keys is pressed
 on the keyboard. This triggers a focus event on form fields, or a click event on
 others.
