@@ -26,25 +26,24 @@
 // Returns key character String or null.
 export default function hotkey(event: KeyboardEvent): string {
   const {ctrlKey, altKey, metaKey, key} = event
-  const hotkeyString = []
+  const hotkeyString: string[] = []
+  const modifiers: boolean[] = [ctrlKey, altKey, metaKey, showShift(event)]
 
-  const modifiers = [ctrlKey, altKey, metaKey, showShift(event)]
-
-  for (const mod of modifiers) {
-    if (mod) hotkeyString.push(mod)
+  for (const [i, mod] of modifiers.entries()) {
+    if (mod) hotkeyString.push(modifierKeyNames[i])
   }
 
-  if (!modifierKeys.includes(key)) {
+  if (!modifierKeyNames.includes(key)) {
     hotkeyString.push(key)
   }
 
   return hotkeyString.join('+')
 }
 
-const modifierKeys = [`Control`, 'Alt', 'Meta', 'Shift']
+const modifierKeyNames: string[] = [`Control`, 'Alt', 'Meta', 'Shift']
 
-// We don't want to show `Shift` when key is capital
-function showShift(event: KeyboardEvent) {
+// We don't want to show `Shift` when `event.key` is capital
+function showShift(event: KeyboardEvent): boolean {
   const {shiftKey, code, key} = event
   return shiftKey && !(code.startsWith('Key') && key.toUpperCase() === key)
 }
