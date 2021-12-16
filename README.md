@@ -14,7 +14,8 @@ function (`install`) as a parameter.
 
 ## How is this used on GitHub?
 
-All shortcuts (for example `g i`, `.`, `Meta+Shift+k`) within GitHub use this feature to declare the shortcut in server side templates. This is used on almost every page on GitHub.
+All shortcuts (for example `g i`, `.`, `Meta+k`) within GitHub use hotkey to declare shortcuts in server side templates. This is used on almost every page on GitHub.
+
 ## Installation
 
 ```
