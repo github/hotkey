@@ -218,7 +218,9 @@ describe('hotkey', function () {
       ['Control+Shift+`', {ctrlKey: true, shiftKey: true, key: '`'}],
       ['c', {key: 'c', code: 'KeyC'}],
       ['S', {key: 'S', shiftKey: true, code: 'KeyS'}],
-      ['!', {key: '!', shiftKey: true, code: 'KeyS'}]
+      ['!', {key: '!', shiftKey: true, code: 'KeyS'}],
+      ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Shift'}],
+      ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Control'}]
     ]
     for (const [expected, keyEvent] of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
