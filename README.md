@@ -11,6 +11,10 @@ other elements.
 By default, hotkeys are extracted from a target element's `data-hotkey`
 attribute, but this can be overridden by passing the hotkey to the registering
 function (`install`) as a parameter.
+
+## How is this used on GitHub?
+
+All shortcuts (for example `g i`, `.`, `Meta+Shift+k`) within GitHub use this feature to declare the shortcut in server side templates. This is used on almost every page on GitHub.
 ## Installation
 
 ```
