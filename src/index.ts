@@ -86,3 +86,5 @@ export function uninstall(element: HTMLElement): void {
     document.removeEventListener('keydown', keyDownHandler)
   }
 }
+
+export * from './hotkey-compare'
