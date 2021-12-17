@@ -5,6 +5,14 @@ export function hotkeyCompare(hotkeyA: string, hotkeyB: string): boolean {
 }
 
 export function normalizeHotkey(hotkey: string): string {
-  const upper = hotkey.replace(/(.*)Shift\+(\w)$/, (m, rest, key) => `${rest}${key.toUpperCase()}`)
-  return upper.replace(/Control|Meta/, 'Mod')
+  const replaceShiftWithUpperChar = hotkey.replace(regexShiftAndChar, replaceMatchShiftAndChar)
+  return replaceShiftWithUpperChar.replace(regexModifiers, 'Mod')
+}
+
+const regexModifiers = /Control|Meta/
+
+const regexShiftAndChar = /(.*)Shift\+(\w)$/
+
+function replaceMatchShiftAndChar(_match: string, rest: string, key: string): string {
+  return `${rest}${key.toUpperCase()}`
 }

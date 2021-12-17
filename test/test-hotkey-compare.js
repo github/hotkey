@@ -9,6 +9,8 @@ describe('normalizeHotkey', () => {
     ['Control+a', 'Mod+a'],
     ['Meta+a', 'Mod+a'],
     ['Control+A', 'Mod+A'],
+    ['Shift+A', 'A'],
+    ['Shift+a', 'A'],
     ['Control+Shift+A', 'Mod+A'],
     ['Meta+Shift+a', 'Mod+A'],
     ['Mod+Shift+a', 'Mod+A'],
