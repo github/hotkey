@@ -1,9 +1,3 @@
-export function hotkeyCompare(hotkeyA: string, hotkeyB: string): boolean {
-  const a = normalizeHotkey(hotkeyA)
-  const b = normalizeHotkey(hotkeyB)
-  return a === b
-}
-
 /**
  * 1. Replaces the `Mod` modifier with `Meta` on mac, `Control` on other platforms
  * 2. Normalizes upper-case keys to `Shift+<key.toLowerCase()>. Eg. "A" becomes "Shift+a"
