@@ -5,9 +5,9 @@ export function hotkeyCompare(hotkeyA: string, hotkeyB: string): boolean {
 }
 
 export function normalizeHotkey(hotkey: string): string {
-  const replaceShiftWithUpperChar = hotkey.replace(regexShiftAndChar, replaceMatchShiftAndChar)
-  if (regexBothModifiers.test(replaceShiftWithUpperChar)) return replaceShiftWithUpperChar
-  return replaceShiftWithUpperChar.replace(regexEitherModifier, 'Mod')
+  const hotkeyShiftReplaced = hotkey.replace(regexShiftAndChar, replaceMatchShiftAndChar)
+  if (regexBothModifiers.test(hotkeyShiftReplaced)) return hotkeyShiftReplaced
+  return hotkeyShiftReplaced.replace(regexEitherModifier, 'Mod')
 }
 
 const regexEitherModifier = /Control|Meta/
