@@ -16,7 +16,11 @@ describe('normalizeHotkey', () => {
     ['Mod+Shift+a', 'Mod+A'],
     ['Mod+A', 'Mod+A'],
     ['Meta+Shift+9', 'Mod+9'],
-    ['Meta+Shift+Space', 'Mod+Shift+Space']
+    ['Meta+Shift+Space', 'Mod+Shift+Space'],
+    // when Control and Meta are both present we don't want to normalize to Mod
+    ['Control+Meta+a', 'Control+Meta+a'],
+    ['Control+Meta+Shift+a', 'Control+Meta+A'],
+    ['Control+Meta+Shift+/', 'Control+Meta+Shift+/']
   ]
 
   for (const [hotkey, expected] of tests) {
