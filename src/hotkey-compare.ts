@@ -5,16 +5,16 @@ export function hotkeyCompare(hotkeyA: string, hotkeyB: string): boolean {
 }
 
 export function normalizeHotkey(hotkey: string): string {
-  const hotkeyShiftReplaced = hotkey.replace(regexShiftAndChar, replaceMatchShiftAndChar)
-  if (regexBothModifiers.test(hotkeyShiftReplaced)) return hotkeyShiftReplaced
-  return hotkeyShiftReplaced.replace(regexEitherModifier, 'Mod')
+  const hotkeyShiftReplaced = hotkey.replace(matchShiftAndChar, replaceMatchShiftAndChar)
+  if (matchBothModifiers.test(hotkeyShiftReplaced)) return hotkeyShiftReplaced
+  return hotkeyShiftReplaced.replace(matchEitherModifier, 'Mod')
 }
 
-const regexEitherModifier = /Control|Meta/
+const matchEitherModifier = /Control|Meta/
 
-const regexBothModifiers = /Control.*Meta/
+const matchBothModifiers = /Control.*Meta/
 
-const regexShiftAndChar = /(.*)Shift\+(\w)$/
+const matchShiftAndChar = /(.*)Shift\+(\w)$/
 
 function replaceMatchShiftAndChar(_match: string, rest: string, key: string): string {
   return `${rest}${key.toUpperCase()}`
