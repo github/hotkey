@@ -4,18 +4,18 @@ export function hotkeyCompare(hotkeyA: string, hotkeyB: string): boolean {
   return a === b
 }
 
-export function normalizeHotkey(hotkey: string): string {
-  const hotkeyShiftReplaced = hotkey.replace(matchShiftAndChar, replaceMatchShiftAndChar)
-  if (matchBothModifiers.test(hotkeyShiftReplaced)) return hotkeyShiftReplaced
-  return hotkeyShiftReplaced.replace(matchEitherModifier, 'Mod')
+/**
+ * 1. Replaces the `Mod` modifier with `Meta` on mac, `Control` on other platforms
+ * 2. Normalizes upper-case keys to `Shift+<key.toLowerCase()>. Eg. "A" becomes "Shift+a"
+ * @param hotkey a hotkey string
+ * @param platform NOTE: this param is only intended to be used to mock navigator.platform in tests
+ * @returns {string} normalized representation of the given hotkey
+ */
+export function normalizeHotkey(hotkey: string, platform: string = navigator.platform): string {
+  hotkey = hotkey.replace(/([A-Z])$/, (_m, key: string) => `Shift+${key.toLocaleLowerCase()}`)
+  hotkey = hotkey.replace(/(Shift\+)+/, 'Shift+')
+  const modKey = matchApplePlatform.test(platform) ? 'Meta' : 'Control'
+  return hotkey.replace('Mod', modKey)
 }
 
-const matchEitherModifier = /Control|Meta/
-
-const matchBothModifiers = /Control.*Meta/
-
-const matchShiftAndChar = /(.*)Shift\+(\w)$/
-
-function replaceMatchShiftAndChar(_match: string, rest: string, key: string): string {
-  return `${rest}${key.toUpperCase()}`
-}
+const matchApplePlatform = /Mac|iPod|iPhone|iPad/i

@@ -6,26 +6,23 @@ describe('normalizeHotkey', () => {
   })
 
   const tests = [
-    ['Control+a', 'Mod+a'],
-    ['Meta+a', 'Mod+a'],
-    ['Control+A', 'Mod+A'],
-    ['Shift+A', 'A'],
-    ['Shift+a', 'A'],
-    ['Control+Shift+A', 'Mod+A'],
-    ['Meta+Shift+a', 'Mod+A'],
-    ['Mod+Shift+a', 'Mod+A'],
-    ['Mod+A', 'Mod+A'],
-    ['Meta+Shift+9', 'Mod+9'],
-    ['Meta+Shift+Space', 'Mod+Shift+Space'],
-    // when Control and Meta are both present we don't want to normalize to Mod
-    ['Control+Meta+a', 'Control+Meta+a'],
-    ['Control+Meta+Shift+a', 'Control+Meta+A'],
-    ['Control+Meta+Shift+/', 'Control+Meta+Shift+/']
+    ['A', 'Shift+a'],
+    ['Shift+A', 'Shift+a'],
+    ['Shift+a', 'Shift+a'],
+    ['Shift+[Space]', 'Shift+[Space]'],
+    ['Mod+a', 'Control+a', 'win'],
+    ['Mod+a', 'Meta+a', 'mac'],
+    ['Mod+A', 'Control+Shift+a', 'win'],
+    ['Mod+A', 'Meta+Shift+a', 'mac'],
+    ['Mod+9', 'Control+9', 'win'],
+    ['Mod+9', 'Meta+9', 'mac'],
+    ['Mod+Shift+[Space]', 'Control+Shift+[Space]', 'win'],
+    ['Mod+Shift+[Space]', 'Meta+Shift+[Space]', 'mac']
   ]
 
-  for (const [hotkey, expected] of tests) {
-    it(`given ${hotkey}, returns ${expected}`, function (done) {
-      assert.equal(normalizeHotkey(hotkey), expected)
+  for (const [input, expected, platform = 'mac'] of tests) {
+    it(`given ${input}, returns ${expected} on ${platform}`, function (done) {
+      assert.equal(normalizeHotkey(input, platform), expected)
       done()
     })
   }
