@@ -1,3 +1,5 @@
+import {normalizeHotkey} from './hotkey-compare'
+
 export function isFormField(element: Node): boolean {
   if (!(element instanceof HTMLElement)) {
     return false
@@ -25,5 +27,5 @@ export function fireDeterminedAction(el: HTMLElement, path: string[]): void {
 }
 
 export function expandHotkeyToEdges(hotkey: string): string[][] {
-  return hotkey.split(',').map(edge => edge.split(' '))
+  return hotkey.split(',').map(edge => edge.split(' ').map(k => normalizeHotkey(k)))
 }
