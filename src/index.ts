@@ -87,4 +87,4 @@ export function uninstall(element: HTMLElement): void {
   }
 }
 
-export * from './hotkey-compare'
+export * from './normalize-hotkey'
