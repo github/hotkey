@@ -6,10 +6,9 @@
  * @returns {string} normalized representation of the given hotkey
  */
 export function normalizeHotkey(hotkey: string, platform: string = navigator.platform): string {
-  hotkey = hotkey.replace(/([A-Z])$/, (_m, key: string) => `Shift+${key.toLocaleLowerCase()}`)
-  hotkey = hotkey.replace(/(Shift\+)+/, 'Shift+')
   const modKey = matchApplePlatform.test(platform) ? 'Meta' : 'Control'
-  return hotkey.replace('Mod', modKey)
+  hotkey = hotkey.replace('Mod', modKey)
+  return hotkey
 }
 
 const matchApplePlatform = /Mac|iPod|iPhone|iPad/i
