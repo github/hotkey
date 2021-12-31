@@ -2,6 +2,8 @@ import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import eventToHotkeyString from './hotkey'
 
+export * from './normalize-hotkey'
+
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
 let currentTriePosition: RadixTrie<HTMLElement> | Leaf<HTMLElement> = hotkeyRadixTrie
@@ -86,5 +88,3 @@ export function uninstall(element: HTMLElement): void {
     document.removeEventListener('keydown', keyDownHandler)
   }
 }
-
-export * from './normalize-hotkey'
