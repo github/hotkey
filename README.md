@@ -23,13 +23,20 @@ $ npm install @github/hotkey
 ```
 
 ## Usage
+
 ### HTML
 
-``` html
+```html
+<!-- Single character hotkey: triggers when "j" is pressed-->
 <a href="/page/2" data-hotkey="j">Next</a>
-<a href="/help" data-hotkey="Control+h">Help</a>
-<a href="/rails/rails" data-hotkey="g c">Code</a>
+<!-- Multiple hotkey aliases: triggers on both "s" and "/" -->
 <a href="/search" data-hotkey="s,/">Search</a>
+<!-- Key-sequence hotkey: triggers when "g" is pressed followed by "c"-->
+<a href="/rails/rails" data-hotkey="g c">Code</a>
+<!-- Hotkey with modifiers — triggers when "Control", "Alt", and "h"are pressed at the same time -->
+<a href="/help" data-hotkey="Control+Alt+h">Help</a>
+<!-- Special "Mod" modifier localizes to "Meta" on mac, "Control" on Windows or Linux-->
+<a href="/settings" data-hotkey="Mod+s">Search</a>
 ```
 
 See [the list of `KeyboardEvent` key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) for a list of supported key values.
@@ -69,14 +76,19 @@ for (const el of document.querySelectorAll('[data-hotkey]')) {
 2. At minimum a hotkey string must specify one bare key.
 3. Multiple hotkeys (aliases) are separated by a `,`. For example the hotkey `a,b` would activate if the user typed `a` or `b`.
 4. Multiple keys separated by a blank space represent a key sequence. For example the hotkey `g n` would activate when a user types the `g` key followed by the `n` key.
-5. Modifier key combos are separated with a `+` and are prepended to a key in a consistent order as follows: `Control+Alt+Meta+Shift+KEY`.
+5. Modifier key combos are separated with a `+` and are prepended to a key in a consistent order as follows: `"Control+Alt+Meta+Shift+KEY"`.
+6. `"Mod"` is a special modifier that localizes to `Meta` on MacOS/iOS, and `Control` on Windows/Linux.
+   1. `"Mod+"` can appear in any order in a hotkey string. For example: `"Mod+Alt+Shift+KEY"`
+   2. Neither the `Control` or `Meta` modifiers should appear in a hotkey string with `Mod`.
+   3. Due to the inconsistent lower-caseing of `event.key` on Mac and iOS when `Meta` is pressed along with `Shift`, it is recommended to avoid hotkey strings containing both `Mod` and `Shift`.
 
 ### Example
 
 The following hotkey would match if the user typed the key sequence `a` and then `b`, OR if the user held down the `Control`, `Alt` and `/` keys at the same time.
 
 ```js
-"a b,Control+Alt+/"
+'a b,Control+Alt+/'
+
 ```
 
 🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: https://github.github.io/hotkey/examples/hotkey_mapper.html
