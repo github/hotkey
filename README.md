@@ -80,7 +80,7 @@ for (const el of document.querySelectorAll('[data-hotkey]')) {
 6. `"Mod"` is a special modifier that localizes to `Meta` on MacOS/iOS, and `Control` on Windows/Linux.
    1. `"Mod+"` can appear in any order in a hotkey string. For example: `"Mod+Alt+Shift+KEY"`
    2. Neither the `Control` or `Meta` modifiers should appear in a hotkey string with `Mod`.
-   3. Due to the inconsistent lower-caseing of `event.key` on Mac and iOS when `Meta` is pressed along with `Shift`, it is recommended to avoid hotkey strings containing both `Mod` and `Shift`.
+   3. Due to the inconsistent lowercasing of `event.key` on Mac and iOS when `Meta` is pressed along with `Shift`, it is recommended to avoid hotkey strings containing both `Mod` and `Shift`.
 
 ### Example
 
