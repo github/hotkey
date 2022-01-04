@@ -14,6 +14,9 @@ describe('normalizeHotkey', () => {
     // Mod should be localized based on platform
     ['Mod+a', 'Control+a', 'win / linux'],
     ['Mod+a', 'Meta+a', 'mac'],
+    ['Mod+a', 'Meta+a', 'iPod'],
+    ['Mod+a', 'Meta+a', 'iPhone'],
+    ['Mod+a', 'Meta+a', 'iPad'],
     ['Mod+A', 'Control+A', 'win / linux'],
     ['Mod+A', 'Meta+A', 'mac'], // TODO: on a mac upper-case keys are lowercased when Meta is pressed
     ['Mod+9', 'Control+9', 'win / linux'],
