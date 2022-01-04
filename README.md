@@ -33,7 +33,7 @@ $ npm install @github/hotkey
 <a href="/search" data-hotkey="s,/">Search</a>
 <!-- Key-sequence hotkey: triggers when "g" is pressed followed by "c"-->
 <a href="/rails/rails" data-hotkey="g c">Code</a>
-<!-- Hotkey with modifiers — triggers when "Control", "Alt", and "h"are pressed at the same time -->
+<!-- Hotkey with modifiers: triggers when "Control", "Alt", and "h" are pressed at the same time -->
 <a href="/help" data-hotkey="Control+Alt+h">Help</a>
 <!-- Special "Mod" modifier localizes to "Meta" on mac, "Control" on Windows or Linux-->
 <a href="/settings" data-hotkey="Mod+s">Search</a>
