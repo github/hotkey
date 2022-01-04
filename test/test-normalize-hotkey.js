@@ -12,15 +12,15 @@ describe('normalizeHotkey', () => {
     ['Meta+a', 'Meta+a'],
     ['Control+Meta+a', 'Control+Meta+a'],
     // Mod should be localized based on platform
-    ['Mod+a', 'Control+a', 'win'],
+    ['Mod+a', 'Control+a', 'win / linux'],
     ['Mod+a', 'Meta+a', 'mac'],
-    ['Mod+A', 'Control+A', 'win'],
+    ['Mod+A', 'Control+A', 'win / linux'],
     ['Mod+A', 'Meta+A', 'mac'], // TODO: on a mac upper-case keys are lowercased when Meta is pressed
-    ['Mod+9', 'Control+9', 'win'],
+    ['Mod+9', 'Control+9', 'win / linux'],
     ['Mod+9', 'Meta+9', 'mac'],
-    ['Mod+)', 'Control+)', 'win'],
+    ['Mod+)', 'Control+)', 'win / linux'],
     ['Mod+)', 'Meta+)', 'mac'], // TODO: on a mac upper-case keys are lowercased when Meta is pressed
-    ['Mod+Alt+a', 'Control+Alt+a', 'win'],
+    ['Mod+Alt+a', 'Control+Alt+a', 'win / linux'],
     ['Mod+Alt+a', 'Alt+Meta+a', 'mac'],
     // Modifier sorting
     ['Shift+Alt+Meta+Control+m', 'Control+Alt+Meta+Shift+m'],
