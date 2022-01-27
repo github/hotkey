@@ -125,6 +125,14 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, key: ','}))
       assert.include(elementsActivated, 'button1')
     })
+
+    it('multiple comma aliases', function () {
+      setHTML('<button id="button1" data-hotkey="x,comma,y">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'x'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'y'}))
+      assert.equal(elementsActivated.length, 3)
+    })
   })
 
   describe('data-hotkey-scope', function () {
