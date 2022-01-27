@@ -25,10 +25,5 @@ export function fireDeterminedAction(el: HTMLElement, path: string[]): void {
 }
 
 export function expandHotkeyToEdges(hotkey: string): string[][] {
-  return hotkey.split(',').map(edge => {
-    if (edge.toLowerCase() === 'comma') {
-      edge = ','
-    }
-    return edge.split(' ')
-  })
+  return hotkey.split(',').map(edge => edge.replace('comma', ',').split(' '))
 }

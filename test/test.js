@@ -119,6 +119,12 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
       assert.include(elementsActivated, 'button1')
     })
+
+    it('supports comma + modifier as a hotkey', function () {
+      setHTML('<button id="button1" data-hotkey="Meta+comma">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, key: ','}))
+      assert.include(elementsActivated, 'button1')
+    })
   })
 
   describe('data-hotkey-scope', function () {
