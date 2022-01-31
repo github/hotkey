@@ -55,5 +55,7 @@ export function expandHotkeyToEdges(hotkey: string): string[][] {
   }
 
   output.push(acc)
-  return output
+
+  // Remove any empty hotkeys/sequences
+  return output.map(h => h.filter(k => k !== '')).filter(h => h.length > 0)
 }

@@ -133,6 +133,34 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'y'}))
       assert.equal(elementsActivated.length, 3)
     })
+
+    it('complex comma parsing', async function () {
+      setHTML('<button id="button1" data-hotkey=", a b,c">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c'}))
+      await keySequence(', a b')
+      assert.equal(elementsActivated.length, 2)
+    })
+
+    it('complex comma parsing II', async function () {
+      setHTML('<button id="button1" data-hotkey="a , b,c,,">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
+      await keySequence('a , b')
+      assert.equal(elementsActivated.length, 3)
+    })
+
+    it('complex comma parsing II', async function () {
+      setHTML('<button id="button1" data-hotkey=", , , ,">Button 1</button>')
+      await keySequence(', , , ,')
+      assert.include(elementsActivated, 'button1')
+    })
+
+    it('complex comma parsing II', async function () {
+      setHTML('<button id="button1" data-hotkey="Control+x, , ,">Button 1</button>')
+      await keySequence(', ,')
+      document.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, key: 'x'}))
+      assert.equal(elementsActivated.length, 2)
+    })
   })
 
   describe('data-hotkey-scope', function () {
