@@ -1,4 +1,4 @@
-import {install, uninstall, eventToHotkeyString} from '../dist/index.js'
+import {install, uninstall, eventToHotkeyString, expandHotkeysToEdges} from '../dist/index.js'
 
 let elementsActivated = []
 function clickHandler(event) {
@@ -115,19 +115,19 @@ describe('hotkey', function () {
     })
 
     it('supports comma as a hotkey', function () {
-      setHTML('<button id="button1" data-hotkey="Comma">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey=",">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
       assert.include(elementsActivated, 'button1')
     })
 
     it('supports comma + modifier as a hotkey', function () {
-      setHTML('<button id="button1" data-hotkey="Meta+Comma">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Meta+,">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, key: ','}))
       assert.include(elementsActivated, 'button1')
     })
 
     it('multiple comma aliases', function () {
-      setHTML('<button id="button1" data-hotkey="x,Comma,y">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="x,,,y">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'x'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'y'}))
@@ -289,6 +289,12 @@ describe('hotkey', function () {
       })
       await keySequence('d e f')
       assert.ok(fired, 'link3 did not receive a hotkey-fire event')
+    })
+
+    it('supports sequences containing commas', async function () {
+      setHTML('<a id="link2" href="#" data-hotkey="b , c"></a>')
+      await keySequence('b , c')
+      assert.deepEqual(elementsActivated, ['link2'])
     })
   })
 

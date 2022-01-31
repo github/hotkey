@@ -25,5 +25,35 @@ export function fireDeterminedAction(el: HTMLElement, path: string[]): void {
 }
 
 export function expandHotkeyToEdges(hotkey: string): string[][] {
-  return hotkey.split(',').map(edge => edge.replace('Comma', ',').split(' '))
+  // NOTE: we can't just split by comma, since comma is a valid hotkey character!
+  const output = []
+  let acc = ['']
+  let commaIsSeparator = false
+  for (let i = 0; i < hotkey.length; i++) {
+    if (commaIsSeparator && hotkey[i] === ',') {
+      output.push(acc)
+      acc = ['']
+      commaIsSeparator = false
+      continue
+    }
+
+    if (hotkey[i] === ' ') {
+      // Spaces are used to separate key sequences, so a following comma is
+      // part of the sequence, not a separator.
+      acc.push('')
+      commaIsSeparator = false
+      continue
+    } else if (hotkey[i] === '+') {
+      // If the current character is a +, a following comma is part of the
+      // shortcut and not a separator.
+      commaIsSeparator = false
+    } else {
+      commaIsSeparator = true
+    }
+
+    acc[acc.length - 1] += hotkey[i]
+  }
+
+  output.push(acc)
+  return output
 }
