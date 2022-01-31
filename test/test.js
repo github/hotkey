@@ -1,4 +1,4 @@
-import {install, uninstall, eventToHotkeyString, expandHotkeysToEdges} from '../dist/index.js'
+import {install, uninstall, eventToHotkeyString} from '../dist/index.js'
 
 let elementsActivated = []
 function clickHandler(event) {
