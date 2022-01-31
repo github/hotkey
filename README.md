@@ -70,6 +70,7 @@ for (const el of document.querySelectorAll('[data-hotkey]')) {
 3. Multiple hotkeys (aliases) are separated by a `,`. For example the hotkey `a,b` would activate if the user typed `a` or `b`.
 4. Multiple keys separated by a blank space represent a key sequence. For example the hotkey `g n` would activate when a user types the `g` key followed by the `n` key.
 5. Modifier key combos are separated with a `+` and are prepended to a key in a consistent order as follows: `Control+Alt+Meta+Shift+KEY`.
+6. You can use the comma key `,` as a hotkey, e.g. `a,,` would activate if the user typed `a` or `,`. `Control+,,x` would activate for `Control+,` or `x`.
 
 ### Example
 

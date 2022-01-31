@@ -113,6 +113,54 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.notInclude(elementsActivated, 'button1')
     })
+
+    it('supports comma as a hotkey', function () {
+      setHTML('<button id="button1" data-hotkey=",">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
+      assert.include(elementsActivated, 'button1')
+    })
+
+    it('supports comma + modifier as a hotkey', function () {
+      setHTML('<button id="button1" data-hotkey="Meta+,">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, key: ','}))
+      assert.include(elementsActivated, 'button1')
+    })
+
+    it('multiple comma aliases', function () {
+      setHTML('<button id="button1" data-hotkey="x,,,y">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'x'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'y'}))
+      assert.equal(elementsActivated.length, 3)
+    })
+
+    it('complex comma parsing', async function () {
+      setHTML('<button id="button1" data-hotkey=", a b,c">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c'}))
+      await keySequence(', a b')
+      assert.equal(elementsActivated.length, 2)
+    })
+
+    it('complex comma parsing II', async function () {
+      setHTML('<button id="button1" data-hotkey="a , b,c,,">Button 1</button>')
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c'}))
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
+      await keySequence('a , b')
+      assert.equal(elementsActivated.length, 3)
+    })
+
+    it('complex comma parsing II', async function () {
+      setHTML('<button id="button1" data-hotkey=", , , ,">Button 1</button>')
+      await keySequence(', , , ,')
+      assert.include(elementsActivated, 'button1')
+    })
+
+    it('complex comma parsing II', async function () {
+      setHTML('<button id="button1" data-hotkey="Control+x, , ,">Button 1</button>')
+      await keySequence(', ,')
+      document.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, key: 'x'}))
+      assert.equal(elementsActivated.length, 2)
+    })
   })
 
   describe('data-hotkey-scope', function () {
@@ -269,6 +317,12 @@ describe('hotkey', function () {
       })
       await keySequence('d e f')
       assert.ok(fired, 'link3 did not receive a hotkey-fire event')
+    })
+
+    it('supports sequences containing commas', async function () {
+      setHTML('<a id="link2" href="#" data-hotkey="b , c"></a>')
+      await keySequence('b , c')
+      assert.deepEqual(elementsActivated, ['link2'])
     })
   })
 
