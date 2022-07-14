@@ -4,9 +4,19 @@
 <button data-hotkey="Shift+?">Show help dialog</button>
 ```
 
-Trigger an action on a target element when a key, or sequence of keys, is pressed
+Trigger an action on a target element when the hotkey (key or sequence of keys) is pressed
 on the keyboard. This triggers a focus event on form fields, or a click event on
 other elements.
+
+The hotkey can be scoped to a form field:
+
+```html
+<button data-hotkey-scope="text-area" data-hotkey="Meta+d" onclick="alert('clicked')">
+  press meta+d in text area to click this button
+</button>
+
+<textarea id="text-area">text area</textarea>
+```
 
 By default, hotkeys are extracted from a target element's `data-hotkey`
 attribute, but this can be overridden by passing the hotkey to the registering
