@@ -72,8 +72,16 @@ describe('hotkey', function () {
       setHTML(`
       <button id="button1" data-hotkey="b">Button 1</button>
       <input id="textfield" />`)
-      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+      document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, key: 'b'}))
       assert.deepEqual(elementsActivated, [])
+    })
+
+    it('triggers when user is focused on a file input', function () {
+      setHTML(`
+      <button id="button1" data-hotkey="b">Button 1</button>
+      <input id="filefield" type="file" />`)
+      document.getElementById('filefield').dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, key: 'b'}))
+      assert.deepEqual(elementsActivated, ['button1'])
     })
 
     it('handles multiple keys in a hotkey combination', function () {
