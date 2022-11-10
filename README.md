@@ -73,6 +73,24 @@ for (const el of document.querySelectorAll('[data-hotkey]')) {
 }
 ```
 
+By default form elements (such as `input`,`textarea`,`select`) or elements with `contenteditable` will call `focus()` when the hotkey is triggered. All other elements trigger a `click()`. All elements, regardless of type, will emit a cancellable `hotkey-fire` event, so you can customize the behaviour, if you so choose:
+
+```js
+for (const el of document.querySelectorAll('[data-shortcut]')) {
+  install(el, el.dataset.shortcut)
+  
+  if (el.matches('.frobber')) {
+    el.addEventListener('hotkey-fire', event => {
+      // ensure the default `focus()`/`click()` is prevented:
+      event.preventDefault()
+      
+      // Use a custom behaviour instead 
+      frobulateFrobber(event.target)
+    })
+  }
+}
+```
+
 ## Hotkey string format
 
 1. Hotkey matches against the `event.key`, and uses standard W3C key names for keys and modifiers as documented in [UI Events KeyboardEvent key Values](https://www.w3.org/TR/uievents-key/).
