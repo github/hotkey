@@ -4,40 +4,47 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Hotkey Mapper Tool</title>
+  <title>hotkey | Mapper Tool</title>
   <link href="https://unpkg.com/@primer/css@^16.0.0/dist/primer.css" rel="stylesheet" />
   <script type="module" src="https://unpkg.com/@github/clipboard-copy-element@latest?module"></script>
-  <style>
-    .copy {
-      /* marg */
-    }
-  </style>
 </head>
 
 <body>
-  <div class="blankslate mx-auto col-12 col-md-8 col-lg-6">
-    <h1>Hotkey Code</h1>
-    <p>Type your desired key combination on the keyboard to see the corresponding Hotkey string.</p>
+  <div class="mx-auto my-3 col-12 col-md-8 col-lg-6">
+    <h1 id="app-name">Hotkey Code</h1>
+    <p id="hint">Press a key combination to see the corresponding hotkey string.</p>
     <div class="position-relative">
-      <clipboard-copy for="hotkey-code" class="position-absolute top-2 right-2">
-        <button aria-label="Copy to clipboard" class="btn">
-          <svg aria-hidden="true" role="img" class="StyledOcticon-uhnt7w-0 iIOaoH" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg>
-        </button>
+      <input
+        role="application"
+        aria-roledescription="Input Capture"
+        autofocus
+        aria-labelledby="app-name"
+        aria-describedby="hint"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="hotkey-code"
+        class="border rounded-2 mt-2 p-6 f1 text-mono"
+        style="width: 100%"
+      />
+
+      <clipboard-copy for="hotkey-code" class="position-absolute bottom-2 right-2 btn">
+        Copy to clipboard
       </clipboard-copy>
-      <div id="hotkey-code" class="border rounded-2 p-6 f1 text-mono overflow-auto">&nbsp;</div>
     </div>
   </div>
 
   <script type="module">
     // import {eventToHotkeyString} from '../dist/index.js'
-    import {eventToHotkeyString} from 'https://unpkg.com/@github/hotkey@latest?module';
-    const codeInput = document.getElementById('hotkey-code');
-    document.addEventListener('keydown', event => {
-      const code = eventToHotkeyString(event);
-      console.log(`Hotkey Code is: "${code}"`);
-      codeInput.innerText = code;
+    import {eventToHotkeyString} from 'https://unpkg.com/@github/hotkey@latest?module'
+
+    document.getElementById('hotkey-code').addEventListener('keydown', event => {
+      if (event.key === "Tab") 
+        return;
+
       event.preventDefault();
       event.stopPropagation();
+
+      event.currentTarget.value = eventToHotkeyString(event);
     })
   </script>
 </body>
