@@ -18,6 +18,12 @@ jobs:
 
       - run: npm run build
 
+      - name: Copy files
+        run: |
+          mkdir _site
+          cp -r pages _site
+          cp -r dist _site
+
       - name: Fix permissions
         run: |
           chmod -c -R +rX "_site/" | while read line; do
