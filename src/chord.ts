@@ -19,24 +19,24 @@ export default class ChordTracker {
 
   registerKeypress(hotkey: string): void {
     this.#path = [...this.#path, hotkey]
-    this.#startTimer()
+    this.startTimer()
   }
 
   reset(): void {
-    this.#killTimer()
+    this.killTimer()
     this.#path = []
     this.#onReset?.()
   }
 
-  #killTimer(): void {
+  private killTimer(): void {
     if (this.#timer != null) {
       window.clearTimeout(this.#timer)
     }
     this.#timer = null
   }
 
-  #startTimer(): void {
-    this.#killTimer()
+  private startTimer(): void {
+    this.killTimer()
     this.#timer = window.setTimeout(() => this.reset(), ChordTracker.CHORD_TIMEOUT)
   }
 }
