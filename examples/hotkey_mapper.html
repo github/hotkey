@@ -7,11 +7,6 @@
   <title>Hotkey Mapper Tool</title>
   <link href="https://unpkg.com/@primer/css@^16.0.0/dist/primer.css" rel="stylesheet" />
   <script type="module" src="https://unpkg.com/@github/clipboard-copy-element@latest?module"></script>
-  <style>
-    .copy {
-      /* marg */
-    }
-  </style>
 </head>
 
 <body>
@@ -19,7 +14,18 @@
     <h1 id="app-name">Hotkey Code</h1>
     <p id="hint">Type your desired key combination on the keyboard to see the corresponding Hotkey string.</p>
     <div class="position-relative">
-      <input autofocus aria-labelledby="app-name" aria-describedby="hint" id="hotkey-code" class="border rounded-2 mt-2 p-6 f1 text-mono" style="width: 100%" />
+      <input
+        role="application"
+        aria-roledescription="Input Capture"
+        autofocus
+        aria-labelledby="app-name"
+        aria-describedby="hint"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="hotkey-code"
+        class="border rounded-2 mt-2 p-6 f1 text-mono"
+        style="width: 100%"
+      />
 
       <clipboard-copy for="hotkey-code" class="position-absolute bottom-2 right-2 btn">
         Copy to clipboard
