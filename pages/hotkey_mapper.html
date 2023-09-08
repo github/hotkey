@@ -5,21 +5,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>hotkey | Mapper Tool</title>
-  <link href="https://unpkg.com/@primer/css@^16.0.0/dist/primer.css" rel="stylesheet" />
+  <link href="https://unpkg.com/@primer/css@^21.0.8/dist/primer.css" rel="stylesheet" />
   <script type="module" src="https://unpkg.com/@github/clipboard-copy-element@latest?module"></script>
 </head>
 
 <body>
   <div class="mx-auto my-3 col-12 col-md-8 col-lg-6">
     <h1 id="app-name">Hotkey Code</h1>
-    <p id="hint">Press a key combination to see the corresponding hotkey string.</p>
+    <p id="hint">Press a key combination to see the corresponding hotkey string. Quickly press another combination to build a chord.</p>
     <div class="position-relative">
       <input
+        readonly
         role="application"
         aria-roledescription="Input Capture"
         autofocus
         aria-labelledby="app-name"
-        aria-describedby="hint"
+        aria-describedby="hint chord-hint"
         aria-live="assertive"
         aria-atomic="true"
         id="hotkey-code"
@@ -27,23 +28,63 @@
         style="width: 100%"
       />
 
-      <clipboard-copy for="hotkey-code" class="position-absolute bottom-2 right-2 btn">
-        Copy to clipboard
-      </clipboard-copy>
+      <div class="position-absolute bottom-2 left-3 right-3 d-flex" style="align-items: center; gap: 8px">
+        <!-- This indicates that the input is listening for a chord press. Ideally we'd have a way to tell screen
+        readers this too, but if we make this live and add more text it will get annoying because it will conflict
+        with the already-live input above. -->
+        <p id="chord-status" class="color-fg-subtle" style="margin: 0" aria-hidden hidden>→</p>
+
+        <span style="flex: 1"></span>
+
+        <button id="reset-button" class="btn">Reset</button>
+
+        <clipboard-copy for="hotkey-code" class="btn">
+          Copy to clipboard
+        </clipboard-copy>
+      </div>
     </div>
   </div>
 
   <script type="module">
     import {eventToHotkeyString} from '../dist/index.js'
+    import ChordTracker from '../dist/chord.js'
 
-    document.getElementById('hotkey-code').addEventListener('keydown', event => {
+    const hotkeyCodeElement = document.getElementById('hotkey-code')
+    const chordStatusElement = document.getElementById('chord-status')
+    const resetButtonElement = document.getElementById('reset-button')
+
+    const chordTracker = new ChordTracker({
+      onReset() {
+        chordStatusElement.hidden = true
+      }
+    })
+
+    let currentChord = null
+
+    hotkeyCodeElement.addEventListener('keydown', event => {
       if (event.key === "Tab") 
         return;
 
       event.preventDefault();
       event.stopPropagation();
 
-      event.currentTarget.value = eventToHotkeyString(event);
+      currentChord = eventToHotkeyString(event)
+      event.currentTarget.value = [...chordTracker.path, currentChord].join(' ');
+    })
+
+    hotkeyCodeElement.addEventListener('keyup', () => {
+      // we don't just build the chord from the keyup event because keyups don't necessarily map to keydowns - for
+      // example, the keyup event for meta+b is just meta.
+      if (currentChord) {
+        chordTracker.registerKeypress(currentChord)
+        chordStatusElement.hidden = false
+        currentChord = null
+      }
+    })
+
+    resetButtonElement.addEventListener('click', () => {
+      chordTracker.reset()
+      hotkeyCodeElement.value = ''
     })
   </script>
 </body>
