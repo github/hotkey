@@ -1,13 +1,13 @@
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import eventToHotkeyString from './hotkey'
-import ChordTracker from './chord'
+import SequenceTracker from './sequence'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
 let currentTriePosition: RadixTrie<HTMLElement> | Leaf<HTMLElement> = hotkeyRadixTrie
 
-const chordTracker = new ChordTracker({
+const sequenceTracker = new SequenceTracker({
   onReset() {
     currentTriePosition = hotkeyRadixTrie
   }
@@ -26,10 +26,10 @@ function keyDownHandler(event: KeyboardEvent) {
   // they've pressed a wrong key-combo and we should reset the flow
   const newTriePosition = (currentTriePosition as RadixTrie<HTMLElement>).get(eventToHotkeyString(event))
   if (!newTriePosition) {
-    chordTracker.reset()
+    sequenceTracker.reset()
     return
   }
-  chordTracker.registerKeypress(eventToHotkeyString(event))
+  sequenceTracker.registerKeypress(eventToHotkeyString(event))
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
@@ -48,11 +48,11 @@ function keyDownHandler(event: KeyboardEvent) {
     }
 
     if (elementToFire && shouldFire) {
-      fireDeterminedAction(elementToFire, chordTracker.path)
+      fireDeterminedAction(elementToFire, sequenceTracker.path)
       event.preventDefault()
     }
 
-    chordTracker.reset()
+    sequenceTracker.reset()
   }
 }
 

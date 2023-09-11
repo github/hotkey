@@ -1,15 +1,15 @@
-interface ChordTrackerOptions {
+interface SequenceTrackerOptions {
   onReset?: () => void
 }
 
-export default class ChordTracker {
+export default class SequenceTracker {
   static readonly CHORD_TIMEOUT = 1500
 
   private _path: readonly string[] = []
   private timer: number | null = null
   private onReset
 
-  constructor({onReset}: ChordTrackerOptions = {}) {
+  constructor({onReset}: SequenceTrackerOptions = {}) {
     this.onReset = onReset
   }
 
@@ -37,6 +37,6 @@ export default class ChordTracker {
 
   private startTimer(): void {
     this.killTimer()
-    this.timer = window.setTimeout(() => this.reset(), ChordTracker.CHORD_TIMEOUT)
+    this.timer = window.setTimeout(() => this.reset(), SequenceTracker.CHORD_TIMEOUT)
   }
 }

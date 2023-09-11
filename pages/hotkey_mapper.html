@@ -20,7 +20,7 @@
         aria-roledescription="Input Capture"
         autofocus
         aria-labelledby="app-name"
-        aria-describedby="hint chord-hint"
+        aria-describedby="hint sequence-hint"
         aria-live="assertive"
         aria-atomic="true"
         id="hotkey-code"
@@ -29,10 +29,10 @@
       />
 
       <div class="position-absolute bottom-2 left-3 right-3 d-flex" style="align-items: center; gap: 8px">
-        <!-- This indicates that the input is listening for a chord press. Ideally we'd have a way to tell screen
+        <!-- This indicates that the input is listening for a sequence press. Ideally we'd have a way to tell screen
         readers this too, but if we make this live and add more text it will get annoying because it will conflict
         with the already-live input above. -->
-        <p id="chord-status" class="color-fg-subtle" style="margin: 0" aria-hidden hidden>→</p>
+        <p id="sequence-status" class="color-fg-subtle" style="margin: 0" aria-hidden hidden>→</p>
 
         <span style="flex: 1"></span>
 
@@ -47,19 +47,19 @@
 
   <script type="module">
     import {eventToHotkeyString} from '../dist/index.js'
-    import ChordTracker from '../dist/chord.js'
+    import sequenceTracker from '../dist/sequence.js'
 
     const hotkeyCodeElement = document.getElementById('hotkey-code')
-    const chordStatusElement = document.getElementById('chord-status')
+    const sequenceStatusElement = document.getElementById('sequence-status')
     const resetButtonElement = document.getElementById('reset-button')
 
-    const chordTracker = new ChordTracker({
+    const sequenceTracker = new sequenceTracker({
       onReset() {
-        chordStatusElement.hidden = true
+        sequenceStatusElement.hidden = true
       }
     })
 
-    let currentChord = null
+    let currentsequence = null
 
     hotkeyCodeElement.addEventListener('keydown', event => {
       if (event.key === "Tab") 
@@ -68,22 +68,22 @@
       event.preventDefault();
       event.stopPropagation();
 
-      currentChord = eventToHotkeyString(event)
-      event.currentTarget.value = [...chordTracker.path, currentChord].join(' ');
+      currentsequence = eventToHotkeyString(event)
+      event.currentTarget.value = [...sequenceTracker.path, currentsequence].join(' ');
     })
 
     hotkeyCodeElement.addEventListener('keyup', () => {
-      // we don't just build the chord from the keyup event because keyups don't necessarily map to keydowns - for
+      // we don't just build the sequence from the keyup event because keyups don't necessarily map to keydowns - for
       // example, the keyup event for meta+b is just meta.
-      if (currentChord) {
-        chordTracker.registerKeypress(currentChord)
-        chordStatusElement.hidden = false
-        currentChord = null
+      if (currentsequence) {
+        sequenceTracker.registerKeypress(currentsequence)
+        sequenceStatusElement.hidden = false
+        currentsequence = null
       }
     })
 
     resetButtonElement.addEventListener('click', () => {
-      chordTracker.reset()
+      sequenceTracker.reset()
       hotkeyCodeElement.value = ''
     })
   </script>
