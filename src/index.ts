@@ -4,6 +4,7 @@ import SequenceTracker from './sequence'
 import {eventToHotkey} from './hotkey'
 
 export * from './hotkey'
+export * from './sequence'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()

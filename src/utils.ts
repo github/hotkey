@@ -1,4 +1,4 @@
-import {normalizeHotkey} from './hotkey'
+import {NormalizedHotkeyString, normalizeHotkey} from './hotkey'
 import {SEQUENCE_DELIMITER} from './sequence'
 
 export function isFormField(element: Node): boolean {
@@ -21,7 +21,7 @@ export function isFormField(element: Node): boolean {
   )
 }
 
-export function fireDeterminedAction(el: HTMLElement, path: readonly string[]): void {
+export function fireDeterminedAction(el: HTMLElement, path: readonly NormalizedHotkeyString[]): void {
   const delegateEvent = new CustomEvent('hotkey-fire', {cancelable: true, detail: {path}})
   const cancelled = !el.dispatchEvent(delegateEvent)
   if (cancelled) return
@@ -32,7 +32,7 @@ export function fireDeterminedAction(el: HTMLElement, path: readonly string[]): 
   }
 }
 
-export function expandHotkeyToEdges(hotkey: string): string[][] {
+export function expandHotkeyToEdges(hotkey: string): NormalizedHotkeyString[][] {
   // NOTE: we can't just split by comma, since comma is a valid hotkey character!
   const output = []
   let acc = ['']
