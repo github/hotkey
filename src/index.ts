@@ -31,7 +31,7 @@ function keyDownHandler(event: KeyboardEvent) {
     sequenceTracker.reset()
     return
   }
-  sequenceTracker.registerKeypress(eventToHotkey(event))
+  sequenceTracker.registerKeypress(event)
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
