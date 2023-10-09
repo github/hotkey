@@ -4,6 +4,8 @@ interface SequenceTrackerOptions {
   onReset?: () => void
 }
 
+export const SEQUENCE_DELIMITER = ' '
+
 export default class SequenceTracker {
   static readonly CHORD_TIMEOUT = 1500
 

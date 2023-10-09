@@ -1,4 +1,5 @@
 import {normalizeHotkey} from './hotkey'
+import {SEQUENCE_DELIMITER} from './sequence'
 
 export function isFormField(element: Node): boolean {
   if (!(element instanceof HTMLElement)) {
@@ -44,7 +45,7 @@ export function expandHotkeyToEdges(hotkey: string): string[][] {
       continue
     }
 
-    if (hotkey[i] === ' ') {
+    if (hotkey[i] === SEQUENCE_DELIMITER) {
       // Spaces are used to separate key sequences, so a following comma is
       // part of the sequence, not a separator.
       acc.push('')
