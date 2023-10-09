@@ -4,9 +4,19 @@
 <button data-hotkey="Shift+?">Show help dialog</button>
 ```
 
-Trigger an action on a target element when a key, or sequence of keys, is pressed
+Trigger an action on a target element when the hotkey (key or sequence of keys) is pressed
 on the keyboard. This triggers a focus event on form fields, or a click event on
 other elements.
+
+The hotkey can be scoped to a form field:
+
+```html
+<button data-hotkey-scope="text-area" data-hotkey="Meta+d" onclick="alert('clicked')">
+  press meta+d in text area to click this button
+</button>
+
+<textarea id="text-area">text area</textarea>
+```
 
 By default, hotkeys are extracted from a target element's `data-hotkey`
 attribute, but this can be overridden by passing the hotkey to the registering
@@ -70,6 +80,24 @@ for (const el of document.querySelectorAll('[data-hotkey]')) {
 }
 ```
 
+By default form elements (such as `input`,`textarea`,`select`) or elements with `contenteditable` will call `focus()` when the hotkey is triggered. All other elements trigger a `click()`. All elements, regardless of type, will emit a cancellable `hotkey-fire` event, so you can customize the behaviour, if you so choose:
+
+```js
+for (const el of document.querySelectorAll('[data-shortcut]')) {
+  install(el, el.dataset.shortcut)
+  
+  if (el.matches('.frobber')) {
+    el.addEventListener('hotkey-fire', event => {
+      // ensure the default `focus()`/`click()` is prevented:
+      event.preventDefault()
+      
+      // Use a custom behaviour instead 
+      frobulateFrobber(event.target)
+    })
+  }
+}
+```
+
 ## Hotkey string format
 
 1. Hotkey matches against the `event.key`, and uses standard W3C key names for keys and modifiers as documented in [UI Events KeyboardEvent key Values](https://www.w3.org/TR/uievents-key/).
@@ -81,6 +109,7 @@ for (const el of document.querySelectorAll('[data-hotkey]')) {
    1. `"Mod+"` can appear in any order in a hotkey string. For example: `"Mod+Alt+Shift+KEY"`
    2. Neither the `Control` or `Meta` modifiers should appear in a hotkey string with `Mod`.
    3. Due to the inconsistent lowercasing of `event.key` on Mac and iOS when `Meta` is pressed along with `Shift`, it is recommended to avoid hotkey strings containing both `Mod` and `Shift`.
+7. You can use the comma key `,` as a hotkey, e.g. `a,,` would activate if the user typed `a` or `,`. `Control+,,x` would activate for `Control+,` or `x`.
 
 ### Example
 

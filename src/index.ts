@@ -1,20 +1,19 @@
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import eventToHotkeyString from './hotkey'
+import SequenceTracker from './sequence'
 
 export * from './normalize-hotkey'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
 let currentTriePosition: RadixTrie<HTMLElement> | Leaf<HTMLElement> = hotkeyRadixTrie
-let resetTriePositionTimer: number | null = null
-let path: string[] = []
 
-function resetTriePosition() {
-  path = []
-  resetTriePositionTimer = null
-  currentTriePosition = hotkeyRadixTrie
-}
+const sequenceTracker = new SequenceTracker({
+  onReset() {
+    currentTriePosition = hotkeyRadixTrie
+  }
+})
 
 function keyDownHandler(event: KeyboardEvent) {
   if (event.defaultPrevented) return
@@ -24,19 +23,15 @@ function keyDownHandler(event: KeyboardEvent) {
     if (!target.id) return
     if (!target.ownerDocument.querySelector(`[data-hotkey-scope="${target.id}"]`)) return
   }
-  if (resetTriePositionTimer != null) {
-    window.clearTimeout(resetTriePositionTimer)
-  }
-  resetTriePositionTimer = window.setTimeout(resetTriePosition, 1500)
 
   // If the user presses a hotkey that doesn't exist in the Trie,
   // they've pressed a wrong key-combo and we should reset the flow
   const newTriePosition = (currentTriePosition as RadixTrie<HTMLElement>).get(eventToHotkeyString(event))
   if (!newTriePosition) {
-    resetTriePosition()
+    sequenceTracker.reset()
     return
   }
-  path.push(eventToHotkeyString(event))
+  sequenceTracker.registerKeypress(eventToHotkeyString(event))
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
@@ -55,11 +50,11 @@ function keyDownHandler(event: KeyboardEvent) {
     }
 
     if (elementToFire && shouldFire) {
-      fireDeterminedAction(elementToFire, path)
+      fireDeterminedAction(elementToFire, sequenceTracker.path)
       event.preventDefault()
     }
 
-    resetTriePosition()
+    sequenceTracker.reset()
   }
 }
 
