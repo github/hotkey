@@ -1,4 +1,4 @@
-import {normalizeHotkey} from './normalize-hotkey'
+import {normalizeHotkey} from './hotkey'
 
 export function isFormField(element: Node): boolean {
   if (!(element instanceof HTMLElement)) {
