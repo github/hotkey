@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>hotkey demo</title>
+  <title>hotkey | Demo</title>
 </head>
 
 <body>
@@ -17,8 +17,7 @@
   <a href="#ok" data-hotkey="o k">Press <kbd>o k</kbd> click this link</a>
 
   <script type="module">
-    // import {install} from '../dist/index.js'
-    import {install} from 'https://unpkg.com/@github/hotkey@latest?module'
+    import {install} from '../dist/index.js'
 
     for (const el of document.querySelectorAll('[data-hotkey]')) {
       install(el)
