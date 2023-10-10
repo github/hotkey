@@ -117,7 +117,6 @@ The following hotkey would match if the user typed the key sequence `a` and then
 
 ```js
 'a b,Control+Alt+/'
-
 ```
 
 🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: https://github.github.io/hotkey/examples/hotkey_mapper.html
