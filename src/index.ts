@@ -3,8 +3,9 @@ import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import {SequenceTracker} from './sequence'
 import {eventToHotkeyString} from './hotkey'
 
-export * from './hotkey'
-export * from './sequence'
+export {eventToHotkeyString, normalizeHotkey, type NormalizedHotkeyString} from './hotkey'
+export {SequenceTracker, normalizeSequence, type NormalizedSequenceString} from './sequence'
+export {RadixTrie, Leaf} from './radix-trie'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
@@ -58,8 +59,6 @@ function keyDownHandler(event: KeyboardEvent) {
     sequenceTracker.reset()
   }
 }
-
-export {RadixTrie, Leaf}
 
 export function install(element: HTMLElement, hotkey?: string): void {
   // Install the keydown handler if this is the first install
