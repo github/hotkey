@@ -12,12 +12,21 @@
 <body>
   <div class="mx-auto my-3 col-12 col-md-8 col-lg-6">
     <h1 id="app-name">Hotkey Code</h1>
-    <p id="hint">Press a key combination to see the corresponding hotkey string. Quickly press another combination to
-      build a sequence.</p>
+    <p id="hint">Press a key combination to see the corresponding hotkey string. Quickly press another combination to build a sequence.</p>
     <div class="position-relative">
-      <input readonly role="application" aria-roledescription="Input Capture" autofocus aria-labelledby="app-name"
-        aria-describedby="hint sequence-hint" aria-live="assertive" aria-atomic="true" id="hotkey-code"
-        class="border rounded-2 mt-2 p-6 f1 text-mono" style="width: 100%" />
+      <input
+        readonly
+        role="application"
+        aria-roledescription="Input Capture"
+        autofocus
+        aria-labelledby="app-name"
+        aria-describedby="hint sequence-hint"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="hotkey-code"
+        class="border rounded-2 mt-2 p-6 f1 text-mono"
+        style="width: 100%"
+      />
 
       <div class="position-absolute bottom-2 left-3 right-3 d-flex" style="align-items: center; gap: 8px">
         <!-- This indicates that the input is listening for a sequence press. Ideally we'd have a way to tell screen
@@ -53,7 +62,7 @@
     let currentsequence = null
 
     hotkeyCodeElement.addEventListener('keydown', event => {
-      if (event.key === "Tab")
+      if (event.key === "Tab") 
         return;
 
       event.preventDefault();
