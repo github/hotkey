@@ -1,11 +1,23 @@
+import {NormalizedHotkeyString, eventToHotkeyString, normalizeHotkey} from './hotkey'
+
 interface SequenceTrackerOptions {
   onReset?: () => void
 }
 
-export default class SequenceTracker {
+export const SEQUENCE_DELIMITER = ' '
+
+const sequenceBrand = Symbol('sequence')
+
+/**
+ * Sequence of hotkeys, separated by spaces. For example, `Mod+m g`. Obtain one through the `SequenceTracker` class or
+ * by normalizing a string with `normalizeSequence`.
+ */
+export type NormalizedSequenceString = string & {[sequenceBrand]: true}
+
+export class SequenceTracker {
   static readonly CHORD_TIMEOUT = 1500
 
-  private _path: readonly string[] = []
+  private _path: readonly NormalizedHotkeyString[] = []
   private timer: number | null = null
   private onReset
 
@@ -13,12 +25,16 @@ export default class SequenceTracker {
     this.onReset = onReset
   }
 
-  get path(): readonly string[] {
+  get path(): readonly NormalizedHotkeyString[] {
     return this._path
   }
 
-  registerKeypress(hotkey: string): void {
-    this._path = [...this._path, hotkey]
+  get sequence(): NormalizedSequenceString {
+    return this._path.join(SEQUENCE_DELIMITER) as NormalizedSequenceString
+  }
+
+  registerKeypress(event: KeyboardEvent): void {
+    this._path = [...this._path, eventToHotkeyString(event)]
     this.startTimer()
   }
 
@@ -39,4 +55,11 @@ export default class SequenceTracker {
     this.killTimer()
     this.timer = window.setTimeout(() => this.reset(), SequenceTracker.CHORD_TIMEOUT)
   }
+}
+
+export function normalizeSequence(sequence: string): NormalizedSequenceString {
+  return sequence
+    .split(SEQUENCE_DELIMITER)
+    .map(h => normalizeHotkey(h))
+    .join(SEQUENCE_DELIMITER) as NormalizedSequenceString
 }
