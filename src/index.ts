@@ -1,6 +1,6 @@
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
-import SequenceTracker from './sequence'
+import {SequenceTracker} from './sequence'
 import {eventToHotkeyString} from './hotkey'
 
 export * from './hotkey'

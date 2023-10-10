@@ -14,7 +14,7 @@ const sequenceBrand = Symbol('sequence')
  */
 export type NormalizedSequenceString = string & {[sequenceBrand]: true}
 
-export default class SequenceTracker {
+export class SequenceTracker {
   static readonly CHORD_TIMEOUT = 1500
 
   private _path: readonly NormalizedHotkeyString[] = []

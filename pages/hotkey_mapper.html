@@ -47,13 +47,13 @@
 
   <script type="module">
     import {eventToHotkeyString} from '../dist/index.js'
-    import sequenceTracker, {SEQUENCE_DELIMITER} from '../dist/sequence.js'
+    import {SEQUENCE_DELIMITER, SequenceTracker} from '../dist/sequence.js'
 
     const hotkeyCodeElement = document.getElementById('hotkey-code')
     const sequenceStatusElement = document.getElementById('sequence-status')
     const resetButtonElement = document.getElementById('reset-button')
 
-    const sequenceTracker = new sequenceTracker({
+    const SequenceTracker = new SequenceTracker({
       onReset() {
         sequenceStatusElement.hidden = true
       }
