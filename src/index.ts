@@ -1,9 +1,11 @@
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
-import eventToHotkeyString from './hotkey'
-import SequenceTracker from './sequence'
+import {SequenceTracker} from './sequence'
+import {eventToHotkeyString} from './hotkey'
 
-export * from './normalize-hotkey'
+export {eventToHotkeyString, normalizeHotkey, NormalizedHotkeyString} from './hotkey'
+export {SequenceTracker, normalizeSequence, NormalizedSequenceString} from './sequence'
+export {RadixTrie, Leaf} from './radix-trie'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
@@ -31,7 +33,7 @@ function keyDownHandler(event: KeyboardEvent) {
     sequenceTracker.reset()
     return
   }
-  sequenceTracker.registerKeypress(eventToHotkeyString(event))
+  sequenceTracker.registerKeypress(event)
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
@@ -57,8 +59,6 @@ function keyDownHandler(event: KeyboardEvent) {
     sequenceTracker.reset()
   }
 }
-
-export {RadixTrie, Leaf, eventToHotkeyString}
 
 export function install(element: HTMLElement, hotkey?: string): void {
   // Install the keydown handler if this is the first install
