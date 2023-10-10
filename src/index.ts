@@ -3,6 +3,8 @@ import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import eventToHotkeyString from './hotkey'
 import SequenceTracker from './sequence'
 
+export * from './normalize-hotkey'
+
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
 let currentTriePosition: RadixTrie<HTMLElement> | Leaf<HTMLElement> = hotkeyRadixTrie

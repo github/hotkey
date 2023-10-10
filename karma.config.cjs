@@ -4,9 +4,8 @@ module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'chai'],
     files: [
-      { pattern: 'dist/index.js', type: 'module' },
-      { pattern: 'test/test.js', type: 'module' },
-      { pattern: 'test/test-radix-trie.js', type: 'module' }
+      {pattern: 'dist/index.js', type: 'module'},
+      {pattern: 'test/test*.js', type: 'module'}
     ],
     reporters: ['mocha'],
     port: 9876,

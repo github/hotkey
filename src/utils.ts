@@ -1,3 +1,5 @@
+import {normalizeHotkey} from './normalize-hotkey'
+
 export function isFormField(element: Node): boolean {
   if (!(element instanceof HTMLElement)) {
     return false
@@ -62,5 +64,5 @@ export function expandHotkeyToEdges(hotkey: string): string[][] {
   output.push(acc)
 
   // Remove any empty hotkeys/sequences
-  return output.map(h => h.filter(k => k !== '')).filter(h => h.length > 0)
+  return output.map(h => h.map(k => normalizeHotkey(k)).filter(k => k !== '')).filter(h => h.length > 0)
 }
