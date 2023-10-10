@@ -1,7 +1,7 @@
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 
 /**
- * A hotkey string with modifier keys in standard order. Build one with `eventToHotkey` or normalize a string via
+ * A hotkey string with modifier keys in standard order. Build one with `eventToHotkeyString` or normalize a string via
  * `normalizeHotkey`.
  *
  * A full list of key names can be found here:
@@ -23,10 +23,10 @@ export type NormalizedHotkeyString = string & {[normalizedHotkeyBrand]: true}
  * Returns a hotkey character string for keydown and keyup events.
  * @example
  * document.addEventListener('keydown', function(event) {
- *   if (hotkey(event) === 'h') ...
+ *   if (eventToHotkeyString(event) === 'h') ...
  * })
  */
-export function eventToHotkey(event: KeyboardEvent): NormalizedHotkeyString {
+export function eventToHotkeyString(event: KeyboardEvent): NormalizedHotkeyString {
   const {ctrlKey, altKey, metaKey, key} = event
   const hotkeyString: string[] = []
   const modifiers: boolean[] = [ctrlKey, altKey, metaKey, showShift(event)]

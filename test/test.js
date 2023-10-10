@@ -1,4 +1,4 @@
-import {install, uninstall, eventToHotkey} from '../dist/index.js'
+import {install, uninstall, eventToHotkeyString} from '../dist/index.js'
 
 let elementsActivated = []
 function clickHandler(event) {
@@ -282,7 +282,7 @@ describe('hotkey', function () {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
         document.body.addEventListener('keydown', function handler(event) {
           document.body.removeEventListener('keydown', handler)
-          assert.equal(eventToHotkey(event), expected)
+          assert.equal(eventToHotkeyString(event), expected)
           done()
         })
         document.body.dispatchEvent(new KeyboardEvent('keydown', keyEvent))

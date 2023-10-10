@@ -1,4 +1,4 @@
-import {NormalizedHotkeyString, eventToHotkey, normalizeHotkey} from './hotkey'
+import {NormalizedHotkeyString, eventToHotkeyString, normalizeHotkey} from './hotkey'
 
 interface SequenceTrackerOptions {
   onReset?: () => void
@@ -34,7 +34,7 @@ export default class SequenceTracker {
   }
 
   registerKeypress(event: KeyboardEvent): void {
-    this._path = [...this._path, eventToHotkey(event)]
+    this._path = [...this._path, eventToHotkeyString(event)]
     this.startTimer()
   }
 

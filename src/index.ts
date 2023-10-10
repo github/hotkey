@@ -1,7 +1,7 @@
 import {Leaf, RadixTrie} from './radix-trie'
 import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
 import SequenceTracker from './sequence'
-import {eventToHotkey} from './hotkey'
+import {eventToHotkeyString} from './hotkey'
 
 export * from './hotkey'
 export * from './sequence'
@@ -27,7 +27,7 @@ function keyDownHandler(event: KeyboardEvent) {
 
   // If the user presses a hotkey that doesn't exist in the Trie,
   // they've pressed a wrong key-combo and we should reset the flow
-  const newTriePosition = (currentTriePosition as RadixTrie<HTMLElement>).get(eventToHotkey(event))
+  const newTriePosition = (currentTriePosition as RadixTrie<HTMLElement>).get(eventToHotkeyString(event))
   if (!newTriePosition) {
     sequenceTracker.reset()
     return
