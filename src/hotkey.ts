@@ -1,3 +1,5 @@
+import {NormalizedSequenceString} from './sequence'
+
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 
 /**
@@ -17,7 +19,7 @@ const normalizedHotkeyBrand = Symbol('normalizedHotkey')
  * "Control+s"          // Control modifier plus letter
  * "Control+Alt+Delete" // Multiple modifiers
  */
-export type NormalizedHotkeyString = string & {[normalizedHotkeyBrand]: true}
+export type NormalizedHotkeyString = NormalizedSequenceString & {[normalizedHotkeyBrand]: true}
 
 /**
  * Returns a hotkey character string for keydown and keyup events.
