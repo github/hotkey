@@ -85,13 +85,13 @@ By default form elements (such as `input`,`textarea`,`select`) or elements with 
 ```js
 for (const el of document.querySelectorAll('[data-shortcut]')) {
   install(el, el.dataset.shortcut)
-  
+
   if (el.matches('.frobber')) {
     el.addEventListener('hotkey-fire', event => {
       // ensure the default `focus()`/`click()` is prevented:
       event.preventDefault()
-      
-      // Use a custom behaviour instead 
+
+      // Use a custom behaviour instead
       frobulateFrobber(event.target)
     })
   }
@@ -117,9 +117,10 @@ The following hotkey would match if the user typed the key sequence `a` and then
 
 ```js
 'a b,Control+Alt+/'
+
 ```
 
-🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: https://github.github.io/hotkey/examples/hotkey_mapper.html
+🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: <https://github.github.io/hotkey/pages/hotkey_mapper.html>
 
 #### Key-sequence considerations
 
