@@ -375,6 +375,26 @@ describe('hotkey', function () {
 
       assert.deepEqual(elementsActivated, ['metashiftplane'])
     })
+
+    it('works with macos alt plane', async () => {
+      setHTML(`<a href="#" id="altplane" data-hotkey="Alt+d"></a>`)
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {altKey: true, key: '∂'}))
+
+      await wait(10)
+
+      assert.deepEqual(elementsActivated, ['altplane'])
+    })
+
+    it('works with macos alt+shift plane', async () => {
+      setHTML(`<a href="#" id="altshiftplane" data-hotkey="Alt+Shift+R"></a>`)
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {altKey: true, shiftKey: true, key: '‰'}))
+
+      await wait(10)
+
+      assert.deepEqual(elementsActivated, ['altshiftplane'])
+    })
   })
 
   describe('elements', function () {
