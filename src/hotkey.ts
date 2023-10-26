@@ -1,4 +1,4 @@
-import {NormalizedSequenceString} from './sequence'
+import {NormalizedSequenceString} from './sequence.js'
 
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 

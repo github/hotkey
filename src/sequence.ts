@@ -1,4 +1,4 @@
-import {NormalizedHotkeyString, eventToHotkeyString, normalizeHotkey} from './hotkey'
+import {NormalizedHotkeyString, eventToHotkeyString, normalizeHotkey} from './hotkey.js'
 
 interface SequenceTrackerOptions {
   onReset?: () => void
