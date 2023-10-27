@@ -1,6 +1,7 @@
 {
   "rules": {
     "github/unescaped-html-literal": "off",
+    "github/no-inner-html": "off",
     "eslint-comments/no-use": "off",
     "import/extensions": "off"
   },

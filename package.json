@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .js,.ts && tsc --noEmit",
     "test": "karma start karma.config.cjs",
     "clean": "rm -rf dist",
-    "prebuild": "npm run clean && npm run lint && mkdir dist",
+    "xprebuild": "npm run clean && npm run lint && mkdir dist",
     "pretest": "npm run build",
     "prepublishOnly": "npm run build",
     "buildSite": "npm run build && mkdir -p pages/hotkey && cp -r dist/* pages/hotkey"

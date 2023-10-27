@@ -3,9 +3,6 @@
   "extends": ["plugin:github/recommended", "plugin:github/browser", "plugin:github/typescript"],
   "settings": {
     "import/resolver": {
-      "node": {
-        "extensions": [".js"]
-      },
       "typescript": {
         "extensions": [".ts", ".tsx"]
       }
