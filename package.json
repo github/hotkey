@@ -41,5 +41,8 @@
   },
   "eslintIgnore": [
     "dist/"
-  ]
+  ],
+  "dependencies": {
+    "eslint-import-resolver-typescript": "^3.6.1"
+  }
 }
