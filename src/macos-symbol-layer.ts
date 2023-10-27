@@ -3,7 +3,7 @@
  * English layout. Most of these are standardized across most language layouts, so this won't work 100% in every
  * language but it should work most of the time.
  */
-export const macosSymbolPlaneKeys: Record<string, string> = {
+export const macosSymbolLayerKeys: Record<string, string> = {
   ['¡']: '1',
   ['™']: '2',
   ['£']: '3',

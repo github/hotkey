@@ -1,5 +1,5 @@
 import {NormalizedSequenceString} from './sequence'
-import {macosSymbolPlaneKeys} from './macos-symbol-plane'
+import {macosSymbolLayerKeys} from './macos-symbol-layer'
 
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 
@@ -42,7 +42,7 @@ export function eventToHotkeyString(
   }
 
   if (!modifierKeyNames.includes(key)) {
-    const nonOptionPlaneKey = matchApplePlatform.test(platform) ? macosSymbolPlaneKeys[key] ?? key : key
+    const nonOptionPlaneKey = matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
     hotkeyString.push(nonOptionPlaneKey)
   }
 
