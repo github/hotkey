@@ -1,4 +1,5 @@
 import {NormalizedSequenceString} from './sequence'
+import {macosSymbolLayerKeys} from './macos-symbol-layer'
 
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 
@@ -28,7 +29,10 @@ export type NormalizedHotkeyString = NormalizedSequenceString & {[normalizedHotk
  *   if (eventToHotkeyString(event) === 'h') ...
  * })
  */
-export function eventToHotkeyString(event: KeyboardEvent): NormalizedHotkeyString {
+export function eventToHotkeyString(
+  event: KeyboardEvent,
+  platform: string = navigator.platform
+): NormalizedHotkeyString {
   const {ctrlKey, altKey, metaKey, key} = event
   const hotkeyString: string[] = []
   const modifiers: boolean[] = [ctrlKey, altKey, metaKey, showShift(event)]
@@ -38,7 +42,8 @@ export function eventToHotkeyString(event: KeyboardEvent): NormalizedHotkeyStrin
   }
 
   if (!modifierKeyNames.includes(key)) {
-    hotkeyString.push(key)
+    const nonOptionPlaneKey = matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
+    hotkeyString.push(nonOptionPlaneKey)
   }
 
   return hotkeyString.join('+') as NormalizedHotkeyString

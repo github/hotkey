@@ -276,13 +276,21 @@ describe('hotkey', function () {
       ['S', {key: 'S', shiftKey: true, code: 'KeyS'}],
       ['!', {key: '!', shiftKey: true, code: 'KeyS'}],
       ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Shift'}],
-      ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Control'}]
+      ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Control'}],
+      ['Alt+s', {altKey: true, key: 's'}],
+      ['Alt+s', {altKey: true, key: 'ß'}, 'mac'],
+      ['Alt+Shift+S', {altKey: true, shiftKey: true, key: 'S'}],
+      ['Alt+Shift+S', {altKey: true, shiftKey: true, key: 'Í'}, 'mac'],
+      ['Alt+ArrowLeft', {altKey: true, key: 'ArrowLeft'}],
+      ['Alt+ArrowLeft', {altKey: true, key: 'ArrowLeft'}, 'mac'],
+      ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}],
+      ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}, 'mac']
     ]
-    for (const [expected, keyEvent] of tests) {
+    for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
         document.body.addEventListener('keydown', function handler(event) {
           document.body.removeEventListener('keydown', handler)
-          assert.equal(eventToHotkeyString(event), expected)
+          assert.equal(eventToHotkeyString(event, platform), expected)
           done()
         })
         document.body.dispatchEvent(new KeyboardEvent('keydown', keyEvent))
