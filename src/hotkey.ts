@@ -47,7 +47,8 @@ export function eventToHotkeyString(
   }
 
   if (!modifierKeyNames.includes(key)) {
-    const nonOptionPlaneKey = matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
+    const nonOptionPlaneKey =
+      hotkeyString.includes('Alt') && matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
     const syntheticKey = syntheticKeyNames[nonOptionPlaneKey] ?? nonOptionPlaneKey
     hotkeyString.push(syntheticKey)
   }
