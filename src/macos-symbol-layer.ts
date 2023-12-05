@@ -16,7 +16,7 @@ export const macosSymbolLayerKeys: Record<string, string> = {
   ['º']: '0',
   ['–']: '-',
   ['≠']: '=',
-  ['`']: '~',
+  ['`']: '`',
   ['⁄']: '!',
   ['€']: '@',
   ['‹']: '#',
