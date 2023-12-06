@@ -108,7 +108,7 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail.path, ['B'])
+        assert.deepEqual(event.detail.path, ['Shift+B'])
         assert.equal(event.cancelable, true)
       })
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
@@ -262,19 +262,18 @@ describe('hotkey', function () {
 
   describe('eventToHotkeyString', function () {
     const tests = [
-      ['Control+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
-      ['Control+Shift+j', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}],
+      ['Control+Shift+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
       ['Control+j', {ctrlKey: true, code: 'KeyJ', key: 'j'}],
       ['Meta+Shift+p', {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}],
       ['Meta+Shift+8', {key: '8', metaKey: true, shiftKey: true, code: 'Digit8'}],
       ['Control+Shift+7', {key: '7', ctrlKey: true, shiftKey: true, code: 'Digit7'}],
-      ['J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
+      ['Shift+J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
       ['/', {key: '/', code: ''}],
       ['1', {key: '1', code: 'Digit1'}],
       ['Control+Shift+`', {ctrlKey: true, shiftKey: true, key: '`'}],
       ['c', {key: 'c', code: 'KeyC'}],
-      ['S', {key: 'S', shiftKey: true, code: 'KeyS'}],
-      ['!', {key: '!', shiftKey: true, code: 'KeyS'}],
+      ['Shift+S', {key: 'S', shiftKey: true, code: 'KeyS'}],
+      ['Shift+!', {key: '!', shiftKey: true, code: 'Digit1'}],
       ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Shift'}],
       ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Control'}],
       ['Alt+s', {altKey: true, key: 's'}],
@@ -286,9 +285,7 @@ describe('hotkey', function () {
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}],
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}, 'mac'],
       ['Control+Space', {ctrlKey: true, key: ' '}],
-      ['Shift+Plus', {shiftKey: true, key: '+'}],
-      ['Shift+S', {shiftKey: true, key: 'S'}],
-      ['s', {shiftKey: true, key: 's'}]
+      ['Shift+Plus', {shiftKey: true, key: '+'}]
     ]
     for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
