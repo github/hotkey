@@ -98,13 +98,13 @@ describe('hotkey', function () {
     })
 
     it('triggers elements with capitalised key', function () {
-      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.include(elementsActivated, 'button1')
     })
 
     it('dispatches an event on the element once fired', function () {
-      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
@@ -116,7 +116,7 @@ describe('hotkey', function () {
     })
 
     it('wont trigger action if the hotkey-fire event is cancelled', function () {
-      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.querySelector('#button1').addEventListener('hotkey-fire', event => event.preventDefault())
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.notInclude(elementsActivated, 'button1')
@@ -286,7 +286,9 @@ describe('hotkey', function () {
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}],
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}, 'mac'],
       ['Control+Space', {ctrlKey: true, key: ' '}],
-      ['Shift+Plus', {shiftKey: true, key: '+'}]
+      ['Shift+Plus', {shiftKey: true, key: '+'}],
+      ['Shift+S', {shiftKey: true, key: 'S'}],
+      ['s', {shiftKey: true, key: 's'}]
     ]
     for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
