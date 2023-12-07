@@ -48,7 +48,7 @@ export function eventToHotkeyString(
   }
 
   if (!modifierKeyNames.includes(key)) {
-    // MacOS outputs cymbols when `Alt` is held, so we map them back to the key symbol if we can
+    // MacOS outputs symbols when `Alt` is held, so we map them back to the key symbol if we can
     const altNormalizedKey =
       hotkeyString.includes('Alt') && matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
 
