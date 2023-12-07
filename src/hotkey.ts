@@ -1,5 +1,5 @@
-import {NormalizedSequenceString} from './sequence'
-import {macosSymbolLayerKeys} from './macos-symbol-layer'
+import {NormalizedSequenceString} from './sequence.js'
+import {macosSymbolLayerKeys} from './macos-symbol-layer.js'
 import {macosUppercaseLayerKeys} from './macos-uppercase-layer'
 
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')

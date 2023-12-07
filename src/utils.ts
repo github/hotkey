@@ -1,5 +1,5 @@
-import {NormalizedHotkeyString, normalizeHotkey} from './hotkey'
-import {SEQUENCE_DELIMITER} from './sequence'
+import {NormalizedHotkeyString, normalizeHotkey} from './hotkey.js'
+import {SEQUENCE_DELIMITER} from './sequence.js'
 
 export function isFormField(element: Node): boolean {
   if (!(element instanceof HTMLElement)) {

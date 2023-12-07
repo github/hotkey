@@ -1,11 +1,11 @@
-import {Leaf, RadixTrie} from './radix-trie'
-import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils'
-import {SequenceTracker} from './sequence'
-import {eventToHotkeyString} from './hotkey'
+import {Leaf, RadixTrie} from './radix-trie.js'
+import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils.js'
+import {SequenceTracker} from './sequence.js'
+import {eventToHotkeyString} from './hotkey.js'
 
-export {eventToHotkeyString, normalizeHotkey, NormalizedHotkeyString} from './hotkey'
-export {SequenceTracker, normalizeSequence, NormalizedSequenceString} from './sequence'
-export {RadixTrie, Leaf} from './radix-trie'
+export {eventToHotkeyString, normalizeHotkey, NormalizedHotkeyString} from './hotkey.js'
+export {SequenceTracker, normalizeSequence, NormalizedSequenceString} from './sequence.js'
+export {RadixTrie, Leaf} from './radix-trie.js'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()
 const elementsLeaves = new WeakMap<HTMLElement, Array<Leaf<HTMLElement>>>()
