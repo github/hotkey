@@ -110,7 +110,8 @@ for (const el of document.querySelectorAll('[data-shortcut]')) {
    2. Neither the `Control` or `Meta` modifiers should appear in a hotkey string with `Mod`.
 7. `"Plus"` and `"Space"` are special key names to represent the `+` and ` ` keys respectively, because these symbols cannot be represented in the normal hotkey string syntax.
 8. You can use the comma key `,` as a hotkey, e.g. `a,,` would activate if the user typed `a` or `,`. `Control+,,x` would activate for `Control+,` or `x`.
-9. `"Shift"` should be included if it would be held and the key is uppercase: ie, `Shift+A` not `A`. Note however that MacOS outputs lowercase keys when `Meta+Shift` is held (ie, `Meta+Shift+a`); see 6.3 above.
+9. `"Shift"` should be included if it would be held and the key is uppercase: ie, `Shift+A` not `A`
+   1. MacOS outputs lowercase key names when `Meta+Shift` is held (ie, `Meta+Shift+a`). In an attempt to normalize this, `hotkey` will automatically map these key names to uppercase, so the uppercase keys should still be used (ie, `"Meta+Shift+A"` or `"Mod+Shift+A"`). **However**, this normalization only works on US keyboard layouts.
 
 ### Example
 
@@ -118,7 +119,6 @@ The following hotkey would match if the user typed the key sequence `a` and then
 
 ```js
 'a b,Control+Alt+/'
-
 ```
 
 🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: <https://github.github.io/hotkey/pages/hotkey_mapper.html>
