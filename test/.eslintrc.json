@@ -1,7 +1,9 @@
 {
   "rules": {
     "github/unescaped-html-literal": "off",
-    "eslint-comments/no-use": "off"
+    "github/no-inner-html": "off",
+    "eslint-comments/no-use": "off",
+    "import/extensions": ["error", "always"]
   },
   "env": {
     "mocha": true
@@ -9,5 +11,12 @@
   "globals": {
     "assert": true
   },
-  "extends": "../.eslintrc.json"
+  "extends": "../.eslintrc.json",
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js"]
+      }
+    }
+  }
 }

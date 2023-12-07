@@ -1,8 +1,11 @@
 {
   "root": true,
-  "extends": [
-    "plugin:github/recommended",
-    "plugin:github/browser",
-    "plugin:github/typescript"
-  ]
+  "extends": ["plugin:github/recommended", "plugin:github/browser", "plugin:github/typescript"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "extensions": [".ts", ".tsx"]
+      }
+    }
+  }
 }

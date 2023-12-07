@@ -12,9 +12,9 @@
     "lint": "eslint . --ext .js,.ts && tsc --noEmit",
     "test": "karma start karma.config.cjs",
     "clean": "rm -rf dist",
-    "prebuild": "npm run clean && npm run lint && mkdir dist",
-    "pretest": "npm run build",
-    "prepublishOnly": "npm run build",
+    "prebuild": "npm run clean && mkdir dist",
+    "pretest": "npm run build && npm run lint",
+    "prepublishOnly": "npm run test",
     "buildSite": "npm run build && mkdir -p pages/hotkey && cp -r dist/* pages/hotkey"
   },
   "files": [
@@ -26,20 +26,23 @@
   "prettier": "@github/prettier-config",
   "devDependencies": {
     "@github/prettier-config": "0.0.4",
-    "chai": "^4.2.0",
+    "chai": "^4.3.10",
     "chromium": "^3.0.3",
-    "eslint": "^7.22.0",
-    "eslint-plugin-github": "^4.0.0",
-    "karma": "^6.2.0",
+    "eslint": "^8.52.0",
+    "eslint-plugin-github": "^4.10.1",
+    "karma": "^6.4.2",
     "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^3.1.0",
+    "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
-    "karma-mocha-reporter": "^2.2.3",
+    "karma-mocha-reporter": "^2.2.5",
     "mocha": "^10.2.0",
-    "rollup": "^2.4.0",
-    "typescript": "^4.2.3"
+    "rollup": "^4.1.4",
+    "typescript": "^5.2.2"
   },
   "eslintIgnore": [
     "dist/"
-  ]
+  ],
+  "dependencies": {
+    "eslint-import-resolver-typescript": "^3.6.1"
+  }
 }
