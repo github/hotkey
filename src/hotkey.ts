@@ -1,6 +1,6 @@
 import {NormalizedSequenceString} from './sequence.js'
 import {macosSymbolLayerKeys} from './macos-symbol-layer.js'
-import {macosUppercaseLayerKeys} from './macos-uppercase-layer'
+import {macosUppercaseLayerKeys} from './macos-uppercase-layer.js'
 
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 
@@ -95,12 +95,12 @@ function localizeMod(hotkey: string, platform: string = navigator.platform): str
 
 function sortModifiers(hotkey: string): string {
   const key = hotkey.split('+').pop()
-  const modifiers = []
+  const modifiers: string[] = []
   for (const modifier of ['Control', 'Alt', 'Meta', 'Shift']) {
     if (hotkey.includes(modifier)) {
       modifiers.push(modifier)
     }
   }
-  modifiers.push(key)
+  if (key) modifiers.push(key)
   return modifiers.join('+')
 }
