@@ -98,17 +98,17 @@ describe('hotkey', function () {
     })
 
     it('triggers elements with capitalised key', function () {
-      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.include(elementsActivated, 'button1')
     })
 
     it('dispatches an event on the element once fired', function () {
-      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail.path, ['B'])
+        assert.deepEqual(event.detail.path, ['Shift+B'])
         assert.equal(event.cancelable, true)
       })
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
@@ -116,7 +116,7 @@ describe('hotkey', function () {
     })
 
     it('wont trigger action if the hotkey-fire event is cancelled', function () {
-      setHTML('<button id="button1" data-hotkey="B">Button 1</button>')
+      setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.querySelector('#button1').addEventListener('hotkey-fire', event => event.preventDefault())
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
       assert.notInclude(elementsActivated, 'button1')
@@ -262,19 +262,19 @@ describe('hotkey', function () {
 
   describe('eventToHotkeyString', function () {
     const tests = [
-      ['Control+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
+      ['Control+Shift+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
       ['Control+Shift+j', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}],
       ['Control+j', {ctrlKey: true, code: 'KeyJ', key: 'j'}],
       ['Meta+Shift+p', {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}],
       ['Meta+Shift+8', {key: '8', metaKey: true, shiftKey: true, code: 'Digit8'}],
       ['Control+Shift+7', {key: '7', ctrlKey: true, shiftKey: true, code: 'Digit7'}],
-      ['J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
+      ['Shift+J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
       ['/', {key: '/', code: ''}],
       ['1', {key: '1', code: 'Digit1'}],
       ['Control+Shift+`', {ctrlKey: true, shiftKey: true, key: '`'}],
       ['c', {key: 'c', code: 'KeyC'}],
-      ['S', {key: 'S', shiftKey: true, code: 'KeyS'}],
-      ['!', {key: '!', shiftKey: true, code: 'KeyS'}],
+      ['Shift+S', {key: 'S', shiftKey: true, code: 'KeyS'}],
+      ['Shift+!', {key: '!', shiftKey: true, code: 'Digit1'}],
       ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Shift'}],
       ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Control'}],
       ['Alt+s', {altKey: true, key: 's'}],

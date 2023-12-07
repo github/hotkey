@@ -38,9 +38,9 @@ export function eventToHotkeyString(
   event: KeyboardEvent,
   platform: string = navigator.platform
 ): NormalizedHotkeyString {
-  const {ctrlKey, altKey, metaKey, key} = event
+  const {ctrlKey, altKey, metaKey, shiftKey, key} = event
   const hotkeyString: string[] = []
-  const modifiers: boolean[] = [ctrlKey, altKey, metaKey, showShift(event)]
+  const modifiers: boolean[] = [ctrlKey, altKey, metaKey, shiftKey]
 
   for (const [i, mod] of modifiers.entries()) {
     if (mod) hotkeyString.push(modifierKeyNames[i])
@@ -57,12 +57,6 @@ export function eventToHotkeyString(
 }
 
 const modifierKeyNames: string[] = ['Control', 'Alt', 'Meta', 'Shift']
-
-// We don't want to show `Shift` when `event.key` is capital
-function showShift(event: KeyboardEvent): boolean {
-  const {shiftKey, code, key} = event
-  return shiftKey && !(code.startsWith('Key') && key.toUpperCase() === key)
-}
 
 /**
  * Normalizes a hotkey string before comparing it to the serialized event
