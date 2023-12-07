@@ -12,21 +12,12 @@
 <body>
   <div class="mx-auto my-3 col-12 col-md-8 col-lg-6">
     <h1 id="app-name">Hotkey Code</h1>
-    <p id="hint">Press a key combination to see the corresponding hotkey string. Quickly press another combination to build a sequence.</p>
+    <p id="hint">Press a key combination to see the corresponding hotkey string. Quickly press another combination to
+      build a sequence.</p>
     <div class="position-relative">
-      <input
-        readonly
-        role="application"
-        aria-roledescription="Input Capture"
-        autofocus
-        aria-labelledby="app-name"
-        aria-describedby="hint sequence-hint"
-        aria-live="assertive"
-        aria-atomic="true"
-        id="hotkey-code"
-        class="border rounded-2 mt-2 p-6 f1 text-mono"
-        style="width: 100%"
-      />
+      <input readonly role="application" aria-roledescription="Input Capture" autofocus aria-labelledby="app-name"
+        aria-describedby="hint sequence-hint" aria-live="assertive" aria-atomic="true" id="hotkey-code"
+        class="border rounded-2 mt-2 p-6 f1 text-mono" style="width: 100%" />
 
       <div class="position-absolute bottom-2 left-3 right-3 d-flex" style="align-items: center; gap: 8px">
         <!-- This indicates that the input is listening for a sequence press. Ideally we'd have a way to tell screen
@@ -59,27 +50,42 @@
       }
     })
 
-    let currentsequence = null
+    const modifierKeyNames = ['Alt', 'Control', 'Meta', 'Shift'];
+
+    // we only want to add lone modifier keys to the sequence if they are lifted without pressing another key
+    // otherwise, the chord Control+f would become "Control Control+f". But we do want to be able to display sequences
+    // like "Control f", which is pressing and releasing control, then f.
+    let lastKeyDownModifierEvent = null
+
+    const registerEvent = (event) => {
+      lastKeyDownModifierEvent = null;
+
+      sequenceTracker.registerKeypress(event);
+      sequenceStatusElement.hidden = false;
+
+      event.target.value = sequenceTracker.path.join(SEQUENCE_DELIMITER);
+    }
 
     hotkeyCodeElement.addEventListener('keydown', event => {
-      if (event.key === "Tab") 
+      // always leave Tab alone so focus can leave the input
+      if (event.key === "Tab")
         return;
 
       event.preventDefault();
       event.stopPropagation();
 
-      currentsequence = eventToHotkeyString(event)
-      event.currentTarget.value = [...sequenceTracker.path, currentsequence].join(SEQUENCE_DELIMITER);
+      if (modifierKeyNames.includes(event.key)) {
+        lastKeyDownModifierEvent = event
+        return
+      }
+
+      registerEvent(event);
     })
 
     hotkeyCodeElement.addEventListener('keyup', () => {
-      // we don't just build the sequence from the keyup event because keyups don't necessarily map to keydowns - for
-      // example, the keyup event for meta+b is just meta.
-      if (currentsequence) {
-        sequenceTracker.registerKeypress(currentsequence)
-        sequenceStatusElement.hidden = false
-        currentsequence = null
-      }
+      // we still have to use the keydown event, not the keyup event, because the keyup event won't have the modifier
+      // properties (ie, `ctrlKey` will be false).
+      if (lastKeyDownModifierEvent) registerEvent(lastKeyDownModifierEvent);
     })
 
     resetButtonElement.addEventListener('click', () => {
