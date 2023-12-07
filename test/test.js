@@ -287,9 +287,9 @@ describe('hotkey', function () {
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}, 'mac'],
       ['Control+Space', {ctrlKey: true, key: ' '}],
       ['Shift+Plus', {shiftKey: true, key: '+'}],
-      ['Command+Shift+X', {metaKey: true, shiftKey: true, key: 'x'}, 'mac'],
+      ['Meta+Shift+X', {metaKey: true, shiftKey: true, key: 'x'}, 'mac'],
       ['Control+Shift+X', {ctrlKey: true, shiftKey: true, key: 'X'}],
-      ['Command+Shift+!', {metaKey: true, shiftKey: true, key: '1'}, 'mac'],
+      ['Meta+Shift+!', {metaKey: true, shiftKey: true, key: '1'}, 'mac'],
       ['Control+Shift+!', {ctrlKey: true, shiftKey: true, key: '!'}]
     ]
     for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
