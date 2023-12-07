@@ -108,7 +108,6 @@ for (const el of document.querySelectorAll('[data-shortcut]')) {
 6. `"Mod"` is a special modifier that localizes to `Meta` on MacOS/iOS, and `Control` on Windows/Linux.
    1. `"Mod+"` can appear in any order in a hotkey string. For example: `"Mod+Alt+Shift+KEY"`
    2. Neither the `Control` or `Meta` modifiers should appear in a hotkey string with `Mod`.
-   3. Due to the inconsistent lowercasing of `event.key` on Mac and iOS when `Meta` is pressed along with `Shift`, it is recommended to avoid hotkey strings containing both `Mod` and `Shift`.
 7. `"Plus"` and `"Space"` are special key names to represent the `+` and ` ` keys respectively, because these symbols cannot be represented in the normal hotkey string syntax.
 8. You can use the comma key `,` as a hotkey, e.g. `a,,` would activate if the user typed `a` or `,`. `Control+,,x` would activate for `Control+,` or `x`.
 9. `"Shift"` should be included if it would be held, and the key name should match the 'uppercase' key name: `Shift+?`, `Shift+A`, `Shift+$`
