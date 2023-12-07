@@ -1,92 +1,105 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>hotkey | Mapper Tool</title>
+    <link crossorigin="anonymous" href="https://unpkg.com/@primer/css@^21.0.8/dist/primer.css" rel="stylesheet" />
+    <script type="module" src="https://unpkg.com/@github/clipboard-copy-element@latest?module"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>hotkey | Mapper Tool</title>
-  <link href="https://unpkg.com/@primer/css@^21.0.8/dist/primer.css" rel="stylesheet" />
-  <script type="module" src="https://unpkg.com/@github/clipboard-copy-element@latest?module"></script>
-</head>
+  <body>
+    <div class="mx-auto my-3 col-12 col-md-8 col-lg-6">
+      <h1 id="app-name">Hotkey Code</h1>
+      <p id="hint">
+        Press a key combination to see the corresponding hotkey string. Quickly press another combination to build a
+        sequence.
+      </p>
+      <div class="position-relative">
+        <input
+          readonly
+          role="application"
+          aria-roledescription="Input Capture"
+          autofocus
+          aria-labelledby="app-name"
+          aria-describedby="hint sequence-hint"
+          aria-live="assertive"
+          aria-atomic="true"
+          id="hotkey-code"
+          class="border rounded-2 mt-2 p-6 f1 text-mono"
+          style="width: 100%"
+        />
 
-<body>
-  <div class="mx-auto my-3 col-12 col-md-8 col-lg-6">
-    <h1 id="app-name">Hotkey Code</h1>
-    <p id="hint">Press a key combination to see the corresponding hotkey string. Quickly press another combination to build a sequence.</p>
-    <div class="position-relative">
-      <input
-        readonly
-        role="application"
-        aria-roledescription="Input Capture"
-        autofocus
-        aria-labelledby="app-name"
-        aria-describedby="hint sequence-hint"
-        aria-live="assertive"
-        aria-atomic="true"
-        id="hotkey-code"
-        class="border rounded-2 mt-2 p-6 f1 text-mono"
-        style="width: 100%"
-      />
-
-      <div class="position-absolute bottom-2 left-3 right-3 d-flex" style="align-items: center; gap: 8px">
-        <!-- This indicates that the input is listening for a sequence press. Ideally we'd have a way to tell screen
+        <div class="position-absolute bottom-2 left-3 right-3 d-flex" style="align-items: center; gap: 8px">
+          <!-- This indicates that the input is listening for a sequence press. Ideally we'd have a way to tell screen
         readers this too, but if we make this live and add more text it will get annoying because it will conflict
         with the already-live input above. -->
-        <p id="sequence-status" class="color-fg-subtle" style="margin: 0" aria-hidden hidden>→</p>
+          <p id="sequence-status" class="color-fg-subtle" style="margin: 0" aria-hidden hidden>→</p>
 
-        <span style="flex: 1"></span>
+          <span style="flex: 1"></span>
 
-        <button id="reset-button" class="btn">Reset</button>
+          <button id="reset-button" class="btn">Reset</button>
 
-        <clipboard-copy for="hotkey-code" class="btn">
-          Copy to clipboard
-        </clipboard-copy>
+          <clipboard-copy for="hotkey-code" class="btn"> Copy to clipboard </clipboard-copy>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script type="module">
-    import {eventToHotkeyString} from './hotkey/index.js'
-    import {SEQUENCE_DELIMITER, SequenceTracker} from './hotkey/sequence.js'
+    <script type="module">
+      import {eventToHotkeyString} from './hotkey/index.js'
+      import {SEQUENCE_DELIMITER, SequenceTracker} from './hotkey/sequence.js'
 
-    const hotkeyCodeElement = document.getElementById('hotkey-code')
-    const sequenceStatusElement = document.getElementById('sequence-status')
-    const resetButtonElement = document.getElementById('reset-button')
+      const hotkeyCodeElement = document.getElementById('hotkey-code')
+      const sequenceStatusElement = document.getElementById('sequence-status')
+      const resetButtonElement = document.getElementById('reset-button')
 
-    const sequenceTracker = new SequenceTracker({
-      onReset() {
-        sequenceStatusElement.hidden = true
-      }
-    })
+      const sequenceTracker = new SequenceTracker({
+        onReset() {
+          sequenceStatusElement.hidden = true
+        }
+      })
 
-    let currentsequence = null
+      const modifierKeyNames = ['Alt', 'Control', 'Meta', 'Shift']
 
-    hotkeyCodeElement.addEventListener('keydown', event => {
-      if (event.key === "Tab") 
-        return;
+      // we only want to add lone modifier keys to the sequence if they are lifted without pressing another key
+      // otherwise, the chord Control+f would become "Control Control+f". But we do want to be able to display sequences
+      // like "Control f", which is pressing and releasing control, then f.
+      let lastKeyDownModifierEvent = null
 
-      event.preventDefault();
-      event.stopPropagation();
-
-      currentsequence = eventToHotkeyString(event)
-      event.currentTarget.value = [...sequenceTracker.path, currentsequence].join(SEQUENCE_DELIMITER);
-    })
-
-    hotkeyCodeElement.addEventListener('keyup', () => {
-      // we don't just build the sequence from the keyup event because keyups don't necessarily map to keydowns - for
-      // example, the keyup event for meta+b is just meta.
-      if (currentsequence) {
-        sequenceTracker.registerKeypress(currentsequence)
+      const registerEvent = event => {
+        sequenceTracker.registerKeypress(event)
         sequenceStatusElement.hidden = false
-        currentsequence = null
+
+        event.target.value = sequenceTracker.path.join(SEQUENCE_DELIMITER)
       }
-    })
 
-    resetButtonElement.addEventListener('click', () => {
-      sequenceTracker.reset()
-      hotkeyCodeElement.value = ''
-    })
-  </script>
-</body>
+      hotkeyCodeElement.addEventListener('keydown', event => {
+        lastKeyDownModifierEvent = null
 
+        // always leave Tab alone so focus can leave the input
+        if (event.key === 'Tab') return
+
+        event.preventDefault()
+        event.stopPropagation()
+
+        if (modifierKeyNames.includes(event.key)) {
+          lastKeyDownModifierEvent = event
+          return
+        }
+
+        registerEvent(event)
+      })
+
+      hotkeyCodeElement.addEventListener('keyup', () => {
+        // we still have to use the keydown event, not the keyup event, because the keyup event won't have the modifier
+        // properties (ie, `ctrlKey` will be false).
+        if (lastKeyDownModifierEvent) registerEvent(lastKeyDownModifierEvent)
+      })
+
+      resetButtonElement.addEventListener('click', () => {
+        sequenceTracker.reset()
+        hotkeyCodeElement.value = ''
+      })
+    </script>
+  </body>
 </html>
