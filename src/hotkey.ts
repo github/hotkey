@@ -22,6 +22,11 @@ const normalizedHotkeyBrand = Symbol('normalizedHotkey')
  */
 export type NormalizedHotkeyString = NormalizedSequenceString & {[normalizedHotkeyBrand]: true}
 
+const syntheticKeyNames: Record<string, string> = {
+  ' ': 'Space',
+  '+': 'Plus'
+}
+
 /**
  * Returns a hotkey character string for keydown and keyup events.
  * @example
@@ -42,8 +47,10 @@ export function eventToHotkeyString(
   }
 
   if (!modifierKeyNames.includes(key)) {
-    const nonOptionPlaneKey = matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
-    hotkeyString.push(nonOptionPlaneKey)
+    const nonOptionPlaneKey =
+      hotkeyString.includes('Alt') && matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
+    const syntheticKey = syntheticKeyNames[nonOptionPlaneKey] ?? nonOptionPlaneKey
+    hotkeyString.push(syntheticKey)
   }
 
   return hotkeyString.join('+') as NormalizedHotkeyString
