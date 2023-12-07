@@ -263,6 +263,7 @@ describe('hotkey', function () {
   describe('eventToHotkeyString', function () {
     const tests = [
       ['Control+Shift+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
+      ['Control+Shift+j', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}],
       ['Control+j', {ctrlKey: true, code: 'KeyJ', key: 'j'}],
       ['Meta+Shift+p', {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}],
       ['Meta+Shift+8', {key: '8', metaKey: true, shiftKey: true, code: 'Digit8'}],
