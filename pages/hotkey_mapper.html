@@ -58,8 +58,6 @@
     let lastKeyDownModifierEvent = null
 
     const registerEvent = (event) => {
-      lastKeyDownModifierEvent = null;
-
       sequenceTracker.registerKeypress(event);
       sequenceStatusElement.hidden = false;
 
@@ -67,6 +65,8 @@
     }
 
     hotkeyCodeElement.addEventListener('keydown', event => {
+      lastKeyDownModifierEvent = null;
+
       // always leave Tab alone so focus can leave the input
       if (event.key === "Tab")
         return;
