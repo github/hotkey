@@ -286,7 +286,11 @@ describe('hotkey', function () {
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}],
       ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}, 'mac'],
       ['Control+Space', {ctrlKey: true, key: ' '}],
-      ['Shift+Plus', {shiftKey: true, key: '+'}]
+      ['Shift+Plus', {shiftKey: true, key: '+'}],
+      ['Meta+Shift+X', {metaKey: true, shiftKey: true, key: 'x'}, 'mac'],
+      ['Control+Shift+X', {ctrlKey: true, shiftKey: true, key: 'X'}],
+      ['Meta+Shift+!', {metaKey: true, shiftKey: true, key: '1'}, 'mac'],
+      ['Control+Shift+!', {ctrlKey: true, shiftKey: true, key: '!'}]
     ]
     for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {

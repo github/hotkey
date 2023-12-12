@@ -1,5 +1,6 @@
 import {NormalizedSequenceString} from './sequence.js'
 import {macosSymbolLayerKeys} from './macos-symbol-layer.js'
+import {macosUppercaseLayerKeys} from './macos-uppercase-layer.js'
 
 const normalizedHotkeyBrand = Symbol('normalizedHotkey')
 
@@ -47,9 +48,19 @@ export function eventToHotkeyString(
   }
 
   if (!modifierKeyNames.includes(key)) {
-    const nonOptionPlaneKey =
+    // MacOS outputs symbols when `Alt` is held, so we map them back to the key symbol if we can
+    const altNormalizedKey =
       hotkeyString.includes('Alt') && matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
-    const syntheticKey = syntheticKeyNames[nonOptionPlaneKey] ?? nonOptionPlaneKey
+
+    // MacOS outputs lowercase characters when `Command+Shift` is held, so we map them back to uppercase if we can
+    const shiftNormalizedKey =
+      hotkeyString.includes('Shift') && matchApplePlatform.test(platform)
+        ? macosUppercaseLayerKeys[altNormalizedKey] ?? altNormalizedKey
+        : altNormalizedKey
+
+    // Some symbols can't be used because of hotkey string format, so we replace them with 'synthetic' named keys
+    const syntheticKey = syntheticKeyNames[shiftNormalizedKey] ?? shiftNormalizedKey
+
     hotkeyString.push(syntheticKey)
   }
 
@@ -84,12 +95,12 @@ function localizeMod(hotkey: string, platform: string = navigator.platform): str
 
 function sortModifiers(hotkey: string): string {
   const key = hotkey.split('+').pop()
-  const modifiers = []
+  const modifiers: string[] = []
   for (const modifier of ['Control', 'Alt', 'Meta', 'Shift']) {
     if (hotkey.includes(modifier)) {
       modifiers.push(modifier)
     }
   }
-  modifiers.push(key)
+  if (key) modifiers.push(key)
   return modifiers.join('+')
 }
