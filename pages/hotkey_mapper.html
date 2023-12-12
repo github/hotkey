@@ -40,14 +40,23 @@
 
           <button id="reset-button" class="btn">Reset</button>
 
-          <clipboard-copy for="hotkey-code" class="btn"> Copy to clipboard </clipboard-copy>
+          <clipboard-copy for="hotkey-code" class="btn">Copy to clipboard</clipboard-copy>
         </div>
+      </div>
+
+      <div class="mt-2 color-fg-muted">
+        <span class="text-bold" id="user-agent-label">Your user agent:</span>
+
+        <code id="user-agent" aria-labelledby="user-agent-label" class="d-block">...</code>
       </div>
     </div>
 
     <script type="module">
       import {eventToHotkeyString} from './hotkey/index.js'
       import {SEQUENCE_DELIMITER, SequenceTracker} from './hotkey/sequence.js'
+
+      const userAgentElement = document.getElementById('user-agent')
+      userAgentElement.textContent = navigator.userAgent
 
       const hotkeyCodeElement = document.getElementById('hotkey-code')
       const sequenceStatusElement = document.getElementById('sequence-status')
