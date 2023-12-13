@@ -37,12 +37,10 @@
     "karma-mocha-reporter": "^2.2.5",
     "mocha": "^10.2.0",
     "rollup": "^4.1.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "eslint-import-resolver-typescript": "^3.6.1"
   },
   "eslintIgnore": [
     "dist/"
   ],
-  "dependencies": {
-    "eslint-import-resolver-typescript": "^3.6.1"
-  }
 }
