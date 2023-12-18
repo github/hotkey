@@ -121,7 +121,7 @@ The following hotkey would match if the user typed the key sequence `a` and then
 'a b,Control+Alt+/'
 ```
 
-🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: <https://github.github.io/hotkey/pages/hotkey_mapper.html>
+🔬 **Hotkey Mapper** is a tool to help you determine the correct hotkey string for your key combination: <https://github.github.io/hotkey/hotkey_mapper.html>
 
 #### Key-sequence considerations
 
