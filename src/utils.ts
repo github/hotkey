@@ -25,7 +25,7 @@ export function fireDeterminedAction(el: HTMLElement, path: readonly NormalizedH
   const delegateEvent = new CustomEvent('hotkey-fire', {cancelable: true, detail: {path}})
   const cancelled = !el.dispatchEvent(delegateEvent)
   if (cancelled) return false
-  
+
   if (isFormField(el)) {
     el.focus()
   } else {
