@@ -90,7 +90,7 @@ const matchApplePlatform = /Mac|iPod|iPhone|iPad/i
 
 function localizeMod(hotkey: string, platform?: string | undefined): string {
   const ssrSafeWindow = typeof window === 'undefined' ? undefined : window
-  const safePlatform = platform ?? ssrSafeWindow?.navigator.platform ?? ""
+  const safePlatform = platform ?? ssrSafeWindow?.navigator.platform ?? ''
 
   const localModifier = matchApplePlatform.test(safePlatform) ? 'Meta' : 'Control'
   return hotkey.replace('Mod', localModifier)
