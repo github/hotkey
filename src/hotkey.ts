@@ -76,7 +76,7 @@ const modifierKeyNames: string[] = ['Control', 'Alt', 'Meta', 'Shift']
  *   platforms.
  * - Ensures modifiers are sorted in a consistent order
  * @param hotkey a hotkey string
- * @param platform NOTE: this param is only intended to be used to mock `navigator.platform` in tests
+ * @param platform NOTE: this param is only intended to be used to mock `navigator.platform` in tests. `window.navigator.platform` is used by default.
  * @returns {string} normalized representation of the given hotkey string
  */
 export function normalizeHotkey(hotkey: string, platform?: string | undefined): NormalizedHotkeyString {
@@ -88,8 +88,11 @@ export function normalizeHotkey(hotkey: string, platform?: string | undefined): 
 
 const matchApplePlatform = /Mac|iPod|iPhone|iPad/i
 
-function localizeMod(hotkey: string, platform: string = navigator.platform): string {
-  const localModifier = matchApplePlatform.test(platform) ? 'Meta' : 'Control'
+function localizeMod(hotkey: string, platform?: string | undefined): string {
+  const ssrSafeWindow = typeof window === 'undefined' ? undefined : window
+  const safePlatform = platform ?? ssrSafeWindow?.navigator.platform ?? ''
+
+  const localModifier = matchApplePlatform.test(safePlatform) ? 'Meta' : 'Control'
   return hotkey.replace('Mod', localModifier)
 }
 
