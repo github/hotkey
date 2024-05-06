@@ -88,7 +88,7 @@ export function normalizeHotkey(hotkey: string, platform?: string | undefined): 
 
 const matchApplePlatform = /Mac|iPod|iPhone|iPad/i
 
-function localizeMod(hotkey: string, platform: string): string {
+function localizeMod(hotkey: string, platform?: string | undefined): string {
   const ssrSafeWindow = typeof window === "undefined" ? undefined : window
   const safePlatform = ssrSafeWindow
     ? ssrSafeWindow.navigator.platform
