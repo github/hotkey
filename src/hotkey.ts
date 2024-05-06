@@ -92,9 +92,9 @@ function localizeMod(hotkey: string, platform?: string | undefined): string {
   const ssrSafeWindow = typeof window === "undefined" ? undefined : window
   const safePlatform = ssrSafeWindow
     ? ssrSafeWindow.navigator.platform
-    : (platform ?? "")
+    : platform
 
-  const localModifier = matchApplePlatform.test(platform) ? 'Meta' : 'Control'
+  const localModifier = matchApplePlatform.test(platform ?? "") ? 'Meta' : 'Control'
   return hotkey.replace('Mod', localModifier)
 }
 
