@@ -26,7 +26,7 @@ describe('normalizeHotkey', () => {
     ['Mod+Alt+a', 'Control+Alt+a', 'win / linux'],
     ['Mod+Alt+a', 'Alt+Meta+a', 'mac'],
     // undefined platform doesn't localize and falls back to windows (SSR)
-    ["Mod+a", "Control+a", undefined],
+    ['Mod+a', 'Control+a', undefined],
     // Modifier sorting
     ['Shift+Alt+Meta+Control+m', 'Control+Alt+Meta+Shift+m'],
     ['Shift+Alt+Mod+m', 'Control+Alt+Shift+m', 'win']
