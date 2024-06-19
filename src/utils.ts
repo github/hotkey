@@ -21,15 +21,17 @@ export function isFormField(element: Node): boolean {
   )
 }
 
-export function fireDeterminedAction(el: HTMLElement, path: readonly NormalizedHotkeyString[]): void {
+export function fireDeterminedAction(el: HTMLElement, path: readonly NormalizedHotkeyString[]): boolean {
   const delegateEvent = new CustomEvent('hotkey-fire', {cancelable: true, detail: {path}})
   const cancelled = !el.dispatchEvent(delegateEvent)
-  if (cancelled) return
+  if (cancelled) return false
+
   if (isFormField(el)) {
     el.focus()
   } else {
     el.click()
   }
+  return true
 }
 
 export function expandHotkeyToEdges(hotkey: string): NormalizedHotkeyString[][] {

@@ -46,8 +46,10 @@ describe('hotkey', function () {
   describe('single key support', function () {
     it('triggers buttons that have a `data-hotkey` attribute', function () {
       setHTML('<button id="button1" data-hotkey="b">Button 1</button>')
-      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
+      const event = new KeyboardEvent('keydown', {cancelable: true, key: 'b'})
+      document.dispatchEvent(event)
       assert.include(elementsActivated, 'button1')
+      assert.ok(event.defaultPrevented, 'should call preventDefault on keydown event')
     })
 
     it('triggers buttons that get hotkey passed in as second argument', function () {
@@ -118,8 +120,10 @@ describe('hotkey', function () {
     it('wont trigger action if the hotkey-fire event is cancelled', function () {
       setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.querySelector('#button1').addEventListener('hotkey-fire', event => event.preventDefault())
-      document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
+      const event = new KeyboardEvent('keydown', {cancelable: true, shiftKey: true, code: 'KeyB', key: 'B'})
+      document.dispatchEvent(event)
       assert.notInclude(elementsActivated, 'button1')
+      assert.equal(event.defaultPrevented, false, 'should not prevent the keydown event when cancelled')
     })
 
     it('supports comma as a hotkey', function () {

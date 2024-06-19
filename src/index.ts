@@ -52,8 +52,7 @@ function keyDownHandler(event: KeyboardEvent) {
     }
 
     if (elementToFire && shouldFire) {
-      fireDeterminedAction(elementToFire, sequenceTracker.path)
-      event.preventDefault()
+      if (fireDeterminedAction(elementToFire, sequenceTracker.path)) event.preventDefault()
     }
 
     sequenceTracker.reset()
