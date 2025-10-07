@@ -1,3 +1,4 @@
 node_modules/
 dist/
 pages/hotkey
+test/__screenshots__
