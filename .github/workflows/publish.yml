@@ -19,6 +19,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: npm
       - run: npm ci
+      - run: npx playwright install chromium
       - run: npm test
       - run: npm version ${TAG_NAME} --git-tag-version=false
         env:

@@ -9,10 +9,7 @@ export default defineConfig({
       headless: true,
       instances: [
         {
-          browser: 'chromium',
-          launch: {
-            executablePath: '/usr/bin/chromium'
-          }
+          browser: 'chromium'
         }
       ]
     }

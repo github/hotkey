@@ -17,6 +17,7 @@ jobs:
         run: |
           npm install
           npm run build
+          npx playwright install chromium
           npm test
         env:
           CI: true
