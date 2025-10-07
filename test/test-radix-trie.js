@@ -1,4 +1,5 @@
-import {RadixTrie, Leaf} from '../dist/index.js'
+import {describe, it, expect} from 'vitest'
+import {RadixTrie, Leaf} from '../src/index.ts'
 
 describe('RadixTrie', () => {
   describe('insert', () => {
@@ -6,11 +7,11 @@ describe('RadixTrie', () => {
       const trie = new RadixTrie()
       const leaf = trie.insert(['ctrl+p', 'a', 'b'])
 
-      assert(trie.get('ctrl+p'), 'missing `ctrl+p` in trie')
-      assert(trie.get('ctrl+p').get('a'), 'missing `ctrl+p a` in trie')
-      assert(trie.get('ctrl+p').get('a').get('b'), 'missing `ctrl+p a b` in trie')
-      assert.equal(trie.get('ctrl+p').get('a').get('b'), leaf, 'didnt return leaf correctly')
-      assert.instanceOf(leaf, Leaf, 'leaf isnt a Leaf instance')
+      expect(trie.get('ctrl+p')).toBeTruthy()
+      expect(trie.get('ctrl+p').get('a')).toBeTruthy()
+      expect(trie.get('ctrl+p').get('a').get('b')).toBeTruthy()
+      expect(trie.get('ctrl+p').get('a').get('b')).toBe(leaf)
+      expect(leaf).toBeInstanceOf(Leaf)
     })
 
     it('adds new hotkey to trie using existing maps', () => {
@@ -18,19 +19,19 @@ describe('RadixTrie', () => {
       const leaf = trie.insert(['ctrl+p', 'a', 'b'])
       const otherLeaf = trie.insert(['ctrl+p', 'a', 'c'])
 
-      assert.equal(trie.get('ctrl+p').get('a').get('b'), leaf, 'didnt return `ctrl+p a b` end leaf correctly')
-      assert.equal(trie.get('ctrl+p').get('a').get('c'), otherLeaf, 'didnt return `ctrl+p a c` end leaf correctly')
-      assert.notEqual(leaf, otherLeaf, 'leaves are same reference but shouldnt be')
-      assert.instanceOf(leaf, Leaf, 'leaf isnt a Leaf instance')
-      assert.instanceOf(otherLeaf, Leaf, 'otherLeaf isnt a Leaf instance')
+      expect(trie.get('ctrl+p').get('a').get('b')).toBe(leaf)
+      expect(trie.get('ctrl+p').get('a').get('c')).toBe(otherLeaf)
+      expect(leaf).not.toBe(otherLeaf)
+      expect(leaf).toBeInstanceOf(Leaf)
+      expect(otherLeaf).toBeInstanceOf(Leaf)
     })
 
     it('overrides leaves with new deeper insertions', () => {
       const trie = new RadixTrie()
       const otherLeaf = trie.insert(['g', 'c', 'e'])
 
-      assert.instanceOf(trie.get('g').get('c'), RadixTrie, 'didnt override `g c` leaf as trie')
-      assert.equal(trie.get('g').get('c').get('e'), otherLeaf, 'didnt add `g c e` leaf to trie')
+      expect(trie.get('g').get('c')).toBeInstanceOf(RadixTrie)
+      expect(trie.get('g').get('c').get('e')).toBe(otherLeaf)
     })
   })
 
@@ -41,9 +42,9 @@ describe('RadixTrie', () => {
       const keyATrie = trie.get('ctrl+p').get('a')
       const success = leaf.parent.delete(leaf)
 
-      assert(success, 'delete was unsuccessful')
-      assert.isUndefined(trie.get('ctrl+p'), 'still has ctrl+p leaf')
-      assert.isUndefined(keyATrie.get('b'), 'keyAtrie still has b key child')
+      expect(success).toBe(true)
+      expect(trie.get('ctrl+p')).toBeUndefined()
+      expect(keyATrie.get('b')).toBeUndefined()
     })
 
     it('preserves parents with other tries', () => {
@@ -54,8 +55,8 @@ describe('RadixTrie', () => {
       const keyCTrie = keyATrie.get('c')
       const success = otherLeaf.parent.delete(otherLeaf)
 
-      assert(success, 'delete was unsuccessful')
-      assert.equal(keyCTrie.children.length, 0, '`c` trie still has children')
+      expect(success).toBe(true)
+      expect(keyCTrie.children.length).toBe(0)
     })
   })
 })

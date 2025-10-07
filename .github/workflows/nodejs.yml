@@ -7,12 +7,17 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ matrix.node-version }}
           cache: npm
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
       - name: npm install, build, and test
         run: |
           npm install

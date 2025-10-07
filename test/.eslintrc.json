@@ -5,12 +5,6 @@
     "eslint-comments/no-use": "off",
     "import/extensions": ["error", "always"]
   },
-  "env": {
-    "mocha": true
-  },
-  "globals": {
-    "assert": true
-  },
   "extends": "../.eslintrc.json",
   "settings": {
     "import/resolver": {
