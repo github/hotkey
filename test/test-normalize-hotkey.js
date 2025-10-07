@@ -1,8 +1,9 @@
-import {normalizeHotkey} from '../dist/index.js'
+import {describe, it, expect} from 'vitest'
+import {normalizeHotkey} from '../src/index.ts'
 
 describe('normalizeHotkey', () => {
   it('should exist', () => {
-    assert.isDefined(normalizeHotkey)
+    expect(normalizeHotkey).toBeDefined()
   })
 
   const tests = [
@@ -33,9 +34,8 @@ describe('normalizeHotkey', () => {
   ]
 
   for (const [input, expected, platform = 'any platform'] of tests) {
-    it(`given "${input}", returns "${expected}" on ${platform}`, function (done) {
-      assert.equal(normalizeHotkey(input, platform), expected)
-      done()
+    it(`given "${input}", returns "${expected}" on ${platform}`, () => {
+      expect(normalizeHotkey(input, platform)).toBe(expected)
     })
   }
 })

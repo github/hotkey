@@ -3,8 +3,10 @@ import {fireDeterminedAction, expandHotkeyToEdges, isFormField} from './utils.js
 import {SequenceTracker} from './sequence.js'
 import {eventToHotkeyString} from './hotkey.js'
 
-export {eventToHotkeyString, normalizeHotkey, NormalizedHotkeyString} from './hotkey.js'
-export {SequenceTracker, normalizeSequence, NormalizedSequenceString} from './sequence.js'
+export {eventToHotkeyString, normalizeHotkey} from './hotkey.js'
+export type {NormalizedHotkeyString} from './hotkey.js'
+export {SequenceTracker, normalizeSequence} from './sequence.js'
+export type {NormalizedSequenceString} from './sequence.js'
 export {RadixTrie, Leaf} from './radix-trie.js'
 
 const hotkeyRadixTrie = new RadixTrie<HTMLElement>()

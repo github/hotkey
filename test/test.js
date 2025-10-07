@@ -1,4 +1,5 @@
-import {install, uninstall, eventToHotkeyString} from '../dist/index.js'
+import {describe, it, expect, beforeEach, afterEach} from 'vitest'
+import {install, uninstall, eventToHotkeyString} from '../src/index.ts'
 
 let elementsActivated = []
 function clickHandler(event) {
@@ -47,25 +48,25 @@ describe('hotkey', function () {
     it('triggers buttons that have a `data-hotkey` attribute', function () {
       setHTML('<button id="button1" data-hotkey="b">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
     })
 
     it('triggers buttons that get hotkey passed in as second argument', function () {
       setHTML('<button id="button-without-a-attribute">Button 3</button>')
       install(document.getElementById('button-without-a-attribute'), 'Control+c')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
-      assert.include(elementsActivated, 'button-without-a-attribute')
+      expect(elementsActivated).toContain('button-without-a-attribute')
     })
 
     it("doesn't trigger buttons that don't have a `data-hotkey` attribute", function () {
       setHTML('<button id="button2">Button 2</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
-      assert.notInclude(elementsActivated, 'button2')
+      expect(elementsActivated).not.toContain('button2')
     })
 
     it("doesn't respond to the hotkey in a button's overridden `data-hotkey` attribute", function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', ctrlKey: true}))
-      assert.notInclude(elementsActivated, 'button3')
+      expect(elementsActivated).not.toContain('button3')
     })
 
     it("doesn't trigger when user is focused on a input or textfield", function () {
@@ -73,7 +74,7 @@ describe('hotkey', function () {
       <button id="button1" data-hotkey="b">Button 1</button>
       <input id="textfield" />`)
       document.getElementById('textfield').dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, key: 'b'}))
-      assert.deepEqual(elementsActivated, [])
+      expect(elementsActivated).toEqual([])
     })
 
     it('triggers when user is focused on a file input', function () {
@@ -81,26 +82,26 @@ describe('hotkey', function () {
       <button id="button1" data-hotkey="b">Button 1</button>
       <input id="filefield" type="file" />`)
       document.getElementById('filefield').dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, key: 'b'}))
-      assert.deepEqual(elementsActivated, ['button1'])
+      expect(elementsActivated).toEqual(['button1'])
     })
 
     it('handles multiple keys in a hotkey combination', function () {
       setHTML('<button id="button3" data-hotkey="Control+c">Button 3</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c', ctrlKey: true}))
-      assert.include(elementsActivated, 'button3')
+      expect(elementsActivated).toContain('button3')
     })
 
     it("doesn't trigger elements whose hotkey has been removed", function () {
       setHTML('<button id="button1" data-hotkey="b">Button 1</button>')
       uninstall(document.querySelector('#button1'))
       document.dispatchEvent(new KeyboardEvent('keydown', {code: 'KeyB', key: 'b'}))
-      assert.deepEqual(elementsActivated, [])
+      expect(elementsActivated).toEqual([])
     })
 
     it('triggers elements with capitalised key', function () {
       setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
     })
 
     it('dispatches an event on the element once fired', function () {
@@ -108,30 +109,30 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail.path, ['Shift+B'])
-        assert.equal(event.cancelable, true)
+        expect(event.detail.path).toEqual(['Shift+B'])
+        expect(event.cancelable).toBe(true)
       })
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
-      assert.ok(fired, 'button1 did not receive a hotkey-fire event')
+      expect(fired).toBeTruthy()
     })
 
     it('wont trigger action if the hotkey-fire event is cancelled', function () {
       setHTML('<button id="button1" data-hotkey="Shift+B">Button 1</button>')
       document.querySelector('#button1').addEventListener('hotkey-fire', event => event.preventDefault())
       document.dispatchEvent(new KeyboardEvent('keydown', {shiftKey: true, code: 'KeyB', key: 'B'}))
-      assert.notInclude(elementsActivated, 'button1')
+      expect(elementsActivated).not.toContain('button1')
     })
 
     it('supports comma as a hotkey', function () {
       setHTML('<button id="button1" data-hotkey=",">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
     })
 
     it('supports comma + modifier as a hotkey', function () {
       setHTML('<button id="button1" data-hotkey="Meta+,">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, key: ','}))
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
     })
 
     it('multiple comma aliases', function () {
@@ -139,14 +140,14 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'x'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'y'}))
-      assert.equal(elementsActivated.length, 3)
+      expect(elementsActivated.length).toBe(3)
     })
 
     it('complex comma parsing', async function () {
       setHTML('<button id="button1" data-hotkey=", a b,c">Button 1</button>')
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c'}))
       await keySequence(', a b')
-      assert.equal(elementsActivated.length, 2)
+      expect(elementsActivated.length).toBe(2)
     })
 
     it('complex comma parsing II', async function () {
@@ -154,20 +155,20 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'c'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: ','}))
       await keySequence('a , b')
-      assert.equal(elementsActivated.length, 3)
+      expect(elementsActivated.length).toBe(3)
     })
 
     it('complex comma parsing II', async function () {
       setHTML('<button id="button1" data-hotkey=", , , ,">Button 1</button>')
       await keySequence(', , , ,')
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
     })
 
     it('complex comma parsing II', async function () {
       setHTML('<button id="button1" data-hotkey="Control+x, , ,">Button 1</button>')
       await keySequence(', ,')
       document.dispatchEvent(new KeyboardEvent('keydown', {ctrlKey: true, key: 'x'}))
-      assert.equal(elementsActivated.length, 2)
+      expect(elementsActivated.length).toBe(2)
     })
   })
 
@@ -179,7 +180,7 @@ describe('hotkey', function () {
       document
         .getElementById('textfield')
         .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
     })
 
     it('does nothing if `data-hotkey-scope` is set to non-form field', function () {
@@ -189,7 +190,7 @@ describe('hotkey', function () {
       document
         .getElementById('button2')
         .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
-      assert.deepEqual(elementsActivated, [])
+      expect(elementsActivated).toEqual([])
     })
 
     it('does nothing if `data-hotkey-scope` does not exist', function () {
@@ -199,7 +200,7 @@ describe('hotkey', function () {
       document
         .getElementById('textfield')
         .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, cancelable: true, key: 'b'}))
-      assert.deepEqual(elementsActivated, [])
+      expect(elementsActivated).toEqual([])
     })
 
     it('identifies and fires correct element for duplicated hotkeys', function () {
@@ -214,14 +215,14 @@ describe('hotkey', function () {
 
       // Scoped hotkeys
       document.getElementById('textfield1').dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
-      assert.include(elementsActivated, 'button1')
+      expect(elementsActivated).toContain('button1')
 
       document.getElementById('textfield2').dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
-      assert.include(elementsActivated, 'button2')
+      expect(elementsActivated).toContain('button2')
 
       // Non-scoped hotkey
       document.dispatchEvent(new KeyboardEvent('keydown', keyboardEventArgs))
-      assert.include(elementsActivated, 'button3')
+      expect(elementsActivated).toContain('button3')
     })
 
     it('dispatches an event on the element once fired', function () {
@@ -235,13 +236,13 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#button1').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail.path, ['Meta+b'])
-        assert.equal(event.cancelable, true)
+        expect(event.detail.path).toEqual(['Meta+b'])
+        expect(event.cancelable).toBe(true)
       })
       document
         .getElementById('textfield1')
         .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
-      assert.ok(fired, 'button1 did not receive a hotkey-fire event')
+      expect(fired).toBeTruthy()
     })
 
     it('wont trigger action if the hotkey-fire event is cancelled', function () {
@@ -256,7 +257,7 @@ describe('hotkey', function () {
       document
         .getElementById('textfield1')
         .dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, metaKey: true, cancelable: true, key: 'b'}))
-      assert.notInclude(elementsActivated, 'button1')
+      expect(elementsActivated).not.toContain('button1')
     })
   })
 
@@ -293,13 +294,15 @@ describe('hotkey', function () {
       ['Control+Shift+!', {ctrlKey: true, shiftKey: true, key: '!'}]
     ]
     for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
-      it(`${JSON.stringify(keyEvent)} => ${expected}`, function (done) {
-        document.body.addEventListener('keydown', function handler(event) {
-          document.body.removeEventListener('keydown', handler)
-          assert.equal(eventToHotkeyString(event, platform), expected)
-          done()
+      it(`${JSON.stringify(keyEvent)} => ${expected}`, () => {
+        return new Promise(resolve => {
+          document.body.addEventListener('keydown', function handler(event) {
+            document.body.removeEventListener('keydown', handler)
+            expect(eventToHotkeyString(event, platform)).toBe(expected)
+            resolve()
+          })
+          document.body.dispatchEvent(new KeyboardEvent('keydown', keyEvent))
         })
-        document.body.dispatchEvent(new KeyboardEvent('keydown', keyEvent))
       })
     }
   })
@@ -308,25 +311,25 @@ describe('hotkey', function () {
     it('supports sequences of 2 keys', async function () {
       setHTML('<a id="link2" href="#" data-hotkey="b c"></a>')
       await keySequence('b c')
-      assert.deepEqual(elementsActivated, ['link2'])
+      expect(elementsActivated).toEqual(['link2'])
     })
 
     it('finds the longest sequence of keys which maps to something', async function () {
       setHTML('<a id="link2" href="#" data-hotkey="b c"></a>')
       await keySequence('z b c')
-      assert.deepEqual(elementsActivated, ['link2'])
+      expect(elementsActivated).toEqual(['link2'])
     })
 
     it('supports sequences of 3 keys', async function () {
       setHTML('<a id="link3" href="#" data-hotkey="d e f"></a>')
       await keySequence('d e f')
-      assert.deepEqual(elementsActivated, ['link3'])
+      expect(elementsActivated).toEqual(['link3'])
     })
 
     it('only exact hotkey sequence matches', async function () {
       setHTML('<a id="exact" href="#" data-hotkey="j k"></a>')
       await keySequence('j z k')
-      assert.deepEqual(elementsActivated, [])
+      expect(elementsActivated).toEqual([])
     })
 
     it('dispatches an event on the element once fired', async function () {
@@ -334,17 +337,17 @@ describe('hotkey', function () {
       let fired = false
       document.querySelector('#link3').addEventListener('hotkey-fire', event => {
         fired = true
-        assert.deepEqual(event.detail.path, ['d', 'e', 'f'])
-        assert.equal(event.cancelable, true)
+        expect(event.detail.path).toEqual(['d', 'e', 'f'])
+        expect(event.cancelable).toBe(true)
       })
       await keySequence('d e f')
-      assert.ok(fired, 'link3 did not receive a hotkey-fire event')
+      expect(fired).toBeTruthy()
     })
 
     it('supports sequences containing commas', async function () {
       setHTML('<a id="link2" href="#" data-hotkey="b , c"></a>')
       await keySequence('b , c')
-      assert.deepEqual(elementsActivated, ['link2'])
+      expect(elementsActivated).toEqual(['link2'])
     })
   })
 
@@ -358,16 +361,16 @@ describe('hotkey', function () {
       keySequence('h')
       await wait(1550)
       keySequence('i')
-      assert.deepEqual(elementsActivated, ['create2'])
+      expect(elementsActivated).toEqual(['create2'])
     })
 
     it('multiple hotkeys for the same element', async function () {
       setHTML('<a href="#" id="multiple" data-hotkey="l,m n"></a>')
 
       await keySequence('l')
-      assert.deepEqual(elementsActivated, ['multiple'])
+      expect(elementsActivated).toEqual(['multiple'])
       await keySequence('m n')
-      assert.deepEqual(elementsActivated, ['multiple', 'multiple'])
+      expect(elementsActivated).toEqual(['multiple', 'multiple'])
     })
 
     it('with duplicate hotkeys, last element registered wins', async function () {
@@ -377,7 +380,7 @@ describe('hotkey', function () {
         `)
 
       await keySequence('c')
-      assert.deepEqual(elementsActivated, ['duplicate2'])
+      expect(elementsActivated).toEqual(['duplicate2'])
     })
 
     it('works with macos meta+shift plane', async () => {
@@ -387,7 +390,7 @@ describe('hotkey', function () {
 
       await wait(10)
 
-      assert.deepEqual(elementsActivated, ['metashiftplane'])
+      expect(elementsActivated).toEqual(['metashiftplane'])
     })
   })
 
@@ -402,8 +405,8 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
 
-      assert.isTrue(didFocus)
-      assert.deepEqual(elementsActivated, [])
+      expect(didFocus).toBe(true)
+      expect(elementsActivated).toEqual([])
     })
 
     it('will activate checkbox input elements that have a hotkey attribute', async () => {
@@ -411,7 +414,7 @@ describe('hotkey', function () {
 
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
 
-      assert.deepEqual(elementsActivated, ['checkbox'])
+      expect(elementsActivated).toEqual(['checkbox'])
     })
 
     it('will activate radio button input elements that have a hotkey attribute', async () => {
@@ -419,7 +422,7 @@ describe('hotkey', function () {
 
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
 
-      assert.deepEqual(elementsActivated, ['radio'])
+      expect(elementsActivated).toEqual(['radio'])
     })
 
     it('can click a[href] elements that declare data-hotkey for activation', async () => {
@@ -428,7 +431,7 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
 
-      assert.deepEqual(elementsActivated, ['link'])
+      expect(elementsActivated).toEqual(['link'])
     })
 
     it('can click button elements that declare data-hotkey for activation', async () => {
@@ -437,7 +440,7 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
 
-      assert.deepEqual(elementsActivated, ['button'])
+      expect(elementsActivated).toEqual(['button'])
     })
 
     it('can click details summary elements that declare data-hotkey for activation', async () => {
@@ -446,7 +449,7 @@ describe('hotkey', function () {
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a'}))
       document.dispatchEvent(new KeyboardEvent('keydown', {key: 'b'}))
 
-      assert.deepEqual(elementsActivated, ['summary'])
+      expect(elementsActivated).toEqual(['summary'])
     })
   })
 })
@@ -491,8 +494,8 @@ describe('keydown listener', function () {
       install(el)
     }
 
-    assert.deepEqual(registeredAddEventListeners, ['keydown'])
-    assert.deepEqual(registeredRemoveEventListeners, [])
+    expect(registeredAddEventListeners).toEqual(['keydown'])
+    expect(registeredRemoveEventListeners).toEqual([])
   })
 
   it('only one keydown listener is installed', function () {
@@ -505,8 +508,8 @@ describe('keydown listener', function () {
       install(el)
     }
 
-    assert.deepEqual(registeredAddEventListeners, ['keydown'])
-    assert.deepEqual(registeredRemoveEventListeners, [])
+    expect(registeredAddEventListeners).toEqual(['keydown'])
+    expect(registeredRemoveEventListeners).toEqual([])
   })
 
   it('uninstalling the last hotkey removes the keydown handler', function () {
@@ -521,17 +524,17 @@ describe('keydown listener', function () {
     install(button1)
     install(button2)
 
-    assert.deepEqual(registeredAddEventListeners, ['keydown'])
-    assert.deepEqual(registeredRemoveEventListeners, [])
+    expect(registeredAddEventListeners).toEqual(['keydown'])
+    expect(registeredRemoveEventListeners).toEqual([])
 
     uninstall(button1)
 
-    assert.deepEqual(registeredAddEventListeners, ['keydown'])
-    assert.deepEqual(registeredRemoveEventListeners, [])
+    expect(registeredAddEventListeners).toEqual(['keydown'])
+    expect(registeredRemoveEventListeners).toEqual([])
 
     uninstall(button2)
 
-    assert.deepEqual(registeredAddEventListeners, ['keydown'])
-    assert.deepEqual(registeredRemoveEventListeners, ['keydown'])
+    expect(registeredAddEventListeners).toEqual(['keydown'])
+    expect(registeredRemoveEventListeners).toEqual(['keydown'])
   })
 })

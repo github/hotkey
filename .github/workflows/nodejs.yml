@@ -11,12 +11,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - name: npm install, build, and test
         run: |
           npm install
           npm run build
+          npx playwright install chromium
           npm test
         env:
           CI: true
