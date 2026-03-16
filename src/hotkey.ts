@@ -96,14 +96,15 @@ function localizeMod(hotkey: string, platform?: string | undefined): string {
   return hotkey.replace('Mod', localModifier)
 }
 
+const orderedModifiers = {
+  Control: 0,
+  Alt: 1,
+  Meta: 2,
+  Shift: 3
+}
+
 function sortModifiers(hotkey: string): string {
-  const key = hotkey.split('+').pop()
-  const modifiers: string[] = []
-  for (const modifier of ['Control', 'Alt', 'Meta', 'Shift']) {
-    if (hotkey.includes(modifier)) {
-      modifiers.push(modifier)
-    }
-  }
-  if (key) modifiers.push(key)
-  return modifiers.join('+')
+  return hotkey.split('+')
+    .sort((a, b) => (orderedModifiers[a] ?? Infinity) - (orderedModifiers[b] ?? Infinity))
+    .join('+')
 }
