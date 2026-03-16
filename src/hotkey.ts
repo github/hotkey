@@ -96,7 +96,7 @@ function localizeMod(hotkey: string, platform?: string | undefined): string {
   return hotkey.replace('Mod', localModifier)
 }
 
-const orderedModifiers = {
+const orderedModifiers: Partial<Record<string, number>> = {
   Control: 0,
   Alt: 1,
   Meta: 2,
