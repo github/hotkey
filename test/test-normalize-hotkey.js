@@ -30,7 +30,7 @@ describe('normalizeHotkey', () => {
     ['Mod+a', 'Control+a', undefined],
     // Modifier sorting
     ['Shift+Alt+Meta+Control+m', 'Control+Alt+Meta+Shift+m'],
-    ['Shift+Alt+Mod+m', 'Control+Alt+Shift+m', 'win']
+    ['Shift+Alt+Mod+m', 'Control+Alt+Shift+m', 'win'],
     // Edge case: only modifiers
     ['Alt', 'Alt', 'win / linux'],
     ['Alt+Mod', 'Control+Alt', 'win / linux']
