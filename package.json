@@ -13,7 +13,7 @@
     "test": "npm run lint && vitest run",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean && mkdir dist",
-    "prepublishOnly": "npm run test",
+    "prepublishOnly": "npm run build",
     "buildSite": "npm run build && mkdir -p pages/hotkey && cp -r dist/* pages/hotkey"
   },
   "files": [
