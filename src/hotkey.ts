@@ -104,7 +104,8 @@ const orderedModifiers: Partial<Record<string, number>> = {
 }
 
 function sortModifiers(hotkey: string): string {
-  return hotkey.split('+')
+  return hotkey
+    .split('+')
     .sort((a, b) => (orderedModifiers[a] ?? Infinity) - (orderedModifiers[b] ?? Infinity))
     .join('+')
 }
