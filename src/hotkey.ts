@@ -81,7 +81,9 @@ const modifierKeyNames: string[] = ['Control', 'Alt', 'Meta', 'Shift']
  */
 export function normalizeHotkey(hotkey: string, platform?: string | undefined): NormalizedHotkeyString {
   let result: string
-  result = localizeMod(hotkey, platform)
+  const safePlatform = getPlatform(platform)
+  result = localizeMod(hotkey, safePlatform)
+  result = normalizeShiftedKey(result, safePlatform)
   result = sortModifiers(result)
   return result as NormalizedHotkeyString
 }
@@ -89,11 +91,22 @@ export function normalizeHotkey(hotkey: string, platform?: string | undefined): 
 const matchApplePlatform = /Mac|iPod|iPhone|iPad/i
 
 function localizeMod(hotkey: string, platform?: string | undefined): string {
-  const ssrSafeWindow = typeof window === 'undefined' ? undefined : window
-  const safePlatform = platform ?? ssrSafeWindow?.navigator.platform ?? ''
-
-  const localModifier = matchApplePlatform.test(safePlatform) ? 'Meta' : 'Control'
+  const localModifier = matchApplePlatform.test(getPlatform(platform)) ? 'Meta' : 'Control'
   return hotkey.replace('Mod', localModifier)
+}
+
+function getPlatform(platform?: string | undefined): string {
+  const ssrSafeWindow = typeof window === 'undefined' ? undefined : window
+  return platform ?? ssrSafeWindow?.navigator.platform ?? ''
+}
+
+function normalizeShiftedKey(hotkey: string, platform: string): string {
+  if (!matchApplePlatform.test(platform)) return hotkey
+
+  const parts = hotkey.split('+')
+  if (!parts.includes('Shift')) return hotkey
+
+  return parts.map(part => (modifierKeyNames.includes(part) ? part : macosUppercaseLayerKeys[part] ?? part)).join('+')
 }
 
 const orderedModifiers: Partial<Record<string, number>> = {
