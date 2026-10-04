@@ -21,11 +21,12 @@ const sequenceTracker = new SequenceTracker({
 
 function keyDownHandler(event: KeyboardEvent) {
   if (event.defaultPrevented) return
-  if (!(event.target instanceof Node)) return
-  if (isFormField(event.target)) {
-    const target = event.target as HTMLElement
-    if (!target.id) return
-    if (!target.ownerDocument.querySelector(`[data-hotkey-scope="${target.id}"]`)) return
+  const target = event.composedPath()[0] ?? event.target
+  if (!(target instanceof Node)) return
+  if (isFormField(target)) {
+    const field = target as HTMLElement
+    if (!field.id) return
+    if (!field.ownerDocument.querySelector(`[data-hotkey-scope="${field.id}"]`)) return
   }
 
   // If the user presses a hotkey that doesn't exist in the Trie,
@@ -39,7 +40,7 @@ function keyDownHandler(event: KeyboardEvent) {
 
   currentTriePosition = newTriePosition
   if (newTriePosition instanceof Leaf) {
-    const target = event.target as HTMLElement
+    const field = target as HTMLElement
     let shouldFire = false
     let elementToFire
     const formField = isFormField(target)
@@ -47,7 +48,7 @@ function keyDownHandler(event: KeyboardEvent) {
     for (let i = newTriePosition.children.length - 1; i >= 0; i -= 1) {
       elementToFire = newTriePosition.children[i]
       const scope = elementToFire.getAttribute('data-hotkey-scope')
-      if ((!formField && !scope) || (formField && target.id === scope)) {
+      if ((!formField && !scope) || (formField && field.id === scope)) {
         shouldFire = true
         break
       }
