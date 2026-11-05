@@ -77,6 +77,75 @@ describe('hotkey', function () {
       expect(elementsActivated).toEqual([])
     })
 
+    it.each(['<input>', '<textarea></textarea>', '<select></select>', '<div contenteditable="true"></div>'])(
+      "doesn't trigger global hotkeys from a shadow root form field: %s",
+      function (html) {
+        setHTML('<button id="button1" data-hotkey="b">Button 1</button><div id="host"></div>')
+        const root = document.getElementById('host').attachShadow({mode: 'open'})
+        root.innerHTML = html
+        const event = new KeyboardEvent('keydown', {bubbles: true, composed: true, cancelable: true, key: 'b'})
+
+        root.firstElementChild.dispatchEvent(event)
+
+        expect(elementsActivated).toEqual([])
+        expect(event.defaultPrevented).toBe(false)
+      }
+    )
+
+    it("doesn't trigger global hotkeys from a nested shadow root form field", function () {
+      setHTML('<button id="button1" data-hotkey="b">Button 1</button><div id="host"></div>')
+      const root = document.getElementById('host').attachShadow({mode: 'open'})
+      const innerHost = document.createElement('div')
+      root.append(innerHost)
+      const innerRoot = innerHost.attachShadow({mode: 'open'})
+      innerRoot.innerHTML = '<input>'
+
+      innerRoot.firstElementChild.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, composed: true, key: 'b'}))
+
+      expect(elementsActivated).toEqual([])
+    })
+
+    it('allows a scoped hotkey from a shadow root form field', function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="textfield" data-hotkey="b">Scoped</button>
+      <button id="button2" data-hotkey="b">Global</button>
+      <div id="host"></div>`)
+      const root = document.getElementById('host').attachShadow({mode: 'open'})
+      root.innerHTML = '<input id="textfield">'
+      const event = new KeyboardEvent('keydown', {bubbles: true, composed: true, cancelable: true, key: 'b'})
+
+      root.firstElementChild.dispatchEvent(event)
+
+      expect(elementsActivated).toEqual(['button1'])
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it("doesn't fall back to a global hotkey from a shadow root form field with another scope", function () {
+      setHTML(`
+      <button id="button1" data-hotkey-scope="other-field" data-hotkey="b">Scoped</button>
+      <button id="button2" data-hotkey="b">Global</button>
+      <div id="host"></div>`)
+      const root = document.getElementById('host').attachShadow({mode: 'open'})
+      root.innerHTML = '<input id="textfield">'
+
+      root.firstElementChild.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, composed: true, key: 'b'}))
+
+      expect(elementsActivated).toEqual([])
+    })
+
+    it.each(['<button>Button</button>', '<input type="file">'])(
+      'allows global hotkeys from a shadow root non-editable control: %s',
+      function (html) {
+        setHTML('<button id="button1" data-hotkey="b">Button 1</button><div id="host"></div>')
+        const root = document.getElementById('host').attachShadow({mode: 'open'})
+        root.innerHTML = html
+
+        root.firstElementChild.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, composed: true, key: 'b'}))
+
+        expect(elementsActivated).toEqual(['button1'])
+      }
+    )
+
     it('triggers when user is focused on a file input', function () {
       setHTML(`
       <button id="button1" data-hotkey="b">Button 1</button>
