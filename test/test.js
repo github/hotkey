@@ -173,6 +173,34 @@ describe('hotkey', function () {
   })
 
   describe('data-hotkey-scope', function () {
+    it('matches scoped form fields without CSS.escape', function () {
+      setHTML('<button id="button1" data-hotkey="Meta+b">Button 1</button><input id="textfield" />')
+      const field = document.getElementById('textfield')
+      field.id = 'field"one'
+      document.getElementById('button1').setAttribute('data-hotkey-scope', field.id)
+      const original = CSS.escape
+      try {
+        CSS.escape = undefined
+        field.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, key: 'b', metaKey: true}))
+        expect(elementsActivated).toEqual(['button1'])
+      } finally {
+        CSS.escape = original
+      }
+    })
+
+    it.each(['field"one', 'field\\one'])('matches a scope whose ID contains CSS escapes: %s', function (id) {
+      setHTML(`
+        <button id="button1" data-hotkey-scope="textfield" data-hotkey="Meta+b">Button 1</button>
+        <input id="textfield" />`)
+      const field = document.getElementById('textfield')
+      field.id = id
+      document.getElementById('button1').setAttribute('data-hotkey-scope', id)
+
+      field.dispatchEvent(new KeyboardEvent('keydown', {bubbles: true, key: 'b', metaKey: true}))
+
+      expect(elementsActivated).toEqual(['button1'])
+    })
+
     it('allows hotkey action from form field', function () {
       setHTML(`
       <button id="button1" data-hotkey-scope="textfield" data-hotkey="Meta+b">Button 1</button>

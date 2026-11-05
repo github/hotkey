@@ -25,7 +25,13 @@ function keyDownHandler(event: KeyboardEvent) {
   if (isFormField(event.target)) {
     const target = event.target as HTMLElement
     if (!target.id) return
-    if (!target.ownerDocument.querySelector(`[data-hotkey-scope="${target.id}"]`)) return
+    const hasScope =
+      typeof CSS !== 'undefined' && CSS.escape
+        ? target.ownerDocument.querySelector(`[data-hotkey-scope="${CSS.escape(target.id)}"]`)
+        : Array.from(target.ownerDocument.querySelectorAll('[data-hotkey-scope]')).some(
+            element => element.getAttribute('data-hotkey-scope') === target.id
+          )
+    if (!hasScope) return
   }
 
   // If the user presses a hotkey that doesn't exist in the Trie,
