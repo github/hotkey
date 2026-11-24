@@ -263,37 +263,47 @@ describe('hotkey', function () {
 
   describe('eventToHotkeyString', function () {
     const tests = [
-      ['Control+Shift+J', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}],
-      ['Control+Shift+j', {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}],
-      ['Control+j', {ctrlKey: true, code: 'KeyJ', key: 'j'}],
-      ['Meta+Shift+p', {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}],
-      ['Meta+Shift+8', {key: '8', metaKey: true, shiftKey: true, code: 'Digit8'}],
-      ['Control+Shift+7', {key: '7', ctrlKey: true, shiftKey: true, code: 'Digit7'}],
-      ['Shift+J', {shiftKey: true, code: 'KeyJ', key: 'J'}],
-      ['/', {key: '/', code: ''}],
-      ['1', {key: '1', code: 'Digit1'}],
-      ['Control+Shift+`', {ctrlKey: true, shiftKey: true, key: '`'}],
-      ['c', {key: 'c', code: 'KeyC'}],
-      ['Shift+S', {key: 'S', shiftKey: true, code: 'KeyS'}],
-      ['Shift+!', {key: '!', shiftKey: true, code: 'Digit1'}],
-      ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Shift'}],
-      ['Control+Shift', {ctrlKey: true, shiftKey: true, key: 'Control'}],
-      ['Alt+s', {altKey: true, key: 's'}],
-      ['Alt+s', {altKey: true, key: 'ß'}, 'mac'],
-      ['Alt+Shift+S', {altKey: true, shiftKey: true, key: 'S'}],
-      ['Alt+Shift+S', {altKey: true, shiftKey: true, key: 'Í'}, 'mac'],
-      ['Alt+ArrowLeft', {altKey: true, key: 'ArrowLeft'}],
-      ['Alt+ArrowLeft', {altKey: true, key: 'ArrowLeft'}, 'mac'],
-      ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}],
-      ['Alt+Shift+ArrowLeft', {altKey: true, shiftKey: true, key: 'ArrowLeft'}, 'mac'],
-      ['Control+Space', {ctrlKey: true, key: ' '}],
-      ['Shift+Plus', {shiftKey: true, key: '+'}],
-      ['Meta+Shift+X', {metaKey: true, shiftKey: true, key: 'x'}, 'mac'],
-      ['Control+Shift+X', {ctrlKey: true, shiftKey: true, key: 'X'}],
-      ['Meta+Shift+!', {metaKey: true, shiftKey: true, key: '1'}, 'mac'],
-      ['Control+Shift+!', {ctrlKey: true, shiftKey: true, key: '!'}]
+      // Other platforms
+      {expected: '/', event: {key: '/', code: ''}},
+      {expected: '1', event: {key: '1', code: 'Digit1'}},
+      {expected: 'c', event: {key: 'c', code: 'KeyC'}},
+      {expected: 'Shift+J', event: {shiftKey: true, code: 'KeyJ', key: 'J'}},
+      {expected: 'Shift+S', event: {key: 'S', shiftKey: true, code: 'KeyS'}},
+      {expected: 'Shift+!', event: {key: '!', shiftKey: true, code: 'Digit1'}},
+      {expected: 'Shift+Plus', event: {shiftKey: true, key: '+'}},
+      {expected: 'Control+j', event: {ctrlKey: true, code: 'KeyJ', key: 'j'}},
+      {expected: 'Control+Space', event: {ctrlKey: true, key: ' '}},
+      {expected: 'Control+Shift+J', event: {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'J'}},
+      {expected: 'Control+Shift+j', event: {ctrlKey: true, shiftKey: true, code: 'KeyJ', key: 'j'}},
+      {expected: 'Control+Shift+7', event: {key: '7', ctrlKey: true, shiftKey: true, code: 'Digit7'}},
+      {expected: 'Control+Shift+`', event: {ctrlKey: true, shiftKey: true, key: '`'}},
+      {expected: 'Control+Shift', event: {ctrlKey: true, shiftKey: true, key: 'Shift'}},
+      {expected: 'Control+Shift', event: {ctrlKey: true, shiftKey: true, key: 'Control'}},
+      {expected: 'Control+Shift+X', event: {ctrlKey: true, shiftKey: true, key: 'X'}},
+      {expected: 'Control+Shift+!', event: {ctrlKey: true, shiftKey: true, key: '!'}},
+      {expected: 'Alt+s', event: {altKey: true, key: 's'}},
+      {expected: 'Alt+ArrowLeft', event: {altKey: true, key: 'ArrowLeft'}},
+      {expected: 'Alt+Shift+S', event: {altKey: true, shiftKey: true, key: 'S'}},
+      {expected: 'Alt+Shift+ArrowLeft', event: {altKey: true, shiftKey: true, key: 'ArrowLeft'}},
+      {expected: 'Meta+Shift+p', event: {key: 'p', metaKey: true, shiftKey: true, code: 'KeyP'}},
+      {expected: 'Meta+Shift+8', event: {key: '8', metaKey: true, shiftKey: true, code: 'Digit8'}},
+
+      // macOS
+      {expected: 'Shift+A', event: {shiftKey: true, key: 'A', code: 'KeyA'}, platform: 'mac'},
+      {expected: 'Shift+/', event: {shiftKey: true, key: '/', code: 'Digit7'}, platform: 'mac'}, // DE keyboard layout
+      {expected: 'Shift+?', event: {shiftKey: true, key: '?', code: 'Minus'}, platform: 'mac'}, // DE keyboard layout
+      {expected: 'Shift+(', event: {shiftKey: true, key: '(', code: 'Digit8'}, platform: 'mac'}, // DE keyboard layout
+      {expected: 'Shift+Plus', event: {shiftKey: true, key: '+', code: 'BracketRight'}, platform: 'mac'}, // DE keyboard layout
+      {expected: 'Control+Shift+?', event: {ctrlKey: true, shiftKey: true, key: '/'}, platform: 'mac'},
+      {expected: 'Alt+s', event: {altKey: true, key: 'ß'}, platform: 'mac'},
+      {expected: 'Alt+ArrowLeft', event: {altKey: true, key: 'ArrowLeft'}, platform: 'mac'},
+      {expected: 'Alt+Shift+S', event: {altKey: true, shiftKey: true, key: 'Í'}, platform: 'mac'},
+      {expected: 'Alt+Shift+ArrowLeft', event: {altKey: true, shiftKey: true, key: 'ArrowLeft'}, platform: 'mac'},
+      {expected: 'Alt+Shift+?', event: {altKey: true, shiftKey: true, key: '/'}, platform: 'mac'},
+      {expected: 'Meta+Shift+X', event: {metaKey: true, shiftKey: true, key: 'x'}, platform: 'mac'},
+      {expected: 'Meta+Shift+!', event: {metaKey: true, shiftKey: true, key: '1'}, platform: 'mac'}
     ]
-    for (const [expected, keyEvent, platform = 'win / linux'] of tests) {
+    for (const {expected, event: keyEvent, platform = 'win / linux'} of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, () => {
         return new Promise(resolve => {
           document.body.addEventListener('keydown', function handler(event) {
@@ -384,7 +394,8 @@ describe('hotkey', function () {
     })
 
     it('works with macos meta+shift plane', async () => {
-      setHTML(`<a href="#" id="metashiftplane" data-hotkey="Meta+Shift+p"></a>`)
+      const key = /Mac|iPod|iPhone|iPad/i.test(navigator.platform) ? 'P' : 'p'
+      setHTML(`<a href="#" id="metashiftplane" data-hotkey="Meta+Shift+${key}"></a>`)
 
       document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, shiftKey: true, key: 'p'}))
 
