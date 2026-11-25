@@ -52,7 +52,7 @@ export function eventToHotkeyString(
     const altNormalizedKey =
       hotkeyString.includes('Alt') && matchApplePlatform.test(platform) ? macosSymbolLayerKeys[key] ?? key : key
 
-    // MacOS outputs lowercase characters when a modifier and `Shift` are held, so we map them back to uppercase if we can.
+    // macOS may report lowercase letters when a modifier and `Shift` are held.
     const shiftNormalizedKey =
       shiftKey && (ctrlKey || altKey || metaKey) && matchApplePlatform.test(platform)
         ? macosUppercaseLayerKeys[altNormalizedKey] ?? altNormalizedKey

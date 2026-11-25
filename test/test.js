@@ -294,14 +294,16 @@ describe('hotkey', function () {
       {expected: 'Shift+?', event: {shiftKey: true, key: '?', code: 'Minus'}, platform: 'mac'}, // DE keyboard layout
       {expected: 'Shift+(', event: {shiftKey: true, key: '(', code: 'Digit8'}, platform: 'mac'}, // DE keyboard layout
       {expected: 'Shift+Plus', event: {shiftKey: true, key: '+', code: 'BracketRight'}, platform: 'mac'}, // DE keyboard layout
-      {expected: 'Control+Shift+?', event: {ctrlKey: true, shiftKey: true, key: '/'}, platform: 'mac'},
+      {expected: 'Control+Shift+/', event: {ctrlKey: true, shiftKey: true, key: '/'}, platform: 'mac'},
       {expected: 'Alt+s', event: {altKey: true, key: 'ß'}, platform: 'mac'},
       {expected: 'Alt+ArrowLeft', event: {altKey: true, key: 'ArrowLeft'}, platform: 'mac'},
       {expected: 'Alt+Shift+S', event: {altKey: true, shiftKey: true, key: 'Í'}, platform: 'mac'},
       {expected: 'Alt+Shift+ArrowLeft', event: {altKey: true, shiftKey: true, key: 'ArrowLeft'}, platform: 'mac'},
-      {expected: 'Alt+Shift+?', event: {altKey: true, shiftKey: true, key: '/'}, platform: 'mac'},
+      {expected: 'Alt+Shift+/', event: {altKey: true, shiftKey: true, key: '/'}, platform: 'mac'},
       {expected: 'Meta+Shift+X', event: {metaKey: true, shiftKey: true, key: 'x'}, platform: 'mac'},
-      {expected: 'Meta+Shift+!', event: {metaKey: true, shiftKey: true, key: '1'}, platform: 'mac'}
+      {expected: 'Meta+Shift+1', event: {metaKey: true, shiftKey: true, key: '1'}, platform: 'mac'},
+      {expected: 'Meta+Shift+!', event: {metaKey: true, shiftKey: true, key: '!'}, platform: 'mac'},
+      {expected: 'Meta+Shift+/', event: {metaKey: true, shiftKey: true, key: '/'}, platform: 'mac'}
     ]
     for (const {expected, event: keyEvent, platform = 'win / linux'} of tests) {
       it(`${JSON.stringify(keyEvent)} => ${expected}`, () => {
@@ -402,6 +404,14 @@ describe('hotkey', function () {
       await wait(10)
 
       expect(elementsActivated).toEqual(['metashiftplane'])
+    })
+
+    it('matches the reported non-letter key with meta+shift', function () {
+      setHTML('<a href="#" id="metashift1" data-hotkey="Meta+Shift+1"></a>')
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {metaKey: true, shiftKey: true, key: '1'}))
+
+      expect(elementsActivated).toEqual(['metashift1'])
     })
   })
 
