@@ -1,31 +1,5 @@
-/**
- * Map of 'uppercase' symbols to the keys that would be pressed (while holding `Shift`) to type them on MacOS on an
- * English layout. Most of these are standardized across most language layouts, so this won't work 100% in every
- * language but it should work most of the time.
- *
- */
+/** Map ASCII lowercase letters to uppercase for macOS modifier+Shift events. */
 export const macosUppercaseLayerKeys: Record<string, string> = {
-  ['`']: '~',
-  ['1']: '!',
-  ['2']: '@',
-  ['3']: '#',
-  ['4']: '$',
-  ['5']: '%',
-  ['6']: '^',
-  ['7']: '&',
-  ['8']: '*',
-  ['9']: '(',
-  ['0']: ')',
-  ['-']: '_',
-  ['=']: '+',
-  ['[']: '{',
-  [']']: '}',
-  ['\\']: '|',
-  [';']: ':',
-  ["'"]: '"',
-  [',']: '<',
-  ['.']: '>',
-  ['/']: '?',
   ['q']: 'Q',
   ['w']: 'W',
   ['e']: 'E',
